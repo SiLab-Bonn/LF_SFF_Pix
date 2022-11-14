@@ -1,0 +1,3 @@
+Record=TopLevelDocument|FileName=LF_SDD_AC_DC.SchDoc|SheetNumber= 
+Record=SheetSymbol|SourceDocument=LF_SDD_AC_DC.SchDoc|Designator=GPACConnector|SchDesignator=GPACConnector|FileName=GPACConnector.SchDoc|SheetNumber=2|SymbolType=Normal|RawFileName=GPACConnector.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=NoMainPathDocument|SourceDocument=LF_SDD_AC_DC.SchDoc|FileName=xtb01.SchDoc|SheetNumber=1
