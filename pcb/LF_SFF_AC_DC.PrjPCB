@@ -66,7 +66,7 @@ GenerateClassCluster=0
 DocumentUniqueId=PFPRCPAW
 
 [Document2]
-DocumentPath=LF_SDD_AC_DC.SchDoc
+DocumentPath=LF_SFF_AC_DC.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -100,23 +100,6 @@ GenerateClassCluster=0
 DocumentUniqueId=LLEIQFJU
 
 [Document4]
-DocumentPath=LF_SFF_AC_DC.PcbDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=ELITOWPK
-
-[Document5]
 DocumentPath=GPACConnector.Harness
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -132,6 +115,23 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
+
+[Document5]
+DocumentPath=LF_SFF_AC_DC.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=ELITOWPK
 
 [Document6]
 DocumentPath=CAMtastic1.Cam
