@@ -1,0 +1,108 @@
+Release 14.7 Map P.20131013 (lin64)
+Xilinx Map Application Log File for Design 'xtb01'
+
+Design Information
+------------------
+Command Line   : map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off
+-c 100 -o xtb01_map.ncd xtb01.ngd xtb01.pcf 
+Target Device  : xc3s1000
+Target Package : fg320
+Target Speed   : -4
+Mapper Version : spartan3 -- $Revision: 1.55 $
+Mapped Date    : Thu Dec  8 13:27:04 2022
+
+Mapping design into LUTs...
+WARNING:MapLib:701 - Signal ADC_OUT_P<3> connected to top level port
+   ADC_OUT_P<3> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_N<3> connected to top level port
+   ADC_OUT_N<3> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_P<2> connected to top level port
+   ADC_OUT_P<2> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_N<2> connected to top level port
+   ADC_OUT_N<2> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_P<1> connected to top level port
+   ADC_OUT_P<1> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_N<1> connected to top level port
+   ADC_OUT_N<1> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_P<0> connected to top level port
+   ADC_OUT_P<0> has been removed.
+WARNING:MapLib:701 - Signal ADC_OUT_N<0> connected to top level port
+   ADC_OUT_N<0> has been removed.
+WARNING:MapLib:701 - Signal ADC_DCO_P connected to top level port ADC_DCO_P has
+   been removed.
+WARNING:MapLib:701 - Signal ADC_DCO_N connected to top level port ADC_DCO_N has
+   been removed.
+WARNING:MapLib:701 - Signal ADC_FCO_P connected to top level port ADC_FCO_P has
+   been removed.
+WARNING:MapLib:701 - Signal ADC_FCO_N connected to top level port ADC_FCO_N has
+   been removed.
+WARNING:LIT:176 - Clock buffer is designated to drive clock loads. BUFGMUX
+   symbol "physical_group_i_spi_adc/i_spi_core/SPI_CLK/i_clkgen/CLKDV_BUFG_INST"
+   (output signal=i_spi_adc/i_spi_core/SPI_CLK) has a mix of clock and non-clock
+   loads. The non-clock loads are:
+   Pin I0 of i_spi_adc/i_spi_core/icg2/ck_out1
+Running directed packing...
+Running delay-based LUT packing...
+Running related packing...
+Updating timing models...
+
+Design Summary
+--------------
+
+Design Summary:
+Number of errors:      0
+Number of warnings:   13
+Logic Utilization:
+  Total Number Slice Registers:       1,884 out of  15,360   12%
+    Number used as Flip Flops:        1,883
+    Number used as Latches:               1
+  Number of 4 input LUTs:             3,274 out of  15,360   21%
+Logic Distribution:
+  Number of occupied Slices:          2,518 out of   7,680   32%
+    Number of Slices containing only related logic:   2,518 out of   2,518 100%
+    Number of Slices containing unrelated logic:          0 out of   2,518   0%
+      *See NOTES below for an explanation of the effects of unrelated logic.
+  Total Number of 4 input LUTs:       3,707 out of  15,360   24%
+    Number used as logic:             3,014
+    Number used as a route-thru:        433
+    Number used for Dual Port RAMs:     256
+      (Two LUTs used per Dual Port RAM)
+    Number used as Shift registers:       4
+
+  The Slice Logic Distribution report is not meaningful if the design is
+  over-mapped for a non-slice resource or if Placement fails.
+
+  Number of bonded IOBs:                128 out of     221   57%
+    IOB Flip Flops:                      31
+    IOB Master Pads:                      1
+    IOB Slave Pads:                       1
+  Number of RAMB16s:                     24 out of      24  100%
+  Number of BUFGMUXs:                     5 out of       8   62%
+  Number of DCMs:                         2 out of       4   50%
+
+Average Fanout of Non-Clock Nets:                3.39
+
+Peak Memory Usage:  785 MB
+Total REAL time to MAP completion:  3 secs 
+Total CPU time to MAP completion:   3 secs 
+
+NOTES:
+
+   Related logic is defined as being logic that shares connectivity - e.g. two
+   LUTs are "related" if they share common inputs.  When assembling slices,
+   Map gives priority to combine logic that is related.  Doing so results in
+   the best timing performance.
+
+   Unrelated logic shares no connectivity.  Map will only begin packing
+   unrelated logic into a slice once 99% of the slices are occupied through
+   related logic packing.
+
+   Note that once logic distribution reaches the 99% level through related
+   logic packing, this does not mean the device is completely utilized.
+   Unrelated logic packing will then begin, continuing until all usable LUTs
+   and FFs are occupied.  Depending on your timing budget, increased levels of
+   unrelated logic packing may adversely affect the overall timing performance
+   of your design.
+
+Mapping completed.
+See MAP report file "xtb01_map.mrp" for details.
