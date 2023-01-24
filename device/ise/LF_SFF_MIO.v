@@ -42,7 +42,13 @@ module LF_SFF_MIO (
     inout SCL,
 
     output [2:0] TX,
-    
+
+    output wire SEL0,
+    output wire SEL1,
+    output wire SEL2,
+    output wire SEL3,
+    output wire RESET,
+
     //SRAM
     output wire [19:0] SRAM_A,
     inout wire [15:0] SRAM_IO,
@@ -142,8 +148,8 @@ module LF_SFF_MIO (
     localparam ADC_RX_CH3_BASEADDR = ADC_RX_CH2_HIGHADDR + 1;  // 0x0060
     localparam ADC_RX_CH3_HIGHADDR = ADC_RX_CH3_BASEADDR + 15; // 0x006f
     
-    localparam SEQ_GEN_BASEADDR = 16'h1000;                     // 0x1000
-    localparam SEQ_GEN_HIGHADDR = SEQ_GEN_BASEADDR + 15 + 16384;// 0x500f
+    //localparam SEQ_GEN_BASEADDR = 16'h1000;                     // 0x1000
+    //localparam SEQ_GEN_HIGHADDR = SEQ_GEN_BASEADDR + 15 + 16384;// 0x500f
     
 
     // -------  BUS SYGNALING  ------- //
@@ -180,53 +186,52 @@ module LF_SFF_MIO (
     );
     assign ADC_CSN = !ADC_EN;
 
-    wire [15:0] SEQ_OUT;
-    seq_gen 
-    #( 
-        .BASEADDR(SEQ_GEN_BASEADDR), 
-        .HIGHADDR(SEQ_GEN_HIGHADDR), 
-        .MEM_BYTES(16384), 
-        .OUT_BITS(16) 
-    ) i_seq_gen
-    (
-        .BUS_CLK(BUS_CLK),
-        .BUS_RST(BUS_RST),
-        .BUS_ADD(BUS_ADD),
-        .BUS_DATA(BUS_DATA),
-        .BUS_RD(BUS_RD),
-        .BUS_WR(BUS_WR), 
+    //wire [15:0] SEQ_OUT;
+    //seq_gen 
+    //#( 
+    //    .BASEADDR(SEQ_GEN_BASEADDR), 
+    //    .HIGHADDR(SEQ_GEN_HIGHADDR), 
+    //    .MEM_BYTES(16384), 
+    //    .OUT_BITS(16) 
+    //) i_seq_gen
+    //(
+    //    .BUS_CLK(BUS_CLK),
+    //    .BUS_RST(BUS_RST),
+    //    .BUS_ADD(BUS_ADD),
+    //    .BUS_DATA(BUS_DATA),
+    //    .BUS_RD(BUS_RD),
+    //    .BUS_WR(BUS_WR), 
 
-        .SEQ_CLK(ADC_ENC),
-        .SEQ_OUT(SEQ_OUT)
-    );
+    //    .SEQ_CLK(ADC_ENC),
+    //    .SEQ_OUT(SEQ_OUT)
+    //);
 
     wire [3:0] ADC_SYNC;
-     
-    assign RESET_COL_START_1 = 0;
-    assign RESET_COL_START_2 = 0;
-    assign RESET_ROW_START = 0;
+    //assign RESET_COL_START_1 = 0;
+    //assign RESET_COL_START_2 = 0;
+    //assign RESET_ROW_START = 0;
     
-    assign RESET_ROW_CNT = SEQ_OUT[0];
-    assign RESET_COL_CNT = SEQ_OUT[1];
+    //assign RESET_ROW_CNT = SEQ_OUT[0];
+    //assign RESET_COL_CNT = SEQ_OUT[1];
     
-    assign ADC_SYNC[0] = SEQ_OUT[2];
-    assign ADC_SYNC[2] = SEQ_OUT[2];
-    assign CLK_ROW_50 = SEQ_OUT[3];
-    assign CLK_COL_50 = SEQ_OUT[4];
-    assign ROW_RESET_50 = SEQ_OUT[5];
+    //assign ADC_SYNC[0] = SEQ_OUT[2];
+    //assign ADC_SYNC[2] = SEQ_OUT[2];
+    //assign CLK_ROW_50 = SEQ_OUT[3];
+    //assign CLK_COL_50 = SEQ_OUT[4];
+    //assign ROW_RESET_50 = SEQ_OUT[5];
     
-    assign ADC_SYNC[1] = SEQ_OUT[6];
-    assign CLK_ROW_25 = SEQ_OUT[7];
-    assign CLK_COL_25 = SEQ_OUT[8];
-    assign ROW_RESET_25 = SEQ_OUT[9];
+    //assign ADC_SYNC[1] = SEQ_OUT[6];
+    //assign CLK_ROW_25 = SEQ_OUT[7];
+    //assign CLK_COL_25 = SEQ_OUT[8];
+    //assign ROW_RESET_25 = SEQ_OUT[9];
 
-    assign ADC_SYNC[3] = SEQ_OUT[10];
-    assign CLK_ROW_100 = SEQ_OUT[11];
-    assign CLK_COL_100 = SEQ_OUT[12];
-    assign ROW_RESET_100 = SEQ_OUT[13];
+    //assign ADC_SYNC[3] = SEQ_OUT[10];
+    //assign CLK_ROW_100 = SEQ_OUT[11];
+    //assign CLK_COL_100 = SEQ_OUT[12];
+    //assign ROW_RESET_100 = SEQ_OUT[13];
     
-    assign ROW_SAMPLE1_50 = SEQ_OUT[14];
-    assign ROW_SAMPLE2_50 = SEQ_OUT[15];
+    //assign ROW_SAMPLE1_50 = SEQ_OUT[14];
+    //assign ROW_SAMPLE2_50 = SEQ_OUT[15];
     
     wire [3:0] ADC_IN;
     wire ADC_DCO, ADC_FCO;
@@ -380,7 +385,7 @@ module LF_SFF_MIO (
         .BUS_DATA(BUS_DATA),
         .BUS_RD(BUS_RD),
         .BUS_WR(BUS_WR),
-        .IO({FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1})
+        .IO({SEL2, SEL1, SEL0, RESET, LED4, LED3, LED2, LED1}) //,FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1
     );
 
     assign GPIO_NOT_USED = {LED2, LED1};

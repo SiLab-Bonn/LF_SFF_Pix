@@ -1,0 +1,163 @@
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+xst -intstyle ise -ifn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.xst" -ofn "/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.syr" 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 
+ngdbuild -intstyle ise -dd _ngo -nt timestamp -uc /faust/user/dschuechter/Documents/LF_SFF_Pix/device/src/mio.ucf -p xc3s1000-fg320-4 LF_SFF_MIO.ngc LF_SFF_MIO.ngd  
+map -intstyle ise -p xc3s1000-fg320-4 -cm area -ir off -pr off -c 100 -o LF_SFF_MIO_map.ncd LF_SFF_MIO.ngd LF_SFF_MIO.pcf 
+par -w -intstyle ise -ol high -t 1 LF_SFF_MIO_map.ncd LF_SFF_MIO.ncd LF_SFF_MIO.pcf 
+trce -intstyle ise -v 3 -s 4 -n 3 -fastpaths -xml LF_SFF_MIO.twx LF_SFF_MIO.ncd -o LF_SFF_MIO.twr LF_SFF_MIO.pcf 
+bitgen -intstyle ise -f LF_SFF_MIO.ut LF_SFF_MIO.ncd 

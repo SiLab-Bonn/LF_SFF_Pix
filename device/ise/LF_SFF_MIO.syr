@@ -1,0 +1,2291 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+Reading design: LF_SFF_MIO.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "LF_SFF_MIO.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "LF_SFF_MIO"
+Output Format                      : NGC
+Target Device                      : xc3s1000-4-fg320
+
+---- Source Options
+Top Module Name                    : LF_SFF_MIO
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : Yes
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 500
+Add Generic Clock Buffer(BUFG)     : 8
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+---- Other Options
+loop_iteration_limit               : 1000000
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/pulse_gen_rising.v" in library work
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/generic_fifo.v" in library work
+Module <pulse_gen_rising> compiled
+Compiling verilog include file "../../../git/basil/basil/firmware/modules/gpac_adc_rx/../includes/log2func.v"
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/CG_MOD_pos.v" in library work
+Module <gerneric_fifo> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v" in library work
+Module <CG_MOD_pos> compiled
+Module <cdc_syncfifo> compiled
+Module <cdc_fifomem> compiled
+Module <rptr_empty> compiled
+Module <wptr_full> compiled
+Module <cdc_sync_r2w> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/cdc_reset_sync.v" in library work
+Module <cdc_sync_w2r> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/cdc_pulse_sync.v" in library work
+Module <cdc_reset_sync> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/spi/blk_mem_gen_8_to_1_2k.v" in library work
+Module <cdc_pulse_sync> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v" in library work
+Module <blk_mem_gen_8_to_1_2k> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/sram_fifo/sram_fifo_core.v" in library work
+Module <bus_to_ip> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/spi/spi_core.v" in library work
+Module <sram_fifo_core> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/gpio/gpio_core.v" in library work
+Module <spi_core> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx_core.v" in library work
+Module <gpio_core> compiled
+Compiling verilog file "../src/clk_gen.v" in library work
+Module <gpac_adc_rx_core> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/utils/reset_gen.v" in library work
+Module <clk_gen> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/sram_fifo/sram_fifo.v" in library work
+Module <reset_gen> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/spi/spi.v" in library work
+Module <sram_fifo> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/rrp_arbiter/rrp_arbiter.v" in library work
+Module <spi> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/gpio/gpio.v" in library work
+Module <rrp_arbiter> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx.v" in library work
+Module <gpio> compiled
+Compiling verilog file "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_iobuf.v" in library work
+Module <gpac_adc_rx> compiled
+Compiling verilog file "LF_SFF_MIO.v" in library work
+Module <gpac_adc_iobuf> compiled
+Module <LF_SFF_MIO> compiled
+No errors in compilation
+Analysis of file <"LF_SFF_MIO.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <LF_SFF_MIO> in library <work> with parameters.
+	ADC_RX_CH0_BASEADDR = "0000000000110000"
+	ADC_RX_CH0_HIGHADDR = "00000000000000000000000000111111"
+	ADC_RX_CH1_BASEADDR = "00000000000000000000000001000000"
+	ADC_RX_CH1_HIGHADDR = "00000000000000000000000001001111"
+	ADC_RX_CH2_BASEADDR = "00000000000000000000000001010000"
+	ADC_RX_CH2_HIGHADDR = "00000000000000000000000001011111"
+	ADC_RX_CH3_BASEADDR = "00000000000000000000000001100000"
+	ADC_RX_CH3_HIGHADDR = "00000000000000000000000001101111"
+	FIFO_BASEADDR = "0000000000100000"
+	FIFO_HIGHADDR = "00000000000000000000000000101111"
+	GPIO_BASEADDR = "0000000000000000"
+	GPIO_HIGHADDR = "0000000000001111"
+	SPI_ADC_BASEADDR = "0000000000010000"
+	SPI_ADC_HIGHADDR = "00000000000000000000000000011111"
+
+Analyzing hierarchy for module <reset_gen> in library <work> with parameters.
+	CNT = "10000000"
+
+Analyzing hierarchy for module <clk_gen> in library <work>.
+
+Analyzing hierarchy for module <spi> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "0000000000010000"
+	HIGHADDR = "00000000000000000000000000011111"
+	MEM_BYTES = "00000000000000000000000000000010"
+
+Analyzing hierarchy for module <gpac_adc_iobuf> in library <work>.
+
+Analyzing hierarchy for module <rrp_arbiter> in library <work> with parameters.
+	WIDTH = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <sram_fifo> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "0000000000100000"
+	DEPTH = "100000000000000000000"
+	FIFO_ALMOST_EMPTY_THRESHOLD = "00000000000000000000000000000101"
+	FIFO_ALMOST_FULL_THRESHOLD = "00000000000000000000000001011111"
+	HIGHADDR = "00000000000000000000000000101111"
+
+Analyzing hierarchy for module <gpio> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "0000000000000000"
+	HIGHADDR = "0000000000001111"
+	IO_DIRECTION = "00011111"
+	IO_TRI = "00000000000000000000000000000000"
+	IO_WIDTH = "00000000000000000000000000001000"
+
+Analyzing hierarchy for module <gpac_adc_rx> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "00"
+	BASEADDR = "00000000000000000000000000110000"
+	HEADER_ID = "0"
+	HIGHADDR = "00000000000000000000000000111111"
+
+Analyzing hierarchy for module <gpac_adc_rx> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "01"
+	BASEADDR = "00000000000000000000000001000000"
+	HEADER_ID = "0"
+	HIGHADDR = "00000000000000000000000001001111"
+
+Analyzing hierarchy for module <gpac_adc_rx> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "10"
+	BASEADDR = "00000000000000000000000001010000"
+	HEADER_ID = "0"
+	HIGHADDR = "00000000000000000000000001011111"
+
+Analyzing hierarchy for module <gpac_adc_rx> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "11"
+	BASEADDR = "00000000000000000000000001100000"
+	HEADER_ID = "0"
+	HIGHADDR = "00000000000000000000000001101111"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "0000000000010000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "00000000000000000000000000011111"
+
+Analyzing hierarchy for module <spi_core> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	DEF_BIT_OUT = "00000000000000000000000000010000"
+	MEM_BYTES = "00000000000000000000000000000010"
+	VERSION = "00000000000000000000000000000010"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "0000000000100000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "00000000000000000000000000101111"
+
+Analyzing hierarchy for module <sram_fifo_core> in library <work> with parameters.
+	DEPTH = "100000000000000000000"
+	FIFO_ALMOST_EMPTY_THRESHOLD = "00000000000000000000000000000101"
+	FIFO_ALMOST_FULL_THRESHOLD = "00000000000000000000000001011111"
+	READ_NOP_SRAM = "00000000000000000000000000000010"
+	READ_SRAM = "00000000000000000000000000000000"
+	READ_TRY_SRAM = "00000000000000000000000000000011"
+	VERSION = "00000000000000000000000000000010"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "0000000000000000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "0000000000001111"
+
+Analyzing hierarchy for module <gpio_core> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	IO_BYTES = "00000000000000000000000000000001"
+	IO_DIRECTION = "00011111"
+	IO_TRI = "00000000000000000000000000000000"
+	IO_WIDTH = "00000000000000000000000000001000"
+	VERSION = "00000000000000000000000000000000"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "00000000000000000000000000110000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "00000000000000000000000000111111"
+
+Analyzing hierarchy for module <gpac_adc_rx_core> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "00"
+	HEADER_ID = "0"
+	VERSION = "00000000000000000000000000000001"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "00000000000000000000000001000000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "00000000000000000000000001001111"
+
+Analyzing hierarchy for module <gpac_adc_rx_core> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "01"
+	HEADER_ID = "0"
+	VERSION = "00000000000000000000000000000001"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "00000000000000000000000001010000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "00000000000000000000000001011111"
+
+Analyzing hierarchy for module <gpac_adc_rx_core> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "10"
+	HEADER_ID = "0"
+	VERSION = "00000000000000000000000000000001"
+
+Analyzing hierarchy for module <bus_to_ip> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	BASEADDR = "00000000000000000000000001100000"
+	DBUSWIDTH = "00000000000000000000000000001000"
+	HIGHADDR = "00000000000000000000000001101111"
+
+Analyzing hierarchy for module <gpac_adc_rx_core> in library <work> with parameters.
+	ABUSWIDTH = "00000000000000000000000000010000"
+	ADC_ID = "11"
+	HEADER_ID = "0"
+	VERSION = "00000000000000000000000000000001"
+
+Analyzing hierarchy for module <blk_mem_gen_8_to_1_2k> in library <work>.
+
+Analyzing hierarchy for module <cdc_pulse_sync> in library <work>.
+
+Analyzing hierarchy for module <CG_MOD_pos> in library <work>.
+
+Analyzing hierarchy for module <gerneric_fifo> in library <work> with parameters.
+	DATA_SIZE = "00000000000000000000000000100000"
+	DEPTH = "00000000000000000000010000000000"
+	POINTER_SIZE = "00000000000000000000000000001010"
+
+Analyzing hierarchy for module <cdc_reset_sync> in library <work>.
+
+Analyzing hierarchy for module <pulse_gen_rising> in library <work>.
+
+Analyzing hierarchy for module <cdc_syncfifo> in library <work> with parameters.
+	ASIZE = "00000000000000000000000000000011"
+	DSIZE = "00000000000000000000000000100000"
+
+Analyzing hierarchy for module <cdc_sync_r2w> in library <work> with parameters.
+	ADDRSIZE = "00000000000000000000000000000011"
+
+Analyzing hierarchy for module <cdc_sync_w2r> in library <work> with parameters.
+	ADDRSIZE = "00000000000000000000000000000011"
+
+Analyzing hierarchy for module <cdc_fifomem> in library <work> with parameters.
+	ADDRSIZE = "00000000000000000000000000000011"
+	DATASIZE = "00000000000000000000000000100000"
+	DEPTH = "00000000000000000000000000001000"
+
+Analyzing hierarchy for module <rptr_empty> in library <work> with parameters.
+	ADDRSIZE = "00000000000000000000000000000011"
+
+Analyzing hierarchy for module <wptr_full> in library <work> with parameters.
+	ADDRSIZE = "00000000000000000000000000000011"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <LF_SFF_MIO>.
+	ADC_RX_CH0_BASEADDR = 16'b0000000000110000
+	ADC_RX_CH0_HIGHADDR = 32'b00000000000000000000000000111111
+	ADC_RX_CH1_BASEADDR = 32'b00000000000000000000000001000000
+	ADC_RX_CH1_HIGHADDR = 32'b00000000000000000000000001001111
+	ADC_RX_CH2_BASEADDR = 32'b00000000000000000000000001010000
+	ADC_RX_CH2_HIGHADDR = 32'b00000000000000000000000001011111
+	ADC_RX_CH3_BASEADDR = 32'b00000000000000000000000001100000
+	ADC_RX_CH3_HIGHADDR = 32'b00000000000000000000000001101111
+	FIFO_BASEADDR = 16'b0000000000100000
+	FIFO_HIGHADDR = 32'b00000000000000000000000000101111
+	GPIO_BASEADDR = 16'b0000000000000000
+	GPIO_HIGHADDR = 16'b0000000000001111
+	SPI_ADC_BASEADDR = 16'b0000000000010000
+	SPI_ADC_HIGHADDR = 32'b00000000000000000000000000011111
+WARNING:Xst:852 - "LF_SFF_MIO.v" line 170: Unconnected input port 'EXT_START' of instance 'i_spi_adc' is tied to GND.
+WARNING:Xst:852 - "LF_SFF_MIO.v" line 238: Unconnected input port 'ADC_CLK' of instance 'i_gpac_adc_iobuf' is tied to GND.
+Module <LF_SFF_MIO> is correct for synthesis.
+ 
+Analyzing module <reset_gen> in library <work>.
+	CNT = 8'b10000000
+Module <reset_gen> is correct for synthesis.
+ 
+Analyzing module <clk_gen> in library <work>.
+Module <clk_gen> is correct for synthesis.
+ 
+    Set user-defined property "CLKDV_DIVIDE =  4.000000" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLKFX_DIVIDE =  6" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLKFX_MULTIPLY =  5" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLKIN_PERIOD =  20.833000" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLK_FEEDBACK =  1X" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "DESKEW_ADJUST =  SYSTEM_SYNCHRONOUS" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "DFS_FREQUENCY_MODE =  LOW" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "DLL_FREQUENCY_MODE =  LOW" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "DSS_MODE =  NONE" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "DUTY_CYCLE_CORRECTION =  TRUE" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "FACTORY_JF =  C080" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "PHASE_SHIFT =  0" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "SIM_MODE =  SAFE" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "STARTUP_WAIT =  TRUE" for instance <DCM_BUS> in unit <clk_gen>.
+    Set user-defined property "CLKDV_DIVIDE =  8.000000" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "CLKFX_DIVIDE =  1" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "CLKFX_MULTIPLY =  2" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "CLKIN_DIVIDE_BY_2 =  FALSE" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "CLKIN_PERIOD =  25.000000" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "CLKOUT_PHASE_SHIFT =  NONE" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "CLK_FEEDBACK =  1X" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "DESKEW_ADJUST =  SYSTEM_SYNCHRONOUS" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "DFS_FREQUENCY_MODE =  LOW" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "DLL_FREQUENCY_MODE =  LOW" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "DSS_MODE =  NONE" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "DUTY_CYCLE_CORRECTION =  TRUE" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "FACTORY_JF =  C080" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "PHASE_SHIFT =  0" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "SIM_MODE =  SAFE" for instance <DCM_CMD> in unit <clk_gen>.
+    Set user-defined property "STARTUP_WAIT =  TRUE" for instance <DCM_CMD> in unit <clk_gen>.
+Analyzing module <spi> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 16'b0000000000010000
+	HIGHADDR = 32'b00000000000000000000000000011111
+	MEM_BYTES = 32'sb00000000000000000000000000000010
+Module <spi> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.1> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 16'b0000000000010000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 32'b00000000000000000000000000011111
+Module <bus_to_ip.1> is correct for synthesis.
+ 
+Analyzing module <spi_core> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	DEF_BIT_OUT = 32'sb00000000000000000000000000010000
+	MEM_BYTES = 32'sb00000000000000000000000000000010
+	VERSION = 32'sb00000000000000000000000000000010
+Module <spi_core> is correct for synthesis.
+ 
+Analyzing module <blk_mem_gen_8_to_1_2k> in library <work>.
+Module <blk_mem_gen_8_to_1_2k> is correct for synthesis.
+ 
+    Set user-defined property "INITP_00 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_01 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_02 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_03 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_04 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_05 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_06 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INITP_07 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_00 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_01 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_02 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_03 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_04 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_05 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_06 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_07 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_08 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_09 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_0A =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_0B =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_0C =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_0D =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_0E =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_0F =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_10 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_11 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_12 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_13 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_14 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_15 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_16 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_17 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_18 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_19 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_1A =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_1B =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_1C =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_1D =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_1E =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_1F =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_20 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_21 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_22 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_23 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_24 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_25 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_26 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_27 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_28 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_29 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_2A =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_2B =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_2C =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_2D =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_2E =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_2F =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_30 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_31 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_32 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_33 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_34 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_35 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_36 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_37 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_38 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_39 =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_3A =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_3B =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_3C =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_3D =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_3E =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_3F =  0000000000000000000000000000000000000000000000000000000000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_A =  000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "INIT_B =  000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "SIM_COLLISION_CHECK =  ALL" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "SRVAL_A =  000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "SRVAL_B =  000000000" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "WRITE_MODE_A =  WRITE_FIRST" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+    Set user-defined property "WRITE_MODE_B =  WRITE_FIRST" for instance <dpram> in unit <blk_mem_gen_8_to_1_2k>.
+Analyzing module <cdc_pulse_sync> in library <work>.
+Module <cdc_pulse_sync> is correct for synthesis.
+ 
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <aq_sync_ff_1>.
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <aq_sync_ff_2>.
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <out_sync_ff_1>.
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <out_sync_ff_2>.
+Analyzing module <CG_MOD_pos> in library <work>.
+Module <CG_MOD_pos> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_iobuf> in library <work>.
+Module <gpac_adc_iobuf> is correct for synthesis.
+ 
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DIFF_TERM =  TRUE" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DQS_BIAS =  FALSE" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IFD_DELAY_VALUE =  AUTO" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <IBUFGDS_ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFDS_ADC_DCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DIFF_TERM =  TRUE" for instance <IBUFDS_ADC_DCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFDS_ADC_DCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <IBUFDS_ADC_DCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <IBUFDS_ADC_DCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <OBUFDS_ADC_ENC> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <OBUFDS_ADC_ENC> in unit <gpac_adc_iobuf>.
+    Set user-defined property "SLEW =  SLOW" for instance <OBUFDS_ADC_ENC> in unit <gpac_adc_iobuf>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DIFF_TERM =  TRUE" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DQS_BIAS =  FALSE" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IFD_DELAY_VALUE =  AUTO" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <IBUFGDS_ADC_OUT_0> in unit <gpac_adc_iobuf>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DIFF_TERM =  TRUE" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DQS_BIAS =  FALSE" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IFD_DELAY_VALUE =  AUTO" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <IBUFGDS_ADC_OUT_1> in unit <gpac_adc_iobuf>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DIFF_TERM =  TRUE" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DQS_BIAS =  FALSE" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IFD_DELAY_VALUE =  AUTO" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <IBUFGDS_ADC_OUT_2> in unit <gpac_adc_iobuf>.
+    Set user-defined property "CAPACITANCE =  DONT_CARE" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DIFF_TERM =  TRUE" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "DQS_BIAS =  FALSE" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_DELAY_VALUE =  0" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IBUF_LOW_PWR =  TRUE" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IFD_DELAY_VALUE =  AUTO" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOSTANDARD =  LVDS_25" for instance <IBUFGDS_ADC_OUT_3> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_DCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_FCO> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_ENC> in unit <gpac_adc_iobuf>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_FCO_BUF>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_DCO_BUF>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_IN_BUF>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_ENC_BUF>.
+    Set user-defined property "IOB =  TRUE" for signal <ADC_IN>.
+Analyzing module <rrp_arbiter> in library <work>.
+	WIDTH = 32'sb00000000000000000000000000000100
+Module <rrp_arbiter> is correct for synthesis.
+ 
+Analyzing module <sram_fifo> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 16'b0000000000100000
+	DEPTH = 21'b100000000000000000000
+	FIFO_ALMOST_EMPTY_THRESHOLD = 32'sb00000000000000000000000000000101
+	FIFO_ALMOST_FULL_THRESHOLD = 32'sb00000000000000000000000001011111
+	HIGHADDR = 32'b00000000000000000000000000101111
+Module <sram_fifo> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.2> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 16'b0000000000100000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 32'b00000000000000000000000000101111
+Module <bus_to_ip.2> is correct for synthesis.
+ 
+Analyzing module <sram_fifo_core> in library <work>.
+	DEPTH = 21'b100000000000000000000
+	FIFO_ALMOST_EMPTY_THRESHOLD = 32'sb00000000000000000000000000000101
+	FIFO_ALMOST_FULL_THRESHOLD = 32'sb00000000000000000000000001011111
+	READ_NOP_SRAM = 32'sb00000000000000000000000000000010
+	READ_SRAM = 32'sb00000000000000000000000000000000
+	READ_TRY_SRAM = 32'sb00000000000000000000000000000011
+	VERSION = 32'sb00000000000000000000000000000010
+Module <sram_fifo_core> is correct for synthesis.
+ 
+Analyzing module <gerneric_fifo> in library <work>.
+	DATA_SIZE = 32'sb00000000000000000000000000100000
+	DEPTH = 32'sb00000000000000000000010000000000
+	POINTER_SIZE = 32'sb00000000000000000000000000001010
+Module <gerneric_fifo> is correct for synthesis.
+ 
+Analyzing module <gpio> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 16'b0000000000000000
+	HIGHADDR = 16'b0000000000001111
+	IO_DIRECTION = 8'b00011111
+	IO_TRI = 32'sb00000000000000000000000000000000
+	IO_WIDTH = 32'sb00000000000000000000000000001000
+Module <gpio> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.3> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 16'b0000000000000000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 16'b0000000000001111
+Module <bus_to_ip.3> is correct for synthesis.
+ 
+Analyzing module <gpio_core> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	IO_BYTES = 32'sb00000000000000000000000000000001
+	IO_DIRECTION = 8'b00011111
+	IO_TRI = 32'sb00000000000000000000000000000000
+	IO_WIDTH = 32'sb00000000000000000000000000001000
+	VERSION = 32'sb00000000000000000000000000000000
+Module <gpio_core> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx.1> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b00
+	BASEADDR = 32'b00000000000000000000000000110000
+	HEADER_ID = 1'b0
+	HIGHADDR = 32'b00000000000000000000000000111111
+Module <gpac_adc_rx.1> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.4> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 32'b00000000000000000000000000110000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 32'b00000000000000000000000000111111
+Module <bus_to_ip.4> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx_core.1> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b00
+	HEADER_ID = 1'b0
+	VERSION = 32'sb00000000000000000000000000000001
+Module <gpac_adc_rx_core.1> is correct for synthesis.
+ 
+Analyzing module <cdc_reset_sync> in library <work>.
+Module <cdc_reset_sync> is correct for synthesis.
+ 
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <aq_sync_ff_1>.
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <aq_sync_ff_2>.
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <out_sync_ff_1>.
+    Set user-defined property "ASYNC_REG =  TRUE" for signal <out_sync_ff_2>.
+Analyzing module <pulse_gen_rising> in library <work>.
+Module <pulse_gen_rising> is correct for synthesis.
+ 
+Analyzing module <cdc_syncfifo> in library <work>.
+	ASIZE = 32'sb00000000000000000000000000000011
+	DSIZE = 32'sb00000000000000000000000000100000
+Module <cdc_syncfifo> is correct for synthesis.
+ 
+Analyzing module <cdc_sync_r2w> in library <work>.
+	ADDRSIZE = 32'sb00000000000000000000000000000011
+Module <cdc_sync_r2w> is correct for synthesis.
+ 
+Analyzing module <cdc_sync_w2r> in library <work>.
+	ADDRSIZE = 32'sb00000000000000000000000000000011
+Module <cdc_sync_w2r> is correct for synthesis.
+ 
+Analyzing module <cdc_fifomem> in library <work>.
+	ADDRSIZE = 32'sb00000000000000000000000000000011
+	DATASIZE = 32'sb00000000000000000000000000100000
+	DEPTH = 32'sb00000000000000000000000000001000
+Module <cdc_fifomem> is correct for synthesis.
+ 
+Analyzing module <rptr_empty> in library <work>.
+	ADDRSIZE = 32'sb00000000000000000000000000000011
+Module <rptr_empty> is correct for synthesis.
+ 
+Analyzing module <wptr_full> in library <work>.
+	ADDRSIZE = 32'sb00000000000000000000000000000011
+Module <wptr_full> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx.2> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b01
+	BASEADDR = 32'b00000000000000000000000001000000
+	HEADER_ID = 1'b0
+	HIGHADDR = 32'b00000000000000000000000001001111
+Module <gpac_adc_rx.2> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.5> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 32'b00000000000000000000000001000000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 32'b00000000000000000000000001001111
+Module <bus_to_ip.5> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx_core.2> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b01
+	HEADER_ID = 1'b0
+	VERSION = 32'sb00000000000000000000000000000001
+Module <gpac_adc_rx_core.2> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx.3> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b10
+	BASEADDR = 32'b00000000000000000000000001010000
+	HEADER_ID = 1'b0
+	HIGHADDR = 32'b00000000000000000000000001011111
+Module <gpac_adc_rx.3> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.6> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 32'b00000000000000000000000001010000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 32'b00000000000000000000000001011111
+Module <bus_to_ip.6> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx_core.3> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b10
+	HEADER_ID = 1'b0
+	VERSION = 32'sb00000000000000000000000000000001
+Module <gpac_adc_rx_core.3> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx.4> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b11
+	BASEADDR = 32'b00000000000000000000000001100000
+	HEADER_ID = 1'b0
+	HIGHADDR = 32'b00000000000000000000000001101111
+Module <gpac_adc_rx.4> is correct for synthesis.
+ 
+Analyzing module <bus_to_ip.7> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	BASEADDR = 32'b00000000000000000000000001100000
+	DBUSWIDTH = 32'sb00000000000000000000000000001000
+	HIGHADDR = 32'b00000000000000000000000001101111
+Module <bus_to_ip.7> is correct for synthesis.
+ 
+Analyzing module <gpac_adc_rx_core.4> in library <work>.
+	ABUSWIDTH = 32'sb00000000000000000000000000010000
+	ADC_ID = 2'b11
+	HEADER_ID = 1'b0
+	VERSION = 32'sb00000000000000000000000000000001
+Module <gpac_adc_rx_core.4> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+INFO:Xst:2561 - Always blocking tristate driving signal <SDA> in unit <LF_SFF_MIO> is removed.
+INFO:Xst:2561 - Always blocking tristate driving signal <SCL> in unit <LF_SFF_MIO> is removed.
+INFO:Xst:2679 - Register <bi> in unit <gpio_core> has a constant value of 0001 during circuit operation. The register is replaced by logic.
+
+Synthesizing Unit <reset_gen>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/reset_gen.v".
+    Found 8-bit down counter for signal <rst_cnt>.
+    Summary:
+	inferred   1 Counter(s).
+Unit <reset_gen> synthesized.
+
+
+Synthesizing Unit <rrp_arbiter>.
+    Related source file is "../../../git/basil/basil/firmware/modules/rrp_arbiter/rrp_arbiter.v".
+    Found 1-bit register for signal <hold>.
+    Found 4-bit register for signal <prev_select>.
+    Summary:
+	inferred   5 D-type flip-flop(s).
+Unit <rrp_arbiter> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_1>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator greatequal for signal <CS$cmp_ge0000> created at line 33.
+    Found 16-bit comparator lessequal for signal <CS$cmp_le0000> created at line 33.
+    Found 16-bit subtractor for signal <IP_ADD$addsub0000> created at line 36.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_1> synthesized.
+
+
+Synthesizing Unit <cdc_pulse_sync>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_pulse_sync.v".
+    Found 1-bit register for signal <aq_sync_ff_1>.
+    Found 1-bit register for signal <aq_sync_ff_2>.
+    Found 2-bit register for signal <in_pre_sync>.
+    Found 1-bit register for signal <in_sync_pulse>.
+    Found 1-bit register for signal <out_sync_ff_1>.
+    Found 1-bit register for signal <out_sync_ff_2>.
+    Found 1-bit register for signal <out_sync_ff_3>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
+Unit <cdc_pulse_sync> synthesized.
+
+
+Synthesizing Unit <CG_MOD_pos>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/CG_MOD_pos.v".
+WARNING:Xst:737 - Found 1-bit latch for signal <enl>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+Unit <CG_MOD_pos> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_2>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator greatequal for signal <CS$cmp_ge0000> created at line 33.
+    Found 16-bit comparator lessequal for signal <CS$cmp_le0000> created at line 33.
+    Found 16-bit subtractor for signal <IP_ADD$addsub0000> created at line 36.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_2> synthesized.
+
+
+Synthesizing Unit <gerneric_fifo>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/generic_fifo.v".
+    Found 1024x33-bit dual-port RAM <Mram_mem> for signal <mem>.
+    Found 32-bit register for signal <data_out>.
+    Found 1-bit register for signal <empty>.
+    Found 10-bit addsub for signal <size>.
+    Found 10-bit comparator equal for signal <empty$cmp_eq0001> created at line 83.
+    Found 10-bit comparator equal for signal <empty_loc>.
+    Found 10-bit adder for signal <full$addsub0000> created at line 88.
+    Found 10-bit comparator equal for signal <full$cmp_eq0002> created at line 88.
+    Found 10-bit up counter for signal <rd_pointer>.
+    Found 10-bit adder for signal <rd_tmp$add0000> created at line 61.
+    Found 10-bit adder for signal <size$addsub0000> created at line 102.
+    Found 10-bit comparator greatequal for signal <size$cmp_ge0000> created at line 99.
+    Found 10-bit up counter for signal <wr_pointer>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   2 Counter(s).
+	inferred  33 D-type flip-flop(s).
+	inferred   4 Adder/Subtractor(s).
+	inferred   4 Comparator(s).
+Unit <gerneric_fifo> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_3>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator lessequal for signal <CS>.
+    Summary:
+	inferred   1 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_3> synthesized.
+
+
+Synthesizing Unit <gpio_core>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpio/gpio_core.v".
+    Found 8-bit register for signal <BUS_DATA_OUT>.
+    Found 18-bit subtractor for signal <$sub0000> created at line 58.
+    Found 18-bit subtractor for signal <$sub0001> created at line 60.
+    Found 18-bit subtractor for signal <$sub0002> created at line 62.
+    Found 18-bit comparator greatequal for signal <BUS_DATA_OUT$cmp_ge0000> created at line 62.
+    Found 18-bit comparator greatequal for signal <BUS_DATA_OUT$cmp_ge0001> created at line 60.
+    Found 18-bit comparator greatequal for signal <BUS_DATA_OUT$cmp_ge0002> created at line 58.
+    Found 18-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0000> created at line 58.
+    Found 18-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0001> created at line 60.
+    Found 8-bit register for signal <DIRECTION_DATA<0>>.
+    Found 8-bit register for signal <OUTPUT_DATA<0>>.
+    Summary:
+	inferred  24 D-type flip-flop(s).
+	inferred   3 Adder/Subtractor(s).
+	inferred   5 Comparator(s).
+Unit <gpio_core> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_4>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator greatequal for signal <CS$cmp_ge0000> created at line 33.
+    Found 16-bit comparator lessequal for signal <CS$cmp_le0000> created at line 33.
+    Found 16-bit subtractor for signal <IP_ADD$addsub0000> created at line 36.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_4> synthesized.
+
+
+Synthesizing Unit <cdc_reset_sync>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_reset_sync.v".
+    Found 1-bit register for signal <aq_sync_ff_1>.
+    Found 1-bit register for signal <aq_sync_ff_2>.
+    Found 2-bit register for signal <in_pre_sync>.
+    Found 1-bit register for signal <in_sync_pulse>.
+    Found 1-bit register for signal <out_sync_ff_1>.
+    Found 1-bit register for signal <out_sync_ff_2>.
+    Summary:
+	inferred   7 D-type flip-flop(s).
+Unit <cdc_reset_sync> synthesized.
+
+
+Synthesizing Unit <pulse_gen_rising>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/pulse_gen_rising.v".
+    Found 1-bit register for signal <ff>.
+    Summary:
+	inferred   1 D-type flip-flop(s).
+Unit <pulse_gen_rising> synthesized.
+
+
+Synthesizing Unit <cdc_sync_r2w>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v".
+    Found 4-bit register for signal <wq2_rptr>.
+    Found 4-bit register for signal <cdc_sync_wq1_rptr>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
+Unit <cdc_sync_r2w> synthesized.
+
+
+Synthesizing Unit <cdc_sync_w2r>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v".
+    Found 4-bit register for signal <rq2_wptr>.
+    Found 4-bit register for signal <cdc_sync_rq1_wptr>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
+Unit <cdc_sync_w2r> synthesized.
+
+
+Synthesizing Unit <cdc_fifomem>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v".
+    Found 8x32-bit dual-port RAM <Mram_cdc_mem> for signal <cdc_mem>.
+    Summary:
+	inferred   1 RAM(s).
+Unit <cdc_fifomem> synthesized.
+
+
+Synthesizing Unit <rptr_empty>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v".
+    Found 1-bit register for signal <rempty>.
+    Found 4-bit register for signal <rptr>.
+    Found 4-bit register for signal <rbin>.
+    Found 4-bit adder for signal <rbinnext>.
+    Found 4-bit comparator equal for signal <rempty_val>.
+    Found 1-bit xor2 for signal <rgraynext$xor0000> created at line 144.
+    Found 1-bit xor2 for signal <rgraynext$xor0001> created at line 144.
+    Found 1-bit xor2 for signal <rgraynext$xor0002> created at line 144.
+    Summary:
+	inferred   9 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <rptr_empty> synthesized.
+
+
+Synthesizing Unit <wptr_full>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v".
+    Found 4-bit register for signal <wptr>.
+    Found 1-bit register for signal <wfull>.
+    Found 4-bit register for signal <wbin>.
+    Found 4-bit adder for signal <wbinnext>.
+    Found 4-bit comparator equal for signal <wfull_val>.
+    Found 1-bit xor2 for signal <wgraynext$xor0000> created at line 177.
+    Found 1-bit xor2 for signal <wgraynext$xor0001> created at line 177.
+    Found 1-bit xor2 for signal <wgraynext$xor0002> created at line 177.
+    Summary:
+	inferred   9 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   1 Comparator(s).
+Unit <wptr_full> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_5>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator greatequal for signal <CS$cmp_ge0000> created at line 33.
+    Found 16-bit comparator lessequal for signal <CS$cmp_le0000> created at line 33.
+    Found 16-bit subtractor for signal <IP_ADD$addsub0000> created at line 36.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_5> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_6>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator greatequal for signal <CS$cmp_ge0000> created at line 33.
+    Found 16-bit comparator lessequal for signal <CS$cmp_le0000> created at line 33.
+    Found 16-bit subtractor for signal <IP_ADD$addsub0000> created at line 36.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_6> synthesized.
+
+
+Synthesizing Unit <bus_to_ip_7>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/bus_to_ip.v".
+    Found 8-bit tristate buffer for signal <BUS_DATA>.
+    Found 16-bit comparator greatequal for signal <CS$cmp_ge0000> created at line 33.
+    Found 16-bit comparator lessequal for signal <CS$cmp_le0000> created at line 33.
+    Found 16-bit subtractor for signal <IP_ADD$addsub0000> created at line 36.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+	inferred   8 Tristate(s).
+Unit <bus_to_ip_7> synthesized.
+
+
+Synthesizing Unit <clk_gen>.
+    Related source file is "../src/clk_gen.v".
+WARNING:Xst:646 - Signal <CLKOUTFX> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:653 - Signal <CLKFX_BUF> is used but never assigned. This sourceless signal will be automatically connected to value 0.
+Unit <clk_gen> synthesized.
+
+
+Synthesizing Unit <gpac_adc_iobuf>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_iobuf.v".
+WARNING:Xst:646 - Signal <adc_des_cnt<15>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_12>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_11>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_10>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_9>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_8>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_7>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_6>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_5>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_4>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_3>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_2>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 1-bit latch for signal <adc_des_cnt_1>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 14-bit latch for signal <gen[0].adc_des_syn>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 14-bit latch for signal <gen[1].adc_des_syn>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 14-bit latch for signal <gen[2].adc_des_syn>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+WARNING:Xst:737 - Found 14-bit latch for signal <gen[3].adc_des_syn>. Latches may be generated from incomplete case or if statements. We do not recommend the use of latches in FPGA/CPLD designs, as they may lead to timing problems.
+    Found 56-bit register for signal <adc_out_sync>.
+    Summary:
+	inferred  56 D-type flip-flop(s).
+Unit <gpac_adc_iobuf> synthesized.
+
+
+Synthesizing Unit <gpio>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpio/gpio.v".
+Unit <gpio> synthesized.
+
+
+Synthesizing Unit <blk_mem_gen_8_to_1_2k>.
+    Related source file is "../../../git/basil/basil/firmware/modules/spi/blk_mem_gen_8_to_1_2k.v".
+Unit <blk_mem_gen_8_to_1_2k> synthesized.
+
+
+Synthesizing Unit <sram_fifo_core>.
+    Related source file is "../../../git/basil/basil/firmware/modules/sram_fifo/sram_fifo_core.v".
+WARNING:Xst:1305 - Output <SRAM_WE_B> is never assigned. Tied to value 0.
+WARNING:Xst:646 - Signal <status_regs<7:3>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <status_regs<0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <CONF_SIZE_BYTE_BUF<7:0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 16-bit tristate buffer for signal <SRAM_IO>.
+    Found 1-bit register for signal <FIFO_NEAR_FULL>.
+    Found 8-bit register for signal <BUS_DATA_OUT>.
+    Found 1-bit adder for signal <$add0000> created at line 301.
+    Found 1-bit adder for signal <$add0001> created at line 303.
+    Found 1-bit register for signal <byte_to_read>.
+    Found 8-bit up counter for signal <CONF_READ_ERROR>.
+    Found 21-bit register for signal <CONF_SIZE>.
+    Found 21-bit addsub for signal <CONF_SIZE$addsub0000>.
+    Found 21-bit adder for signal <CONF_SIZE$addsub0001> created at line 289.
+    Found 21-bit subtractor for signal <CONF_SIZE$addsub0002> created at line 285.
+    Found 20-bit comparator greatequal for signal <CONF_SIZE$cmp_ge0000> created at line 283.
+    Found 23-bit adder for signal <CONF_SIZE$sub0000> created at line 289.
+    Found 22-bit register for signal <CONF_SIZE_BYTE_BUF>.
+    Found 20-bit comparator equal for signal <empty>.
+    Found 21-bit comparator greatequal for signal <FIFO_NEAR_FULL$cmp_ge0000> created at line 303.
+    Found 21-bit comparator lessequal for signal <FIFO_NEAR_FULL$cmp_le0000> created at line 301.
+    Found 20-bit comparator equal for signal <full$cmp_eq0001> created at line 266.
+    Found 1-bit register for signal <full_ff>.
+    Found 20-bit adder for signal <full_ff$addsub0000> created at line 274.
+    Found 20-bit comparator equal for signal <full_ff$cmp_eq0001> created at line 272.
+    Found 20-bit comparator equal for signal <full_ff$cmp_eq0003> created at line 274.
+    Found 20-bit adder for signal <next_rd_pointer$addsub0000> created at line 239.
+    Found 20-bit adder for signal <next_wr_pointer$add0000> created at line 254.
+    Found 20-bit register for signal <rd_pointer>.
+    Found 2-bit register for signal <read_state>.
+    Found 2-bit 4-to-1 multiplexer for signal <read_state_next>.
+    Found 16-bit register for signal <sram_data_read>.
+    Found 16-bit register for signal <status_regs<2:1>>.
+    Found 16-bit comparator greatequal for signal <status_regs_1$cmp_ge0000> created at line 74.
+    Found 1-bit register for signal <usb_read_dly>.
+    Found 20-bit register for signal <wr_pointer>.
+    Summary:
+	inferred   1 Counter(s).
+	inferred 129 D-type flip-flop(s).
+	inferred   9 Adder/Subtractor(s).
+	inferred   8 Comparator(s).
+	inferred   2 Multiplexer(s).
+	inferred  16 Tristate(s).
+Unit <sram_fifo_core> synthesized.
+
+
+Synthesizing Unit <cdc_syncfifo>.
+    Related source file is "../../../git/basil/basil/firmware/modules/utils/cdc_syncfifo.v".
+Unit <cdc_syncfifo> synthesized.
+
+
+Synthesizing Unit <sram_fifo>.
+    Related source file is "../../../git/basil/basil/firmware/modules/sram_fifo/sram_fifo.v".
+Unit <sram_fifo> synthesized.
+
+
+Synthesizing Unit <spi_core>.
+    Related source file is "../../../git/basil/basil/firmware/modules/spi/spi_core.v".
+WARNING:Xst:646 - Signal <CONF_CLK_DIV> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 1-bit register for signal <SLD>.
+    Found 1-bit register for signal <SDI>.
+    Found 1-bit register for signal <SEN>.
+    Found 8-bit 16-to-1 multiplexer for signal <$varindex0000> created at line 103.
+    Found 11-bit subtractor for signal <ADDRA_MIN>.
+    Found 14-bit subtractor for signal <ADDRB_MIN>.
+    Found 16-bit comparator greatequal for signal <and0000$cmp_ge0000> created at line 149.
+    Found 16-bit comparator less for signal <and0000$cmp_lt0000> created at line 149.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0000> created at line 117.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0001> created at line 119.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0002> created at line 121.
+    Found 8-bit register for signal <BUS_DATA_OUT_REG>.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT_REG$cmp_lt0000> created at line 102.
+    Found 1-bit register for signal <CONF_DONE>.
+    Found 32-bit comparator greatequal for signal <DONE$cmp_ge0000> created at line 249.
+    Found 3-bit register for signal <EXT_START_FF>.
+    Found 11-bit subtractor for signal <memout_addra$sub0000> created at line 133.
+    Found 33-bit up counter for signal <out_bit_cnt>.
+    Found 16-bit register for signal <PREV_BUS_ADD>.
+    Found 32-bit comparator less for signal <REP_START$cmp_lt0000> created at line 205.
+    Found 1-bit register for signal <REP_START_DLY>.
+    Found 32-bit up counter for signal <REPEAT_COUNT>.
+    Found 33-bit comparator equal for signal <REPEAT_COUNT$cmp_eq0000> created at line 236.
+    Found 1-bit register for signal <SEN_INT>.
+    Found 33-bit comparator equal for signal <SEN_INT$cmp_eq0000> created at line 216.
+    Found 128-bit register for signal <status_regs>.
+    Found 32-bit adder carry out for signal <STOP_BIT$addsub0000>.
+    Found 2-bit register for signal <sync_ld>.
+    Summary:
+	inferred   2 Counter(s).
+	inferred 163 D-type flip-flop(s).
+	inferred   4 Adder/Subtractor(s).
+	inferred  10 Comparator(s).
+	inferred   8 Multiplexer(s).
+Unit <spi_core> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_core_1>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx_core.v".
+WARNING:Xst:646 - Signal <CONF_SAMPLE_SKIP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 256x14-bit dual-port RAM <Mram_dly_mem> for signal <dly_mem>.
+    Found 8-bit register for signal <BUS_DATA_OUT>.
+    Found 14-bit register for signal <adc_dly_mem>.
+    Found 1-bit register for signal <adc_sync_wait>.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0000> created at line 102.
+    Found 8-bit 16-to-1 multiplexer for signal <BUS_STATUS_OUT>.
+    Found 24-bit comparator greatequal for signal <cdc_fifo_write_single$cmp_ge0000> created at line 169.
+    Found 24-bit comparator lessequal for signal <cdc_fifo_write_single$cmp_le0000> created at line 171.
+    Found 1-bit register for signal <CONF_DONE>.
+    Found 8-bit up counter for signal <CONF_ERROR_LOST>.
+    Found 8-bit subtractor for signal <dly_addr_read>.
+    Found 8-bit up counter for signal <dly_addr_write>.
+    Found 24-bit comparator greater for signal <DONE>.
+    Found 14-bit register for signal <prev_data>.
+    Found 1-bit register for signal <prev_ready>.
+    Found 1-bit register for signal <prev_sync>.
+    Found 24-bit up counter for signal <rec_cnt>.
+    Found 24-bit comparator greater for signal <rec_cnt$cmp_gt0000> created at line 159.
+    Found 128-bit register for signal <status_regs>.
+    Found 16-bit comparator greatequal for signal <status_regs_0$cmp_ge0000> created at line 64.
+    Found 8-bit up counter for signal <sync_cnt>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   4 Counter(s).
+	inferred 168 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   6 Comparator(s).
+	inferred   8 Multiplexer(s).
+Unit <gpac_adc_rx_core_1> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_core_2>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx_core.v".
+WARNING:Xst:646 - Signal <CONF_SAMPLE_SKIP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 256x14-bit dual-port RAM <Mram_dly_mem> for signal <dly_mem>.
+    Found 8-bit register for signal <BUS_DATA_OUT>.
+    Found 14-bit register for signal <adc_dly_mem>.
+    Found 1-bit register for signal <adc_sync_wait>.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0000> created at line 102.
+    Found 8-bit 16-to-1 multiplexer for signal <BUS_STATUS_OUT>.
+    Found 24-bit comparator greatequal for signal <cdc_fifo_write_single$cmp_ge0000> created at line 169.
+    Found 24-bit comparator lessequal for signal <cdc_fifo_write_single$cmp_le0000> created at line 171.
+    Found 1-bit register for signal <CONF_DONE>.
+    Found 8-bit up counter for signal <CONF_ERROR_LOST>.
+    Found 8-bit subtractor for signal <dly_addr_read>.
+    Found 8-bit up counter for signal <dly_addr_write>.
+    Found 24-bit comparator greater for signal <DONE>.
+    Found 14-bit register for signal <prev_data>.
+    Found 1-bit register for signal <prev_ready>.
+    Found 1-bit register for signal <prev_sync>.
+    Found 24-bit up counter for signal <rec_cnt>.
+    Found 24-bit comparator greater for signal <rec_cnt$cmp_gt0000> created at line 159.
+    Found 128-bit register for signal <status_regs>.
+    Found 16-bit comparator greatequal for signal <status_regs_0$cmp_ge0000> created at line 64.
+    Found 8-bit up counter for signal <sync_cnt>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   4 Counter(s).
+	inferred 168 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   6 Comparator(s).
+	inferred   8 Multiplexer(s).
+Unit <gpac_adc_rx_core_2> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_core_3>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx_core.v".
+WARNING:Xst:646 - Signal <CONF_SAMPLE_SKIP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 256x14-bit dual-port RAM <Mram_dly_mem> for signal <dly_mem>.
+    Found 8-bit register for signal <BUS_DATA_OUT>.
+    Found 14-bit register for signal <adc_dly_mem>.
+    Found 1-bit register for signal <adc_sync_wait>.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0000> created at line 102.
+    Found 8-bit 16-to-1 multiplexer for signal <BUS_STATUS_OUT>.
+    Found 24-bit comparator greatequal for signal <cdc_fifo_write_single$cmp_ge0000> created at line 169.
+    Found 24-bit comparator lessequal for signal <cdc_fifo_write_single$cmp_le0000> created at line 171.
+    Found 1-bit register for signal <CONF_DONE>.
+    Found 8-bit up counter for signal <CONF_ERROR_LOST>.
+    Found 8-bit subtractor for signal <dly_addr_read>.
+    Found 8-bit up counter for signal <dly_addr_write>.
+    Found 24-bit comparator greater for signal <DONE>.
+    Found 14-bit register for signal <prev_data>.
+    Found 1-bit register for signal <prev_ready>.
+    Found 1-bit register for signal <prev_sync>.
+    Found 24-bit up counter for signal <rec_cnt>.
+    Found 24-bit comparator greater for signal <rec_cnt$cmp_gt0000> created at line 159.
+    Found 128-bit register for signal <status_regs>.
+    Found 16-bit comparator greatequal for signal <status_regs_0$cmp_ge0000> created at line 64.
+    Found 8-bit up counter for signal <sync_cnt>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   4 Counter(s).
+	inferred 168 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   6 Comparator(s).
+	inferred   8 Multiplexer(s).
+Unit <gpac_adc_rx_core_3> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_core_4>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx_core.v".
+WARNING:Xst:646 - Signal <CONF_SAMPLE_SKIP> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 256x14-bit dual-port RAM <Mram_dly_mem> for signal <dly_mem>.
+    Found 8-bit register for signal <BUS_DATA_OUT>.
+    Found 14-bit register for signal <adc_dly_mem>.
+    Found 1-bit register for signal <adc_sync_wait>.
+    Found 16-bit comparator less for signal <BUS_DATA_OUT$cmp_lt0000> created at line 102.
+    Found 8-bit 16-to-1 multiplexer for signal <BUS_STATUS_OUT>.
+    Found 24-bit comparator greatequal for signal <cdc_fifo_write_single$cmp_ge0000> created at line 169.
+    Found 24-bit comparator lessequal for signal <cdc_fifo_write_single$cmp_le0000> created at line 171.
+    Found 1-bit register for signal <CONF_DONE>.
+    Found 8-bit up counter for signal <CONF_ERROR_LOST>.
+    Found 8-bit subtractor for signal <dly_addr_read>.
+    Found 8-bit up counter for signal <dly_addr_write>.
+    Found 24-bit comparator greater for signal <DONE>.
+    Found 14-bit register for signal <prev_data>.
+    Found 1-bit register for signal <prev_ready>.
+    Found 1-bit register for signal <prev_sync>.
+    Found 24-bit up counter for signal <rec_cnt>.
+    Found 24-bit comparator greater for signal <rec_cnt$cmp_gt0000> created at line 159.
+    Found 128-bit register for signal <status_regs>.
+    Found 16-bit comparator greatequal for signal <status_regs_0$cmp_ge0000> created at line 64.
+    Found 8-bit up counter for signal <sync_cnt>.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   4 Counter(s).
+	inferred 168 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   6 Comparator(s).
+	inferred   8 Multiplexer(s).
+Unit <gpac_adc_rx_core_4> synthesized.
+
+
+Synthesizing Unit <spi>.
+    Related source file is "../../../git/basil/basil/firmware/modules/spi/spi.v".
+Unit <spi> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_1>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx.v".
+Unit <gpac_adc_rx_1> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_2>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx.v".
+Unit <gpac_adc_rx_2> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_3>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx.v".
+Unit <gpac_adc_rx_3> synthesized.
+
+
+Synthesizing Unit <gpac_adc_rx_4>.
+    Related source file is "../../../git/basil/basil/firmware/modules/gpac_adc_rx/gpac_adc_rx.v".
+Unit <gpac_adc_rx_4> synthesized.
+
+
+Synthesizing Unit <LF_SFF_MIO>.
+    Related source file is "LF_SFF_MIO.v".
+WARNING:Xst:1306 - Output <ROW_SAMPLE2_50> is never assigned.
+WARNING:Xst:1306 - Output <ROW_RESET_100> is never assigned.
+WARNING:Xst:1306 - Output <RESET_ROW_START> is never assigned.
+WARNING:Xst:1306 - Output <RESET_COL_START_1> is never assigned.
+WARNING:Xst:1306 - Output <RESET_COL_START_2> is never assigned.
+WARNING:Xst:1306 - Output <LED5> is never assigned.
+WARNING:Xst:1306 - Output <RESET_ROW_CNT> is never assigned.
+WARNING:Xst:1306 - Output <RESET_COL_CNT> is never assigned.
+WARNING:Xst:1306 - Output <ROW_SAMPLE1_50> is never assigned.
+WARNING:Xst:1306 - Output <CLK_COL_25> is never assigned.
+WARNING:Xst:1306 - Output <CLK_ROW_25> is never assigned.
+WARNING:Xst:1306 - Output <CLK_COL_50> is never assigned.
+WARNING:Xst:1306 - Output <CLK_ROW_50> is never assigned.
+WARNING:Xst:1306 - Output <ROW_RESET_25> is never assigned.
+WARNING:Xst:1306 - Output <ROW_RESET_50> is never assigned.
+WARNING:Xst:2565 - Inout <FPGA_BUTTON> is never assigned.
+WARNING:Xst:2565 - Inout <SDA> is never assigned.
+WARNING:Xst:2565 - Inout <SCL> is never assigned.
+WARNING:Xst:1306 - Output <CLK_COL_100> is never assigned.
+WARNING:Xst:647 - Input <FMODE> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:1306 - Output <CLK_ROW_100> is never assigned.
+WARNING:Xst:1305 - Output <SEL0> is never assigned. Tied to value 0.
+WARNING:Xst:1305 - Output <SEL1> is never assigned. Tied to value 0.
+WARNING:Xst:1305 - Output <SEL2> is never assigned. Tied to value 0.
+WARNING:Xst:1306 - Output <SEL3> is never assigned.
+WARNING:Xst:646 - Signal <GPIO_NOT_USED> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <CLK_160_LOCKED> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <BUS_CLK270> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:653 - Signal <ADC_SYNC> is used but never assigned. This sourceless signal will be automatically connected to value 0000.
+WARNING:Xst:646 - Signal <ADC_FCO> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <ADC_ERROR> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <ADC_DCO> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <ADC_CLK> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 16-bit subtractor for signal <BUS_ADD>.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+Unit <LF_SFF_MIO> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+WARNING:Xst:638 - in unit gpac_adc_iobuf Conflict on KEEP property on signal ADC_IN_BUF and ADC_IN ADC_IN signal will be lost.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 13
+ 1024x33-bit dual-port RAM                             : 5
+ 256x14-bit dual-port RAM                              : 4
+ 8x32-bit dual-port RAM                                : 4
+# Adders/Subtractors                                   : 55
+ 1-bit adder                                           : 2
+ 10-bit adder                                          : 15
+ 10-bit addsub                                         : 5
+ 11-bit subtractor                                     : 2
+ 14-bit subtractor                                     : 1
+ 16-bit subtractor                                     : 7
+ 18-bit subtractor                                     : 3
+ 20-bit adder                                          : 3
+ 21-bit adder                                          : 1
+ 21-bit addsub                                         : 1
+ 21-bit subtractor                                     : 1
+ 23-bit adder                                          : 1
+ 32-bit adder carry out                                : 1
+ 4-bit adder                                           : 8
+ 8-bit subtractor                                      : 4
+# Counters                                             : 30
+ 10-bit up counter                                     : 10
+ 24-bit up counter                                     : 4
+ 32-bit up counter                                     : 1
+ 33-bit up counter                                     : 1
+ 8-bit down counter                                    : 1
+ 8-bit up counter                                      : 13
+# Registers                                            : 321
+ 1-bit register                                        : 173
+ 14-bit register                                       : 12
+ 16-bit register                                       : 2
+ 2-bit register                                        : 1
+ 20-bit register                                       : 2
+ 21-bit register                                       : 1
+ 22-bit register                                       : 1
+ 32-bit register                                       : 5
+ 4-bit register                                        : 33
+ 8-bit register                                        : 91
+# Latches                                              : 17
+ 1-bit latch                                           : 13
+ 14-bit latch                                          : 4
+# Comparators                                          : 88
+ 10-bit comparator equal                               : 15
+ 10-bit comparator greatequal                          : 5
+ 16-bit comparator greatequal                          : 12
+ 16-bit comparator less                                : 9
+ 16-bit comparator lessequal                           : 7
+ 18-bit comparator greatequal                          : 3
+ 18-bit comparator less                                : 2
+ 20-bit comparator equal                               : 4
+ 20-bit comparator greatequal                          : 1
+ 21-bit comparator greatequal                          : 1
+ 21-bit comparator lessequal                           : 1
+ 24-bit comparator greatequal                          : 4
+ 24-bit comparator greater                             : 8
+ 24-bit comparator lessequal                           : 4
+ 32-bit comparator greatequal                          : 1
+ 32-bit comparator less                                : 1
+ 33-bit comparator equal                               : 2
+ 4-bit comparator equal                                : 8
+# Multiplexers                                         : 6
+ 2-bit 4-to-1 multiplexer                              : 1
+ 8-bit 16-to-1 multiplexer                             : 5
+# Tristates                                            : 8
+ 16-bit tristate buffer                                : 1
+ 8-bit tristate buffer                                 : 7
+# Xors                                                 : 24
+ 1-bit xor2                                            : 24
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+WARNING:Xst:1290 - Hierarchical block <pulse_adc_sync> is unconnected in block <i_gpac_adc_rx_core>.
+   It will be removed from the design.
+WARNING:Xst:1290 - Hierarchical block <pulse_adc_sync> is unconnected in block <i_gpac_adc_rx_core>.
+   It will be removed from the design.
+WARNING:Xst:1290 - Hierarchical block <pulse_adc_sync> is unconnected in block <i_gpac_adc_rx_core>.
+   It will be removed from the design.
+WARNING:Xst:1290 - Hierarchical block <pulse_adc_sync> is unconnected in block <i_gpac_adc_rx_core>.
+   It will be removed from the design.
+INFO:Xst:2261 - The FF/Latch <rbin_3> in Unit <rptr_empty_inst> is equivalent to the following FF/Latch, which will be removed : <rptr_3> 
+INFO:Xst:2261 - The FF/Latch <wbin_3> in Unit <wptr_full_inst> is equivalent to the following FF/Latch, which will be removed : <wptr_3> 
+INFO:Xst:2261 - The FF/Latch <rbin_3> in Unit <rptr_empty_inst> is equivalent to the following FF/Latch, which will be removed : <rptr_3> 
+INFO:Xst:2261 - The FF/Latch <wbin_3> in Unit <wptr_full_inst> is equivalent to the following FF/Latch, which will be removed : <wptr_3> 
+INFO:Xst:2261 - The FF/Latch <rbin_3> in Unit <rptr_empty_inst> is equivalent to the following FF/Latch, which will be removed : <rptr_3> 
+INFO:Xst:2261 - The FF/Latch <wbin_3> in Unit <wptr_full_inst> is equivalent to the following FF/Latch, which will be removed : <wptr_3> 
+INFO:Xst:2261 - The FF/Latch <rbin_3> in Unit <rptr_empty_inst> is equivalent to the following FF/Latch, which will be removed : <rptr_3> 
+INFO:Xst:2261 - The FF/Latch <wbin_3> in Unit <wptr_full_inst> is equivalent to the following FF/Latch, which will be removed : <wptr_3> 
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <i_gpac_adc_rx_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <i_gpac_adc_rx_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <i_gpac_adc_rx_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <i_gpac_adc_rx_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <adc_out_sync_3_0> (without init value) has a constant value of 0 in block <i_gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <adc_out_sync_2_0> (without init value) has a constant value of 0 in block <i_gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <adc_out_sync_0_0> (without init value) has a constant value of 0 in block <i_gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <adc_out_sync_1_0> (without init value) has a constant value of 0 in block <i_gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <0>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_1>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_2>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_3>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_4>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_5>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_6>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_7>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_8>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_9>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_10>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_11>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <0> (without init value) has a constant value of 0 in block <adc_des_cnt_12>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <EXT_START_FF_0> (without init value) has a constant value of 0 in block <i_spi_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <in_sync_pulse> has a constant value of 0 in block <done_pulse_ext_start>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <in_pre_sync_0> (without init value) has a constant value of 0 in block <done_pulse_ext_start>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <EXT_START_FF_1> (without init value) has a constant value of 0 in block <i_spi_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <in_pre_sync_1> (without init value) has a constant value of 0 in block <done_pulse_ext_start>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <EXT_START_FF_2> (without init value) has a constant value of 0 in block <i_spi_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:2677 - Node <adc_out_sync_1_1> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_2> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_3> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_4> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_5> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_6> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_7> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_8> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_9> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_10> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_11> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_12> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_1_13> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_1> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_2> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_3> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_4> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_5> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_6> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_7> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_8> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_9> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_10> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_11> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_12> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_0_13> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_1> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_2> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_3> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_4> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_5> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_6> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_7> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_8> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_9> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_10> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_11> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_12> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_2_13> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_1> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_2> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_3> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_4> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_5> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_6> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_7> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_8> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_9> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_10> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_11> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_12> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <adc_out_sync_3_13> of sequential type is unconnected in block <i_gpac_adc_iobuf>.
+WARNING:Xst:2677 - Node <data_out_varindex0000_32> of sequential type is unconnected in block <i_buf_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_0> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_1> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_2> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_3> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_4> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_5> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_6> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_7> of sequential type is unconnected in block <i_sram_fifo>.
+WARNING:Xst:2677 - Node <data_out_varindex0000_32> of sequential type is unconnected in block <fifo_i>.
+WARNING:Xst:2677 - Node <data_out_varindex0000_32> of sequential type is unconnected in block <fifo_i>.
+WARNING:Xst:2677 - Node <data_out_varindex0000_32> of sequential type is unconnected in block <fifo_i>.
+WARNING:Xst:2677 - Node <data_out_varindex0000_32> of sequential type is unconnected in block <fifo_i>.
+
+Synthesizing (advanced) Unit <cdc_fifomem>.
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram_cdc_mem> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 8-word x 32-bit                     |          |
+    |     clkA           | connected to signal <wclk>          | rise     |
+    |     weA            | connected to signal <_and0000>      | high     |
+    |     addrA          | connected to signal <waddr>         |          |
+    |     diA            | connected to signal <wdata>         |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 8-word x 32-bit                     |          |
+    |     addrB          | connected to signal <raddr>         |          |
+    |     doB            | connected to signal <rdata>         |          |
+    -----------------------------------------------------------------------
+Unit <cdc_fifomem> synthesized (advanced).
+
+Synthesizing (advanced) Unit <gerneric_fifo>.
+INFO:Xst:3226 - The RAM <Mram_mem> will be implemented as a BLOCK RAM, absorbing the following register(s): <data_out_varindex0000>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 1024-word x 33-bit                  |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <_and0000>      | high     |
+    |     addrA          | connected to signal <wr_pointer>    |          |
+    |     diA            | connected to signal <data_in>       |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 1024-word x 33-bit                  |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <clk>           | rise     |
+    |     addrB          | connected to signal <rd_tmp>        |          |
+    |     doB            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <gerneric_fifo> synthesized (advanced).
+
+Synthesizing (advanced) Unit <gpac_adc_rx_core_1>.
+INFO:Xst:3226 - The RAM <Mram_dly_mem> will be implemented as a BLOCK RAM, absorbing the following register(s): <adc_dly_mem>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <ADC_ENC>       | rise     |
+    |     weA            | connected to internal node          | high     |
+    |     addrA          | connected to signal <dly_addr_write> |          |
+    |     diA            | connected to signal <ADC_IN>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <ADC_ENC>       | rise     |
+    |     addrB          | connected to signal <dly_addr_read> |          |
+    |     doB            | connected to signal <adc_dly_mem>   |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <gpac_adc_rx_core_1> synthesized (advanced).
+
+Synthesizing (advanced) Unit <gpac_adc_rx_core_2>.
+INFO:Xst:3226 - The RAM <Mram_dly_mem> will be implemented as a BLOCK RAM, absorbing the following register(s): <adc_dly_mem>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <ADC_ENC>       | rise     |
+    |     weA            | connected to signal <VCC>           | high     |
+    |     addrA          | connected to signal <dly_addr_write> |          |
+    |     diA            | connected to signal <ADC_IN>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <ADC_ENC>       | rise     |
+    |     addrB          | connected to signal <dly_addr_read> |          |
+    |     doB            | connected to signal <adc_dly_mem>   |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <gpac_adc_rx_core_2> synthesized (advanced).
+
+Synthesizing (advanced) Unit <gpac_adc_rx_core_3>.
+INFO:Xst:3226 - The RAM <Mram_dly_mem> will be implemented as a BLOCK RAM, absorbing the following register(s): <adc_dly_mem>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <ADC_ENC>       | rise     |
+    |     weA            | connected to signal <VCC>           | high     |
+    |     addrA          | connected to signal <dly_addr_write> |          |
+    |     diA            | connected to signal <ADC_IN>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <ADC_ENC>       | rise     |
+    |     addrB          | connected to signal <dly_addr_read> |          |
+    |     doB            | connected to signal <adc_dly_mem>   |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <gpac_adc_rx_core_3> synthesized (advanced).
+
+Synthesizing (advanced) Unit <gpac_adc_rx_core_4>.
+INFO:Xst:3226 - The RAM <Mram_dly_mem> will be implemented as a BLOCK RAM, absorbing the following register(s): <adc_dly_mem>
+    -----------------------------------------------------------------------
+    | ram_type           | Block                               |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | read-first                          |          |
+    |     clkA           | connected to signal <ADC_ENC>       | rise     |
+    |     weA            | connected to signal <VCC>           | high     |
+    |     addrA          | connected to signal <dly_addr_write> |          |
+    |     diA            | connected to signal <ADC_IN>        |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+    | Port B                                                              |
+    |     aspect ratio   | 256-word x 14-bit                   |          |
+    |     mode           | write-first                         |          |
+    |     clkB           | connected to signal <ADC_ENC>       | rise     |
+    |     addrB          | connected to signal <dly_addr_read> |          |
+    |     doB            | connected to signal <adc_dly_mem>   |          |
+    -----------------------------------------------------------------------
+    | optimization       | speed                               |          |
+    -----------------------------------------------------------------------
+Unit <gpac_adc_rx_core_4> synthesized (advanced).
+
+Synthesizing (advanced) Unit <rptr_empty>.
+The following registers are absorbed into accumulator <rbin>: 1 register on signal <rbin>.
+Unit <rptr_empty> synthesized (advanced).
+
+Synthesizing (advanced) Unit <wptr_full>.
+The following registers are absorbed into accumulator <wbin>: 1 register on signal <wbin>.
+Unit <wptr_full> synthesized (advanced).
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_0> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_1> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_2> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_3> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_4> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_5> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_6> of sequential type is unconnected in block <sram_fifo_core>.
+WARNING:Xst:2677 - Node <CONF_SIZE_BYTE_BUF_7> of sequential type is unconnected in block <sram_fifo_core>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 13
+ 1024x33-bit dual-port block RAM                       : 5
+ 256x14-bit dual-port block RAM                        : 4
+ 8x32-bit dual-port distributed RAM                    : 4
+# Adders/Subtractors                                   : 55
+ 1-bit adder                                           : 2
+ 10-bit adder                                          : 15
+ 10-bit addsub                                         : 5
+ 11-bit subtractor                                     : 2
+ 14-bit subtractor                                     : 1
+ 16-bit subtractor                                     : 7
+ 18-bit subtractor                                     : 3
+ 20-bit adder                                          : 3
+ 21-bit adder                                          : 2
+ 21-bit addsub                                         : 1
+ 21-bit subtractor                                     : 1
+ 32-bit adder carry out                                : 1
+ 4-bit adder                                           : 8
+ 8-bit subtractor                                      : 4
+# Counters                                             : 30
+ 10-bit up counter                                     : 10
+ 24-bit up counter                                     : 4
+ 32-bit up counter                                     : 1
+ 33-bit up counter                                     : 1
+ 8-bit down counter                                    : 1
+ 8-bit up counter                                      : 13
+# Accumulators                                         : 8
+ 4-bit up accumulator                                  : 8
+# Registers                                            : 1222
+ Flip-Flops                                            : 1222
+# Latches                                              : 17
+ 1-bit latch                                           : 13
+ 14-bit latch                                          : 4
+# Comparators                                          : 88
+ 10-bit comparator equal                               : 15
+ 10-bit comparator greatequal                          : 5
+ 16-bit comparator greatequal                          : 12
+ 16-bit comparator less                                : 9
+ 16-bit comparator lessequal                           : 7
+ 18-bit comparator greatequal                          : 3
+ 18-bit comparator less                                : 2
+ 20-bit comparator equal                               : 4
+ 20-bit comparator greatequal                          : 1
+ 21-bit comparator greatequal                          : 1
+ 21-bit comparator lessequal                           : 1
+ 24-bit comparator greatequal                          : 4
+ 24-bit comparator greater                             : 8
+ 24-bit comparator lessequal                           : 4
+ 32-bit comparator greatequal                          : 1
+ 32-bit comparator less                                : 1
+ 33-bit comparator equal                               : 2
+ 4-bit comparator equal                                : 8
+# Multiplexers                                         : 41
+ 1-bit 16-to-1 multiplexer                             : 40
+ 2-bit 4-to-1 multiplexer                              : 1
+# Xors                                                 : 24
+ 1-bit xor2                                            : 24
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <EXT_START_FF_0> (without init value) has a constant value of 0 in block <spi_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <EXT_START_FF_1> (without init value) has a constant value of 0 in block <spi_core>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <EXT_START_FF_2> (without init value) has a constant value of 0 in block <spi_core>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <prev_sync> in Unit <gpac_adc_rx_core_1> is equivalent to the following FF/Latch, which will be removed : <pulse_adc_sync/ff> 
+INFO:Xst:2261 - The FF/Latch <prev_sync> in Unit <gpac_adc_rx_core_2> is equivalent to the following FF/Latch, which will be removed : <pulse_adc_sync/ff> 
+INFO:Xst:2261 - The FF/Latch <prev_sync> in Unit <gpac_adc_rx_core_3> is equivalent to the following FF/Latch, which will be removed : <pulse_adc_sync/ff> 
+INFO:Xst:2261 - The FF/Latch <prev_sync> in Unit <gpac_adc_rx_core_4> is equivalent to the following FF/Latch, which will be removed : <pulse_adc_sync/ff> 
+WARNING:Xst:1710 - FF/Latch <adc_des_cnt_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_des_cnt_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <gpac_adc_rx_core_1>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1898 - Due to constant pushing, FF/Latch <adc_sync_wait> is unconnected in block <gpac_adc_rx_core_1>.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <gpac_adc_rx_core_2>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1898 - Due to constant pushing, FF/Latch <adc_sync_wait> is unconnected in block <gpac_adc_rx_core_2>.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <gpac_adc_rx_core_3>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1898 - Due to constant pushing, FF/Latch <adc_sync_wait> is unconnected in block <gpac_adc_rx_core_3>.
+WARNING:Xst:1710 - FF/Latch <prev_sync> (without init value) has a constant value of 0 in block <gpac_adc_rx_core_4>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1898 - Due to constant pushing, FF/Latch <adc_sync_wait> is unconnected in block <gpac_adc_rx_core_4>.
+WARNING:Xst:2677 - Node <PREV_BUS_ADD_0> of sequential type is unconnected in block <spi_core>.
+INFO:Xst:1901 - Instance memin/dpram in unit memin/dpram of type RAMB16_S1_S9 has been replaced by RAMB16
+INFO:Xst:1901 - Instance memout/dpram in unit memout/dpram of type RAMB16_S1_S9 has been replaced by RAMB16
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[2].adc_des_syn_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[3].adc_des_syn_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[0].adc_des_syn_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <gen[1].adc_des_syn_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_3_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_0_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_2_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_13> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_12> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_11> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_10> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_9> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_8> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_7> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_6> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_5> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_4> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_3> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_2> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_1> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <adc_out_sync_1_0> (without init value) has a constant value of 0 in block <gpac_adc_iobuf>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:2677 - Node <i_out_fifo/i_sram_fifo/FIFO_NEAR_FULL> of sequential type is unconnected in block <LF_SFF_MIO>.
+INFO:Xst:2261 - The FF/Latch <rptr_3> in Unit <rptr_empty> is equivalent to the following FF/Latch, which will be removed : <rbin_3> 
+INFO:Xst:2261 - The FF/Latch <wptr_3> in Unit <wptr_full> is equivalent to the following FF/Latch, which will be removed : <wbin_3> 
+WARNING:Xst:2040 - Unit LF_SFF_MIO: 8 multi-source signals are replaced by logic (pull-up yes): BUS_DATA<0>_MLTSRCEDGE, BUS_DATA<1>_MLTSRCEDGE, BUS_DATA<2>_MLTSRCEDGE, BUS_DATA<3>_MLTSRCEDGE, BUS_DATA<4>_MLTSRCEDGE, BUS_DATA<5>_MLTSRCEDGE, BUS_DATA<6>_MLTSRCEDGE, BUS_DATA<7>_MLTSRCEDGE.
+
+Optimizing unit <LF_SFF_MIO> ...
+
+Optimizing unit <rrp_arbiter> ...
+
+Optimizing unit <cdc_pulse_sync> ...
+
+Optimizing unit <gerneric_fifo> ...
+
+Optimizing unit <gpio_core> ...
+
+Optimizing unit <cdc_sync_r2w> ...
+
+Optimizing unit <cdc_sync_w2r> ...
+
+Optimizing unit <rptr_empty> ...
+
+Optimizing unit <wptr_full> ...
+
+Optimizing unit <clk_gen> ...
+
+Optimizing unit <spi_core> ...
+
+Optimizing unit <gpac_adc_rx_core_1> ...
+
+Optimizing unit <gpac_adc_rx_core_2> ...
+
+Optimizing unit <gpac_adc_rx_core_3> ...
+
+Optimizing unit <gpac_adc_rx_core_4> ...
+WARNING:Xst:1710 - FF/Latch <i_spi_adc/i_spi_core/done_pulse_ext_start/in_pre_sync_0> (without init value) has a constant value of 0 in block <LF_SFF_MIO>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1293 - FF/Latch <i_spi_adc/i_spi_core/done_pulse_ext_start/in_sync_pulse> has a constant value of 0 in block <LF_SFF_MIO>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <i_spi_adc/i_spi_core/done_pulse_ext_start/in_pre_sync_1> (without init value) has a constant value of 0 in block <LF_SFF_MIO>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:2677 - Node <i_spi_adc/i_spi_core/SLD> of sequential type is unconnected in block <LF_SFF_MIO>.
+WARNING:Xst:2677 - Node <i_spi_adc/i_spi_core/sync_ld_1> of sequential type is unconnected in block <LF_SFF_MIO>.
+WARNING:Xst:2677 - Node <i_spi_adc/i_spi_core/sync_ld_0> of sequential type is unconnected in block <LF_SFF_MIO>.
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block LF_SFF_MIO, actual ratio is 24.
+FlipFlop i_out_fifo/i_sram_fifo/wr_pointer_0 has been replicated 1 time(s)
+
+Final Macro Processing ...
+
+Processing Unit <LF_SFF_MIO> :
+	Found 2-bit shift register for signal <adc_gen[0].i_gpac_adc_rx/i_gpac_adc_rx_core/isync_rst/in_pre_sync_1>.
+	Found 2-bit shift register for signal <adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/isync_rst/in_pre_sync_1>.
+	Found 2-bit shift register for signal <adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/isync_rst/in_pre_sync_1>.
+	Found 2-bit shift register for signal <adc_gen[3].i_gpac_adc_rx/i_gpac_adc_rx_core/isync_rst/in_pre_sync_1>.
+Unit <LF_SFF_MIO> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 1533
+ Flip-Flops                                            : 1533
+# Shift Registers                                      : 4
+ 2-bit shift register                                  : 4
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : LF_SFF_MIO.ngr
+Top Level Output File Name         : LF_SFF_MIO
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : No
+
+Design Statistics
+# IOs                              : 145
+
+Cell Usage :
+# BELS                             : 5171
+#      GND                         : 17
+#      INV                         : 119
+#      LUT1                        : 388
+#      LUT2                        : 523
+#      LUT2_D                      : 3
+#      LUT2_L                      : 12
+#      LUT3                        : 347
+#      LUT3_D                      : 18
+#      LUT3_L                      : 3
+#      LUT4                        : 1470
+#      LUT4_D                      : 25
+#      LUT4_L                      : 49
+#      MUXCY                       : 1171
+#      MUXF5                       : 222
+#      MUXF6                       : 80
+#      MUXF7                       : 40
+#      VCC                         : 1
+#      XORCY                       : 683
+# FlipFlops/Latches                : 1539
+#      FD                          : 158
+#      FD_1                        : 1
+#      FDE                         : 349
+#      FDR                         : 182
+#      FDR_1                       : 1
+#      FDRE                        : 787
+#      FDRS                        : 1
+#      FDRSE                       : 6
+#      FDS                         : 11
+#      FDSE                        : 41
+#      LD                          : 1
+#      OFDDRRSE                    : 1
+# RAMS                             : 144
+#      RAM16X1D                    : 128
+#      RAMB16                      : 16
+# Shift Registers                  : 4
+#      SRL16                       : 4
+# Clock Buffers                    : 8
+#      BUFG                        : 8
+# IO Buffers                       : 115
+#      IBUF                        : 21
+#      IBUFDS                      : 5
+#      IBUFG                       : 1
+#      IBUFGDS                     : 1
+#      IOBUF                       : 24
+#      OBUF                        : 62
+#      OBUFDS                      : 1
+# DCMs                             : 2
+#      DCM                         : 2
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 3s1000fg320-4 
+
+ Number of Slices:                     1872  out of   7680    24%  
+ Number of Slice Flip Flops:           1523  out of  15360     9%  
+ Number of 4 input LUTs:               3217  out of  15360    20%  
+    Number used as logic:              2957
+    Number used as Shift registers:       4
+    Number used as RAMs:                256
+ Number of IOs:                         145
+ Number of bonded IOBs:                 123  out of    221    55%  
+    IOB Flip Flops:                      16
+ Number of BRAMs:                        16  out of     24    66%  
+ Number of GCLKs:                         8  out of      8   100%  
+ Number of DCMs:                          2  out of      4    50%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+----------------------------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)                        | Load  |
+-----------------------------------+----------------------------------------------+-------+
+FCLK_IN                            | i_clkgen/DCM_BUS:CLK0                        | 1147  |
+FCLK_IN                            | i_clkgen/DCM_BUS:CLKFX+i_clkgen/DCM_CMD:CLKDV| 458   |
+FCLK_IN                            | i_clkgen/DCM_BUS:CLKDV                       | 85    |
+-----------------------------------+----------------------------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -4
+
+   Minimum period: 13.462ns (Maximum Frequency: 74.283MHz)
+   Minimum input arrival time before clock: 21.971ns
+   Maximum output required time after clock: 13.807ns
+   Maximum combinational path delay: 20.913ns
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'FCLK_IN'
+  Clock period: 13.462ns (frequency: 74.283MHz)
+  Total number of paths / destination ports: 250479 / 3976
+-------------------------------------------------------------------------
+Delay:               13.462ns (Levels of Logic = 9)
+  Source:            i_out_fifo/i_sram_fifo/i_buf_fifo/wr_pointer_0 (FF)
+  Destination:       adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/Mram_mem2/Mram_mem2 (RAM)
+  Source Clock:      FCLK_IN rising
+  Destination Clock: FCLK_IN rising
+
+  Data Path: i_out_fifo/i_sram_fifo/i_buf_fifo/wr_pointer_0 to adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/Mram_mem2/Mram_mem2
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDRE:C->Q            10   0.720   1.473  i_out_fifo/i_sram_fifo/i_buf_fifo/wr_pointer_0 (i_out_fifo/i_sram_fifo/i_buf_fifo/Madd_full_addsub0000_cy<0>)
+     LUT3:I0->O            2   0.551   0.903  i_out_fifo/i_sram_fifo/i_buf_fifo/Madd_full_addsub0000_xor<3>111 (i_out_fifo/i_sram_fifo/i_buf_fifo/N8)
+     LUT4_D:I3->LO         1   0.551   0.168  i_out_fifo/i_sram_fifo/i_buf_fifo/Madd_full_addsub0000_xor<6>111 (N708)
+     LUT3:I2->O            2   0.551   0.903  i_out_fifo/i_sram_fifo/i_buf_fifo/Madd_full_addsub0000_xor<8>111 (i_out_fifo/i_sram_fifo/i_buf_fifo/N14)
+     LUT4:I3->O            1   0.551   0.000  i_out_fifo/i_sram_fifo/i_buf_fifo/Mcompar_full_cmp_eq0002_lut<4> (i_out_fifo/i_sram_fifo/i_buf_fifo/Mcompar_full_cmp_eq0002_lut<4>)
+     MUXCY:S->O            2   0.739   0.903  i_out_fifo/i_sram_fifo/i_buf_fifo/Mcompar_full_cmp_eq0002_cy<4> (i_out_fifo/i_sram_fifo/i_buf_fifo/Mcompar_full_cmp_eq0002_cy<4>)
+     LUT4:I3->O           17   0.551   1.540  i_out_fifo/i_sram_fifo/i_buf_fifo/full74 (i_out_fifo/i_sram_fifo/FULL_BUF)
+     LUT2_D:I1->O          6   0.551   1.029  adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/empty_mux0000137 (adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/N20)
+     LUT4:I3->O            2   0.551   0.877  adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/rd_tmp<6>1 (adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/rd_tmp<6>)
+     begin scope: 'adc_gen[2].i_gpac_adc_rx/i_gpac_adc_rx_core/fifo_i/Mram_mem2'
+     RAMB16:ADDRB10            0.350          Mram_mem2
+    ----------------------------------------
+    Total                     13.462ns (5.666ns logic, 7.796ns route)
+                                       (42.1% logic, 57.9% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'FCLK_IN'
+  Total number of paths / destination ports: 784192 / 2149
+-------------------------------------------------------------------------
+Offset:              21.971ns (Levels of Logic = 12)
+  Source:            ADD<6> (PAD)
+  Destination:       adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_0 (FF)
+  Destination Clock: FCLK_IN rising
+
+  Data Path: ADD<6> to adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            35   0.821   2.209  ADD_6_IBUF (ADD_6_IBUF)
+     LUT2:I0->O            6   0.551   1.029  adc_gen[0].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<0>1110 (N42)
+     LUT4:I3->O            5   0.551   0.989  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<11>11 (N111)
+     LUT4:I2->O            2   0.551   0.903  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<15>_SW0 (N233)
+     LUT4:I3->O           98   0.551   2.570  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/CS (adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/CS)
+     LUT4:I0->O            2   0.551   1.216  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<14>1 (adc_gen[1].i_gpac_adc_rx/IP_ADD<14>)
+     LUT4:I0->O            1   0.551   1.140  adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/RST112 (adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/RST112)
+     LUT4:I0->O            2   0.551   1.216  adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/RST139 (adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/RST139)
+     LUT2:I0->O            5   0.551   1.260  adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/RST169 (adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_and0000)
+     LUT4:I0->O           15   0.551   1.527  adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_mux0000<7>11 (adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/N0)
+     LUT4:I0->O            1   0.551   0.827  adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_mux0000<7>41_SW0 (N379)
+     LUT4:I3->O            1   0.551   0.000  adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_mux0000<7>41 (adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_mux0000<7>)
+     FDE:D                     0.203          adc_gen[1].i_gpac_adc_rx/i_gpac_adc_rx_core/BUS_DATA_OUT_0
+    ----------------------------------------
+    Total                     21.971ns (7.085ns logic, 14.886ns route)
+                                       (32.2% logic, 67.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'FCLK_IN'
+  Total number of paths / destination ports: 627 / 62
+-------------------------------------------------------------------------
+Offset:              13.807ns (Levels of Logic = 10)
+  Source:            i_spi_adc/i_spi_core/PREV_BUS_ADD_2 (FF)
+  Destination:       BUS_DATA<7> (PAD)
+  Source Clock:      FCLK_IN rising
+
+  Data Path: i_spi_adc/i_spi_core/PREV_BUS_ADD_2 to BUS_DATA<7>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              2   0.720   1.216  i_spi_adc/i_spi_core/PREV_BUS_ADD_2 (i_spi_adc/i_spi_core/PREV_BUS_ADD_2)
+     LUT2:I0->O            1   0.551   0.000  i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_lut<1>1 (i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_lut<1>1)
+     MUXCY:S->O            1   0.500   0.000  i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<1>_0 (i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<1>1)
+     MUXCY:CI->O           1   0.064   0.000  i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<2>_0 (i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<2>1)
+     MUXCY:CI->O           1   0.064   0.000  i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<3>_0 (i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<3>1)
+     MUXCY:CI->O           1   0.064   0.000  i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<4> (i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<4>)
+     MUXCY:CI->O           8   0.303   1.422  i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<5> (i_spi_adc/i_spi_core/Mcompar_BUS_DATA_OUT_cmp_lt0000_cy<5>)
+     LUT4:I0->O            1   0.551   0.996  BUS_DATA<7>_MLTSRCEDGELogicTrst106_SW0 (N463)
+     LUT4:I1->O            1   0.551   0.000  BUS_DATA<7>_MLTSRCEDGELogicTrst128_F (N667)
+     MUXF5:I0->O           1   0.360   0.801  BUS_DATA<7>_MLTSRCEDGELogicTrst128 (BUS_DATA<7>_MLTSRCEDGE)
+     IOBUF:I->IO               5.644          BUS_DATA_7_IOBUF (BUS_DATA<7>)
+    ----------------------------------------
+    Total                     13.807ns (9.372ns logic, 4.435ns route)
+                                       (67.9% logic, 32.1% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 5936 / 8
+-------------------------------------------------------------------------
+Delay:               20.913ns (Levels of Logic = 10)
+  Source:            ADD<6> (PAD)
+  Destination:       BUS_DATA<7> (PAD)
+
+  Data Path: ADD<6> to BUS_DATA<7>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O            35   0.821   2.209  ADD_6_IBUF (ADD_6_IBUF)
+     LUT2:I0->O            6   0.551   1.029  adc_gen[0].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<0>1110 (N42)
+     LUT4:I3->O            5   0.551   0.989  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<11>11 (N111)
+     LUT4:I2->O            2   0.551   0.903  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/IP_ADD<15>_SW0 (N233)
+     LUT4:I3->O           98   0.551   2.570  adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/CS (adc_gen[1].i_gpac_adc_rx/i_bus_to_ip/CS)
+     LUT4:I0->O            1   0.551   0.827  BUS_DATA<7>_MLTSRCEDGELogicTrst53_SW0 (N641)
+     LUT4:I3->O            2   0.551   0.903  BUS_DATA<7>_MLTSRCEDGELogicTrst53 (BUS_DATA<7>_MLTSRCEDGELogicTrst53)
+     LUT4:I3->O            1   0.551   0.000  BUS_DATA<7>_MLTSRCEDGELogicTrst128_F (N667)
+     MUXF5:I0->O           1   0.360   0.801  BUS_DATA<7>_MLTSRCEDGELogicTrst128 (BUS_DATA<7>_MLTSRCEDGE)
+     IOBUF:I->IO               5.644          BUS_DATA_7_IOBUF (BUS_DATA<7>)
+    ----------------------------------------
+    Total                     20.913ns (10.682ns logic, 10.231ns route)
+                                       (51.1% logic, 48.9% route)
+
+=========================================================================
+WARNING:Xst:615 - Flip flop associated with net adc_gen[3].i_gpac_adc_rx/i_gpac_adc_rx_core/ADC_ENC not found, property IOB not attached.
+WARNING:Xst:615 - Flip flop associated with net i_gpac_adc_iobuf/ADC_DCO_BUF not found, property IOB not attached.
+WARNING:Xst:615 - Flip flop associated with net i_gpac_adc_iobuf/ADC_FCO_BUF not found, property IOB not attached.
+WARNING:Xst:615 - Flip flop associated with net i_gpac_adc_iobuf/ADC_IN_BUF<0> not found, property IOB not attached.
+WARNING:Xst:615 - Flip flop associated with net i_gpac_adc_iobuf/ADC_IN_BUF<1> not found, property IOB not attached.
+WARNING:Xst:615 - Flip flop associated with net i_gpac_adc_iobuf/ADC_IN_BUF<2> not found, property IOB not attached.
+WARNING:Xst:615 - Flip flop associated with net i_gpac_adc_iobuf/ADC_IN_BUF<3> not found, property IOB not attached.
+
+
+Total REAL time to Xst completion: 22.00 secs
+Total CPU time to Xst completion: 18.23 secs
+ 
+--> 
+
+
+Total memory usage is 798912 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :  331 (   0 filtered)
+Number of infos    :   26 (   0 filtered)
+

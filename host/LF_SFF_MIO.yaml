@@ -20,7 +20,7 @@ hw_drivers:
     type      : GPAC
     interface : usb
     base_addr : 0x00000
-
+    
   - name      : GPIO_DRV
     type      : gpio
     interface : usb
@@ -52,158 +52,82 @@ hw_drivers:
     type      : fadc_rx
     interface : usb
     base_addr : 0x10060
-    
-  - name      : seq_gen
-    type      : seq_gen
+  
+  - name      : FIFO
+    type      : sram_fifo
     interface : usb
-    base_addr : 0x11000
-    
+    base_addr : 0x10020
+    base_data_addr: 0x0001000000000000
 
 registers:
-  - name        : GPIO_LED
+  - name        : CONTROL
     type        : StdRegister
     hw_driver   : GPIO_DRV
     size        : 8
     fields:
+      - name    : SEL0
+        size    : 1
+        offset  : 0
+      - name    : SEL1
+        size    : 1
+        offset  : 1
+      - name    : SEL2
+        size    : 1
+        offset  : 2
+      - name    : RESET
+        size    : 1
+        offset  : 3
       - name    : LED
         size    : 5
         offset  : 4
 
-  - name        : DVDD
+        
+  - name        : VDD
     type        : FunctionalRegister
     hw_driver   : GPAC
     arg_names   : [ value ]
     arg_add     : { 'channel': 'PWR0'}
-      
-  - name        : AVDD
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'PWR1'}
-
-  - name        : VNDIODE
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'PWR2'}
-
-  - name        : VM
+    
+  - name        : VRESET
     type        : FunctionalRegister
     hw_driver   : GPAC
     arg_names   : [ value ]
     arg_add     : { 'channel': 'VSRC0'}
-    
-  - name        : VRESETP
+
+  - name        : opAMP_offset
     type        : FunctionalRegister
     hw_driver   : GPAC
     arg_names   : [ value ]
     arg_add     : { 'channel': 'VSRC1'}
     
-  - name        : VRESETN
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'VSRC2'}
-  
-  - name        : FADC_VREF
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'VSRC3'}
-    
-  - name        : IREF_SOURCE_5U
+  - name        : IBP
     type        : FunctionalRegister
     hw_driver   : GPAC
     arg_names   : [ value ]
     arg_add     : { 'channel': 'ISRC0'}
-    
-  - name        : IREF_SOURCE_1U
+
+  - name        : IBN
     type        : FunctionalRegister
     hw_driver   : GPAC
     arg_names   : [ value ]
     arg_add     : { 'channel': 'ISRC1'}
-    
-  - name        : IREF_SINK_11U
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'ISRC2'}
-      
-  - name        : IREF_SINK_5U
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'ISRC3'}
-    
-  - name        : IBP_CS_AMP
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'ISRC4'}
-    
-  - name        : IBN_COL_DRV
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'ISRC5'}
-      
-  - name        : IBP_OUT_SF
-    type        : FunctionalRegister
-    hw_driver   : GPAC
-    arg_names   : [ value ]
-    arg_add     : { 'channel': 'ISRC6'}
-        
-  - name        : AOUT50
+
+  - name        : OUT_0
     type        : FunctionalRegister
     hw_driver   : fadc0_rx
   
-  - name        : AOUT25
+  - name        : OUT_1
     type        : FunctionalRegister
     hw_driver   : fadc1_rx
   
-  - name        : AOUT50v2
+  - name        : OUT_2
     type        : FunctionalRegister
     hw_driver   : fadc2_rx
-      
-  - name        : AOUT100
+  
+  - name        : OUT_3
     type        : FunctionalRegister
     hw_driver   : fadc3_rx
-    
-  - name        : SEQ
-    type        : TrackRegister
-    hw_driver   : seq_gen
-    seq_width   : 16
-    seq_size    : 8192
-    tracks  : 
-      - name     : RESET_ROW_CNT
-        position : 0
-      - name     : RESET_COL_CNT
-        position : 1  
-      - name     : ADC_SYNC_50
-        position : 2
-      - name     : CLK_ROW_50
-        position : 3
-      - name     : CLK_COL_50
-        position : 4
-      - name     : ROW_RESET_50
-        position : 5
-      - name     : ADC_SYNC_25
-        position : 6
-      - name     : CLK_ROW_25
-        position : 7
-      - name     : CLK_COL_25
-        position : 8
-      - name     : ROW_RESET_25
-        position : 9
-      - name     : ADC_SYNC_100
-        position : 10
-      - name     : CLK_ROW_100
-        position : 11
-      - name     : CLK_COL_100
-        position : 12
-      - name     : ROW_RESET_100
-        position : 13
-      - name     : ROW_SAMPLE1_50
-        position : 14
-      - name     : ROW_SAMPLE2_50
-        position : 15
+
+  - name        : DATA_FIFO
+    type        : FunctionalRegister
+    hw_driver   : FIFO
