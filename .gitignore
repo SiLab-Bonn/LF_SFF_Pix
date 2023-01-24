@@ -40,7 +40,6 @@ device/ise/LF_SFF_MIO_summary.xml
 device/ise/LF_SFF_MIO_usage.xml
 device/ise/LF_SFF_MIO_xst.xrpt
 device/ise/LF_SFF_MIO.bgn
-device/ise/LF_SFF_MIO.bit
 device/ise/LF_SFF_MIO.bld
 device/ise/LF_SFF_MIO.cmd_log
 device/ise/LF_SFF_MIO.drc
@@ -128,3 +127,7 @@ device/ise/_xmsgs/*
 device/ise/xlnx_auto_0_xdb/*
 device/ise/xst/*
 
+device/ise/LF_SFF_MIO_guide.ncd
+device/ise/LF_SFF_MIO_summary.html
+device/ise/LF_SFF_MIO.gise
+host/__pycache__/*

@@ -13,17 +13,20 @@ import numpy as np
 class LF_SFF_MIO(Dut):
     
     def boot_seq(self):
-        for i in range(4):
-            self['CONTROL'] = 0x01 << i
+        for i in range(3):
+            self['CONTROL'] = 0x02 << i
             self['CONTROL'].write()
             time.sleep(0.1)
+        self['CONTROL']['RESET'] = 0x1 
+        self['CONTROL'].write()
+        time.sleep(0.1)
         for i in range(0,2):
             self['CONTROL'] = 0x1f
             self['CONTROL'].write()
-            time.sleep(0.5)
+            time.sleep(0.2)
             self['CONTROL'] = 0x00
             self['CONTROL'].write()
-            time.sleep(0.5)
+            time.sleep(0.2)
         self['CONTROL'] = 0x1f
         self['CONTROL'].write()
 
