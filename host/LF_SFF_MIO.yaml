@@ -65,21 +65,22 @@ registers:
     hw_driver   : GPIO_DRV
     size        : 8
     fields:
-      - name    : SEL0
-        size    : 1
-        offset  : 0
-      - name    : SEL1
-        size    : 1
-        offset  : 1
-      - name    : SEL2
-        size    : 1
-        offset  : 2
       - name    : RESET
         size    : 1
+        offset  : 0
+      - name    : SEL0
+        size    : 1
+        offset  : 1
+      - name    : SEL1
+        size    : 1
+        offset  : 2
+      - name    : SEL2
+        size    : 1
         offset  : 3
-      - name    : LED
-        size    : 5
+      - name    : LED5
+        size    : 1
         offset  : 4
+
 
         
   - name        : VDD

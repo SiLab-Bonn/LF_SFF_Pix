@@ -9,6 +9,16 @@ import numpy as np
 from LF_SFF_MIO import LF_SFF_MIO
 import yaml
 
+
+## VDD -> PWR0
+## ISRC0 -> IBP
+## ISRC1 -> IBN
+## DOUT[0:2] -> SEL[0:2]
+## DOUT3 -> RESET
+## VSRC0 -> VRESET
+## FAST_ADC[0:3] -> Out[0:3]
+## VSRC1 -> Offset opAMP
+
 stream = open("LF_SFF_MIO.yaml", 'r')
 cnfg = yaml.load(stream, Loader=yaml.Loader)
 
@@ -18,29 +28,9 @@ dut.init()
 dut.boot_seq()
 
 
-# Voltages
-VDD = 1.2
-VDD_Unit = 'V'
-VRESET = 1.1
-VRESET_Unit = 'V'
+print('\n----------------------- Starting Configuration -----------------------\n')
 
-# Currents
-IBN =  100 
-IBN_Unit = 'uA'
-IBP = 10
-IBP_Unit = 'uA'
-
-dut['VDD'].set_voltage(VDD, unit=VDD_Unit)
-print('VDD:', dut['VDD'].get_voltage(unit='V'), 'V', dut['VDD'].get_current(), 'mA')
-
-dut['IBN'].set_current(IBN, unit=IBN_Unit)
-print('IBN:', dut['IBN'].get_voltage(unit='V'), 'V', dut['IBN'].get_current(), 'uA')
-
-dut['IBP'].set_current(IBP, unit=IBP_Unit)
-print('IBP:', dut['IBP'].get_voltage(unit='V'), 'V', dut['IBP'].get_current(), 'uA')
-
-dut['VRESET'].set_voltage(VRESET, unit=VRESET_Unit)
-print('VRESET:', dut['VRESET'].get_voltage(unit='V'), VRESET_Unit, dut['VRESET'].get_current(), 'uA')
+dut.load_defaults()
 
 print('\n----------------------- Ending Configuration -----------------------\n')
 
@@ -52,3 +42,29 @@ print(status)
 
 data, sync = dut.take_adc_data('OUT_0')
 print(data)
+
+while True:
+    dut['CONTROL']['SEL0'] = 0x1
+    dut['CONTROL']['SEL1'] = 0x1
+    dut['CONTROL']['SEL2'] = 0x1
+    dut['CONTROL']['RESET'] = 0x1
+    dut['CONTROL'].write()
+    time.sleep(5)
+    dut['CONTROL'] = 0x00
+    dut['CONTROL'].write()
+    time.sleep(2)
+    dut['CONTROL']['SEL0'] = 0x1
+    dut['CONTROL'].write()
+    time.sleep(0.2)
+    dut['CONTROL']['SEL1'] = 0x1
+    dut['CONTROL'].write()
+    time.sleep(0.2)
+    dut['CONTROL']['SEL2'] = 0x1
+    dut['CONTROL'].write()
+    time.sleep(0.2)
+    dut['CONTROL']['RESET'] = 0x1
+    dut['CONTROL'].write()
+    time.sleep(0.2)
+    dut['CONTROL']['LED5'] = 0x1
+    dut['CONTROL'].write()
+    time.sleep(0.2)

@@ -159,8 +159,8 @@ NET "FD[0]" LOC = V11;
 
 # ------ LED -------------------------------------------------------
 
-//NET "LED5" IOSTANDARD = LVCMOS33;
-//NET "LED5" LOC = U15;
+NET "LED5" IOSTANDARD = LVCMOS33;
+NET "LED5" LOC = U15;
 NET "LED4" IOSTANDARD = LVCMOS33;
 NET "LED4" LOC = V16;
 NET "LED3" IOSTANDARD = LVCMOS33;
@@ -408,7 +408,6 @@ NET "ADC_OUT_N[3]"  LOC = H1 | IOSTANDARD = LVDS_25 | DIFF_TERM = TRUE;
 
 
 # ------ DOUT -------------------------------------------------
-
 NET "SEL0"  LOC = A15; 	#DOUT0
 NET "SEL1"  LOC = B13; 	#DOUT1
 NET "SEL2" 	LOC = A14; 	#DOUT2

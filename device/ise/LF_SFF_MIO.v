@@ -369,15 +369,15 @@ module LF_SFF_MIO (
     ); 
     `endif
 	 
-
+	
 
 	wire [1:0] GPIO_NOT_USED;
     gpio #(
         .BASEADDR(GPIO_BASEADDR),
         .HIGHADDR(GPIO_HIGHADDR),
 
-        .IO_WIDTH(8),
-        .IO_DIRECTION(8'h1f) // 3 MSBs are input the rest output
+        .IO_WIDTH(5),
+        .IO_DIRECTION(5'h1f) // 3 MSBs are input the rest output
     ) i_gpio (
         .BUS_CLK(BUS_CLK),
         .BUS_RST(BUS_RST),
@@ -385,9 +385,13 @@ module LF_SFF_MIO (
         .BUS_DATA(BUS_DATA),
         .BUS_RD(BUS_RD),
         .BUS_WR(BUS_WR),
-        .IO({SEL2, SEL1, SEL0, RESET, LED4, LED3, LED2, LED1}) //,FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1
+        .IO({LED5, SEL2, SEL1, SEL0, RESET}) //,FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1
     );
 
     assign GPIO_NOT_USED = {LED2, LED1};
+	 assign LED1 = SEL0;
+	 assign LED2 = SEL1;
+	 assign LED3 = SEL2;
+	 assign LED4 = RESET;
 
 endmodule
