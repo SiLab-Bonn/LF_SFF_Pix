@@ -12,7 +12,7 @@ transfer_layer:
   - name  : usb
     type  : SiUsb
     init:
-      avoid_download : True
+      avoid_download : False
       bit_file : ../device/ise/LF_SFF_MIO.bit
     
 hw_drivers:
@@ -100,7 +100,13 @@ registers:
     hw_driver   : GPAC
     arg_names   : [ value ]
     arg_add     : { 'channel': 'VSRC1'}
-    
+   
+  - name        : fast_ADC
+    type        : FunctionalRegister
+    hw_driver   : GPAC
+    arg_names   : [ value ]
+    arg_add     : { 'channel': 'VSRC3'} 
+
   - name        : IBP
     type        : FunctionalRegister
     hw_driver   : GPAC

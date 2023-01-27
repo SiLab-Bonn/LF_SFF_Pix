@@ -131,3 +131,15 @@ device/ise/LF_SFF_MIO_guide.ncd
 device/ise/LF_SFF_MIO_summary.html
 device/ise/LF_SFF_MIO.gise
 host/__pycache__/*
+notes.md
+host/array_plots.py
+host/example_.py
+host/example.py
+host/example.yaml
+host/iv_test.py
+host/iv_xtb01.py
+host/lftestm_mio.bit
+host/single_pix_spectra.py
+host/xtb01.bit
+host/xtb01.py
+host/xtb01.yaml

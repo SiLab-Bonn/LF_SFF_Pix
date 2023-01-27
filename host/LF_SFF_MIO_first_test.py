@@ -38,12 +38,34 @@ print('\n----------------------- Ending Configuration -----------------------\n'
 
 
 status = dut.get_status()
-print(status)
 
 data, sync = dut.take_adc_data('OUT_0')
 print(data)
 
+dut['CONTROL']=0x00
+dut['CONTROL'].write
+channel_list = []
 while True:
+    try:
+        channel = input("Activate Channel: ")
+        if channel in channel_list:
+            dut['CONTROL'][channel] = 0x0
+            del channel_list[channel_list.index(channel)]
+        else:
+            if channel == 'exit':
+                break
+            dut['CONTROL'][channel] = 0x1
+            channel_list.append(channel)
+        dut['CONTROL'].write()  
+    except:
+        print("Channel does not exist")
+    if len(channel_list)!= 0:
+        print('\nActive channels: ', str(channel_list)[1:-1])
+    time.sleep(1)
+    status = dut.get_status()
+    
+
+""" 
     dut['CONTROL']['SEL0'] = 0x1
     dut['CONTROL']['SEL1'] = 0x1
     dut['CONTROL']['SEL2'] = 0x1
@@ -68,3 +90,4 @@ while True:
     dut['CONTROL']['LED5'] = 0x1
     dut['CONTROL'].write()
     time.sleep(0.2)
+"""
