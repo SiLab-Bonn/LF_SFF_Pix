@@ -12,7 +12,7 @@ transfer_layer:
   - name  : usb
     type  : SiUsb
     init:
-      avoid_download : False
+      avoid_download : True
       bit_file : ../device/ise/LF_SFF_MIO.bit
     
 hw_drivers:

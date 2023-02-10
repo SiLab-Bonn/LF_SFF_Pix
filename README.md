@@ -5,5 +5,4 @@
  - /device - FPGA firmware project
  - /pcb - carrier PCB design project
 
-
  

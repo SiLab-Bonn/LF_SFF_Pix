@@ -143,3 +143,7 @@ host/single_pix_spectra.py
 host/xtb01.bit
 host/xtb01.py
 host/xtb01.yaml
+/host/Test_Samples/*
+/host/lab_devices/__pycache__
+/host/lab_devices/scpi_devices.py
+/host/lab_devices/tektronix_oscilloscope_tds3034b.py
