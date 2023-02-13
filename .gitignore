@@ -147,3 +147,4 @@ host/xtb01.yaml
 /host/lab_devices/__pycache__
 /host/lab_devices/scpi_devices.py
 /host/lab_devices/tektronix_oscilloscope_tds3034b.py
+host/Test.py

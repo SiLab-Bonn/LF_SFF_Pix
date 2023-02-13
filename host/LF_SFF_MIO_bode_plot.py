@@ -64,12 +64,15 @@ stream = open("LF_SFF_MIO.yaml", 'r')
 cnfg = yaml.load(stream, Loader=yaml.Loader)
 
 try:
-    if sys.argv[1]=='flash':
+    if 'flash' in sys.argv[1:]:
         dut = LF_SFF_MIO(cnfg)
         dut.init()
 
         dut.boot_seq()
         dut.load_defaults()
+    if 'AC' in sys.argv[1:]:
+        image_path = './Test_Samples/Test_4_AC/'
+
 except:
     print('')
 
@@ -83,40 +86,51 @@ freq_gen.init()
 voltage=freq_gen['Pulser'].get_voltage(0, unit='mV')
 print(voltage)
 
-channel = 1
-frequency_steps = 20
-frequency_range = [100,1e3,1e4,1e5,1e6]
-add_freq = []
-for f in frequency_range:
-    if f != 1e6:
-        add_freq.extend([f*i for i in range(2,5)])
-print(add_freq)
-frequency_range.extend(add_freq)
-print(frequency_range)
+frequency_oszi = [1e2,1e3,1e4,1e5,1e6]
 
-meas_waveform = np.array([])
+# generate frequency scale that shall be scanned
+frequencies = []
+for i in frequency_oszi:
+    frequencies.extend([i*j for j in range(1,10)])
+
+
+# Add supported time scale by the oscilloscope
+add_freq = []
+for freq in frequency_oszi:
+#    if freq != 1e6:
+    add_freq.extend([freq*i for i in [2,4]])
+frequency_oszi.extend(add_freq)
+
+frequency_oszi = np.sort(frequency_oszi)
+
 
 fit_params_func_gen = []
 fit_params_LF_SFF = []
 
-for f in frequency_range:
-    print('Frequency: ',f)
+for f in frequencies:
+    if f in frequency_oszi:
+        set_oszi_freq = f
+    else:
+        for i in range(1,6):
+            if (f-i*len(str(f)[1:]) in frequency_oszi):
+                set_oszi_freq = i*len(str(f)[1:])
+                break
+    print(f,'\t', set_oszi_freq)
+    
     plt.figure(figsize=(16,9))
     period = 1/f
     freq_gen['Pulser'].set_pulse_period(period)
-    oszi['Oscilloscope'].set_horizontal_scale(period)
-    time.sleep(1)
+    oszi['Oscilloscope'].set_horizontal_scale(1/set_oszi_freq)
+
+    time.sleep(2)
     # make measurement for CH2 -> LF SFF
-    meas_waveform_LF_SFF = oszi['Oscilloscope'].get_waveform(channel=2)
+    meas_waveform_LF_SFF = oszi['Oscilloscope'].get_waveform(channel=2, continue_meas=False)
     CH_LF_SFF         = meas_waveform_LF_SFF[0]
     CH_data_LF_SFF    = meas_waveform_LF_SFF[1]
     CH_xscale_LF_SFF  = meas_waveform_LF_SFF[2]
     CH_yscale_LF_SFF  = meas_waveform_LF_SFF[3]
     CH_time_LF_SFF    = np.linspace(0,CH_xscale_LF_SFF[0]*len(CH_data_LF_SFF),len(CH_data_LF_SFF))#np.linspace(0,len(CH_data_LF_SFF),len(CH_data_LF_SFF))#
     
-
-    time.sleep(1)
-
     # make measurement for CH1 -> function generator
     meas_waveform_func_gen = oszi['Oscilloscope'].get_waveform(channel=1)
     CH_func_gen         = meas_waveform_func_gen[0]
@@ -152,17 +166,17 @@ for f in frequency_range:
 
 
     plt.ylim(-4*CH_yscale_func_gen[0], 4*CH_yscale_func_gen[0])
-    plt.title('Frequency '+str(f))
+    plt.title('Frequency '+str(f)+'Hz')
     plt.grid(linestyle='--')
-    plt.ylabel('Time in V')
-    plt.xlabel('Voltage in s')
+    plt.ylabel('Voltage in V')
+    plt.xlabel('Time in s')
     plt.legend()
     plt.savefig(image_path+'measurement_'+str(f)+'.png')
     plt.close()
 
-
-plt.scatter((frequency_range), np.array(fit_params_LF_SFF)[:,0]/np.array(fit_params_func_gen)[:,0])
-plt.xlabel('f / Hz')
+plt.figure(figsize=(16,9))
+plt.scatter(np.log10(frequencies), np.abs(np.array(fit_params_LF_SFF)[:,0]/np.array(fit_params_func_gen)[:,0]))
+plt.xlabel('log10(f)')
 plt.ylabel('$V_{pp}(LF SFF)/V_{pp}(Frequence Generator)$')
 
 plt.grid(linestyle='--')
