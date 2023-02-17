@@ -97,7 +97,7 @@ while True:
         if channel == 'resetPulse':
             dut['CONTROL']['RESET'] = 0x1
             dut['CONTROL'].write()
-            time.sleep(200e-6)  
+            time.sleep(1e-6)  
             dut['CONTROL']['RESET'] = 0x0
             dut['CONTROL'].write()
     except:

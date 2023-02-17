@@ -32,7 +32,7 @@ class LF_SFF_MIO(Dut):
 
 
     def load_defaults(self, VDD = 1.2,VDD_Unit = 'V',
-                        VRESET = 0.6, VRESET_Unit = 'V',
+                        VRESET = 0.2, VRESET_Unit = 'V',
                         opAMP_offset = 0, opAMP_offset_Unit = 'V',
                         IBN =  100, IBN_Unit = 'uA', 
                         IBP = -10, IBP_Unit = 'uA'

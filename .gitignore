@@ -148,3 +148,7 @@ host/xtb01.yaml
 /host/lab_devices/scpi_devices.py
 /host/lab_devices/tektronix_oscilloscope_tds3034b.py
 host/Test.py
+host/data/*
+host/Test_fit.py
+host/bode.csv
+host/bode_backup.csv
