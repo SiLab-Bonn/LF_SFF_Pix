@@ -29,7 +29,7 @@
 #  |_________________________________ |/
 #
 # The function generator is also completely controlled by this script. Please verify BEFORE plugging it into the PIX_INPUT of the
-# LFSFF Board that the Ampl and Offset are not bigger than Vpp=100mV and Voff=650mV.
+# LFSFF Board that the Ampl and Offset are not larger than Vpp=100mV and Voff=650mV.
 #
 
 
@@ -38,7 +38,6 @@ from basil.dut import Dut
 import numpy as np
 from LF_SFF_MIO import LF_SFF_MIO
 import matplotlib.pyplot as plt
-from scipy import odr
 from scipy import optimize
 import uncertainties.unumpy as unp
 import yaml
@@ -48,17 +47,6 @@ import bode_plot_analyzer as bp
 image_path = './Test_Samples/Test_4_AC/'
 data_path = image_path+'./data/'
 reset_pulser = False
-
-
-def double_err(function, x,y,presets): #x_error, y, y_error, presets):
-    model = odr.Model(function)
-    data = odr.RealData(x, y)#, sy=y_error)
-    out = odr.ODR(data, model, beta0=presets).run()
-
-    popt = out.beta
-    perr = out.sd_beta
-
-    return popt,perr
 
 def func_fit(x,a,b,c,d):
     #a,b,c,d=p
@@ -71,7 +59,7 @@ def func_fit_rst(x,a,b,c,d,e):
 def func_fit_lin(x,d,e):
     return d*x+e
 
-
+# Function to coarsly guess fit parameters for the both, the func_fit and func_rst_fit functions
 def guess_params(x,y,f,reset_pulser=False):
     ampl_limits = [np.amin(y),np.amax(y)]
     ampl_approx = np.abs(np.abs(ampl_limits[0])-np.abs(ampl_limits[1]))/2
@@ -101,12 +89,11 @@ def guess_params(x,y,f,reset_pulser=False):
     else:
         return ampl_approx, freq, -first_max_loc, offset_approx
 
-
-
-
+# Generates x values for a taken waveform measurement (We only know the number of dots and the scale width)
 def gen_waveform_x(waveform):
     x= np.linspace(0,waveform[2][0], len(waveform[1]))
     return x
+
 stream = open("LF_SFF_MIO.yaml", 'r')
 cnfg = yaml.load(stream, Loader=yaml.Loader)
 
@@ -152,6 +139,7 @@ else:
     oszi['Oscilloscope'].set_trigger_level(1.0E-2)
     oszi['Oscilloscope'].set_trigger_source(channel=1)
 
+# Configure settings of the function generator
 freq_gen = Dut('./lab_devices/agilent33250a_pyserial.yaml')
 freq_gen.init()
 freq_gen['Pulser'].set_voltage_high(6.75e-1)
@@ -175,7 +163,7 @@ frequency_oszi.extend(add_freq)
 
 frequency_oszi = np.sort(frequency_oszi)
 
-
+# Function that finds the position of the nearest value in a given list
 def nearest_value_in_list(value, data):
     nearest_value = 0
     for i in range(0,len(data)):
@@ -251,7 +239,6 @@ def measure_bode_plot():
             for i in range(0, len(CH_data_LF_SFF)-1):
                 if np.abs(np.abs(CH_data_LF_SFF[i+1])-np.abs(CH_data_LF_SFF[i]))>=0.02:
                     peak_pos=i+1
-            
             if peak_pos!=None:
                 plt.scatter(CH_time_LF_SFF[peak_pos], CH_data_LF_SFF[peak_pos], color='black')
                 plt.text(CH_time_LF_SFF[peak_pos], CH_data_LF_SFF[peak_pos]-0.02, 'RESET')
@@ -280,13 +267,11 @@ def measure_bode_plot():
         if reset_pulser:
             p_func_gen = guess_params(CH_time_func_gen,CH_data_func_gen, f)
             p_LF_SFF = guess_params(CH_time_LF_SFF,CH_data_LF_SFF, f, True)
-            print(p_LF_SFF)
             popt_func_gen, perr =  optimize.curve_fit(func_fit, CH_time_func_gen, CH_data_func_gen,p_func_gen)
             popt_LF_SFF, perr =  optimize.curve_fit(func_fit_rst, CH_time_LF_SFF, CH_data_LF_SFF,p_LF_SFF)
 
             plt.plot(CH_time_func_gen, func_fit(CH_time_func_gen,popt_func_gen[0],popt_func_gen[1],popt_func_gen[2],popt_func_gen[3]), label='Function Generator fit ', color='black')
             plt.plot(CH_time_LF_SFF, func_fit_rst(CH_time_LF_SFF,popt_LF_SFF[0],popt_LF_SFF[1],popt_LF_SFF[2],popt_LF_SFF[3],popt_LF_SFF[4]), label='LF SFF fit', color='black')
-            print(popt_LF_SFF)
 
         else:    
             p_func_gen = guess_params(CH_time_func_gen,CH_data_func_gen, f)
@@ -297,7 +282,7 @@ def measure_bode_plot():
             plt.plot(CH_time_func_gen, func_fit(CH_time_func_gen,popt_func_gen[0],popt_func_gen[1],popt_func_gen[2],popt_func_gen[3]), label='Function Generator fit ', color='black')
             plt.plot(CH_time_LF_SFF, func_fit(CH_time_LF_SFF,popt_LF_SFF[0],popt_LF_SFF[1],popt_LF_SFF[2],popt_LF_SFF[3]), label='LF SFF fit', color='black')
 
-
+        # Plot everything
         plt.ylim(-4*CH_yscale_func_gen[0], 4*CH_yscale_func_gen[0])
         plt.title('Frequency '+str(f)+'Hz')
         plt.grid(linestyle='--')
@@ -305,7 +290,6 @@ def measure_bode_plot():
         plt.xlabel('Time in s')
         plt.legend()
         plt.savefig(image_path+'measurement_'+str(f)+'.png')
-        #plt.show()
         plt.close()
         fit_params_func_gen.append(popt_func_gen)
         fit_params_LF_SFF.append(popt_LF_SFF)
@@ -313,17 +297,7 @@ def measure_bode_plot():
     x_log = np.abs(np.log10(1/np.array(fit_params_func_gen)[:,1]))
     y_db = 10*np.log10(np.abs(np.array(fit_params_LF_SFF)[:,0]/np.array(fit_params_func_gen)[:,0]))
 
-    plt.figure(figsize=(16,9))
-    plt.scatter(x_log, 10*np.log10(np.abs(np.array(fit_params_LF_SFF)[:,0]/np.array(fit_params_func_gen)[:,0])))
-    plt.xlabel('log10(f)')
-    plt.ylabel('$V_{pp}(LF SFF)/V_{pp}(Frequence Generator)$ in dB')
-
-    plt.grid(linestyle='--')
-    plt.savefig(image_path+'bodeplot_log.png')
-    plt.show()
-    plt.close()
-    
-    #np.savetxt(data_path+'bode.csv', (x_log, y_db), delimiter=',')
+    # Save data    
     with open(data_path+'bode.csv', 'w') as f:
         f.write('frequency, \tdB\n')
         for i in range(0, len(frequencies)):
@@ -333,12 +307,14 @@ def measure_bode_plot():
 
 
 x_log, y_db = measure_bode_plot()
-f_hp, f_tp = bp.analyse_bode_plot(x_log, y_db, 'Bode Plot', image_path+'bodeplot.png')
+f_hp, f_tp, C_in = bp.analyse_bode_plot(x_log, y_db, 'Bode Plot', image_path+'bodeplot.png')
 
-C_ac = 6*1e-15
+C_ac = 6*1e-15 # Taken from the datasheet
 
 print('------ RESULTS ------')
 print('$f_{hp}=$',f_hp,'Hz\n','$f_{tp}=$',f_tp,'Hz')
+print('$C_{in}=$', C_in,' fF')
 R_off = 2*np.pi/f_hp/C_ac
 print('$R_{off}=$',R_off,'$\\Omega$')
+
 
