@@ -20,24 +20,25 @@ def lin_fit(x,a,b):
 def const_fit(x,a):
     return x*0+a
 
-def analyse_bode_plot(x,y, title, output_path=None, reset_pulser = False):
+def analyse_bode_plot(x,y, title, output_path=None, reset_pulser = True):
     print(x,y)
     x=np.abs(x)
     plt.figure(figsize=(16,9))
     plt.scatter(x,y)
 
     ###### find pleateau
-    threshold = 0.05
-    if reset_pulser:
-        threshold = 0.2
     plateau_max = np.max(y)
+    threshold = 0.10
+    if reset_pulser:
+        threshold = 0.30
+    print(plateau_max*threshold)
     print(plateau_max)
     plateau = [i for i in range(0, len(y)) if y[i]>plateau_max+plateau_max*threshold]
     print(plateau)
     popt_plateau, perr_plateau =  optimize.curve_fit(const_fit, x[plateau],y[plateau],[plateau_max])
     x_fit_plateau = np.linspace(0, 100, 2)
-    plt.plot(x_fit_plateau,const_fit(x_fit_plateau,popt_plateau), color='black')
-
+    plt.plot(x_fit_plateau,const_fit(x_fit_plateau,popt_plateau), color='black', label='plateau')
+    plt.hlines(plateau_max+plateau_max*threshold, 0,10, linestyle='-.', colors='black', label='plateau threshold')
     ###### find rising/falling region
     left = []
     for i in range(0, len(y)):
@@ -53,12 +54,12 @@ def analyse_bode_plot(x,y, title, output_path=None, reset_pulser = False):
     x_fit = np.linspace(0, 100, 3)
     try:
         popt_left, perr_left =  optimize.curve_fit(lin_fit, x[left][:-skip_corner],y[left][:-skip_corner],[0,0])
-        plt.plot(x_fit,lin_fit(x_fit,popt_left[0],popt_left[1]), color='red')
+        plt.plot(x_fit,lin_fit(x_fit,popt_left[0],popt_left[1]), color='red', label='high pass')
     except:
         print('No rising edge found')
     try:
         popt_right, perr_right =  optimize.curve_fit(lin_fit, x[right][skip_corner:],y[right][skip_corner:],[0,0])
-        plt.plot(x_fit,lin_fit(x_fit,popt_right[0],popt_right[1]), color='orange')
+        plt.plot(x_fit,lin_fit(x_fit,popt_right[0],popt_right[1]), color='orange',label='low pass')
     except:
         print('No falling edge found')
 
@@ -67,12 +68,12 @@ def analyse_bode_plot(x,y, title, output_path=None, reset_pulser = False):
     f_tp_hz = None
     C_in = None
     minus3dB = popt_plateau - 3
-    plt.hlines(minus3dB, -10,10, color='black')
+    plt.hlines(minus3dB, -10,10, color='gray', label='-3dB')
 
     try:
         f_hp = (minus3dB-popt_left[1])/popt_left[0]
         plt.vlines(f_hp, 0, -30, linestyles='dashed', colors='black')
-        plt.text(f_hp+0.05, minus3dB-3, '$f_{hp}=$'+str(np.round(10**f_hp[0],2))+'Hz')
+        plt.text(f_hp+0.05, minus3dB-0.5, '$f_{hp}=$'+str(np.round(10**f_hp[0],2))+'Hz')
         f_hp_hz = np.round(10**f_hp[0],2)
     except:
         print('Could not calculate f_hp')
@@ -80,7 +81,7 @@ def analyse_bode_plot(x,y, title, output_path=None, reset_pulser = False):
     try:
         f_tp = (minus3dB-popt_right[1])/popt_right[0]
         plt.vlines(f_tp, 0, -30, linestyles='dashed', colors='black')
-        plt.text(f_tp-0.8, minus3dB-3, '$f_{tp}=$'+str(np.round(10**f_tp[0],2))+'Hz')
+        plt.text(f_tp-1, minus3dB-0.5, '$f_{tp}=$'+str(np.round(10**f_tp[0],2))+'Hz')
     except:
         print('Could not calculate f_tp')
         f_tp_hz = np.round(10**f_tp[0],2)
@@ -102,6 +103,7 @@ def analyse_bode_plot(x,y, title, output_path=None, reset_pulser = False):
     plt.title(title)
     plt.ylim(np.min(y)-1, np.max(y)+1)
     plt.xlim(np.min(x)-1,np.max(x)+1)
+    plt.legend()
     if output_path!= None:
         plt.savefig(output_path)
     plt.show()

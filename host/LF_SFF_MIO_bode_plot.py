@@ -80,10 +80,11 @@ def guess_params(x,y,f,reset_pulser=False):
                     current_max = y[i]
                     first_max_loc = i
                     break
-        popt, perr = optimize.curve_fit(func_fit_rst, x, y ,p_func_gen)
-        slope = popt[0]
+        if reset_pulser:
+            popt, perr = optimize.curve_fit(func_fit_rst, x, y ,p_func_gen)
+            slope = popt[0]
     except:
-        print('Failed to find a local maximum')
+        print('Could not guess all fit parameters')
     if reset_pulser==True:
         return ampl_approx, freq, -first_max_loc, slope, offset_approx
     else:
@@ -123,7 +124,6 @@ except:
 
 oszi = Dut('./lab_devices/tektronix_tds_3034b.yaml')
 oszi.init()
-oszi['Oscilloscope'].set_trigger_mode('AUTO')
 
 # Configure viewport of the oscilloscope
 oszi['Oscilloscope'].set_vertical_scale('5.0E-2',channel=1)
@@ -132,20 +132,23 @@ oszi['Oscilloscope'].set_vertical_offset('0.0E0', channel=1)
 oszi['Oscilloscope'].set_vertical_scale('5.0E-2',channel=2)
 oszi['Oscilloscope'].set_vertical_position('2.0E-2',channel=2)
 oszi['Oscilloscope'].set_vertical_offset('0.0E0', channel=2)
+
 if reset_pulser:
+    trigger_lvl = -1.8E-2
     oszi['Oscilloscope'].set_trigger_source(channel=2)
-    oszi['Oscilloscope'].set_trigger_level(-1.8E-2)
 else:
-    oszi['Oscilloscope'].set_trigger_level(1.0E-2)
+    trigger_lvl = 1.0E-2
     oszi['Oscilloscope'].set_trigger_source(channel=1)
+
+oszi['Oscilloscope'].set_trigger_level(trigger_lvl)
+oszi['Oscilloscope'].set_trigger_mode('AUTO')
 
 # Configure settings of the function generator
 freq_gen = Dut('./lab_devices/agilent33250a_pyserial.yaml')
 freq_gen.init()
 freq_gen['Pulser'].set_voltage_high(6.75e-1)
 freq_gen['Pulser'].set_voltage_low(5.75e-1)
-
-time.sleep(2)
+freq_gen['Pulser'].set_enable(1)
 
 frequency_oszi = [1e2,1e3,1e4,1e5,1e6]
 
@@ -163,14 +166,7 @@ frequency_oszi.extend(add_freq)
 
 frequency_oszi = np.sort(frequency_oszi)
 
-# Function that finds the position of the nearest value in a given list
-def nearest_value_in_list(value, data):
-    nearest_value = 0
-    for i in range(0,len(data)):
-        if np.abs(data[i]-value) <= np.abs(data[nearest_value]-value):
-            nearest_value = i
-    return nearest_value
-
+time.sleep(2)
 
 def measure_bode_plot():
     fit_params_func_gen = []
@@ -227,40 +223,33 @@ def measure_bode_plot():
         
         # Plot data
         plt.figure(figsize=(16,9))
+        plt.xlim(np.min(CH_time_LF_SFF), np.max(CH_time_LF_SFF))
         plt.scatter(CH_time_func_gen, CH_data_func_gen, label='Function Generator Data')
         plt.scatter(CH_time_LF_SFF, CH_data_LF_SFF, label='LF SFF Data', color='orange')
-
         
         # Find fit area in case of reset pulse
         if(reset_pulser):
             reset_tail = 0.5/f
-            plt.scatter(CH_time_LF_SFF, CH_data_LF_SFF)
-            peak_pos=None
-            for i in range(0, len(CH_data_LF_SFF)-1):
-                if np.abs(np.abs(CH_data_LF_SFF[i+1])-np.abs(CH_data_LF_SFF[i]))>=0.02:
-                    peak_pos=i+1
-            if peak_pos!=None:
+            plt.scatter(CH_time_LF_SFF, CH_data_LF_SFF, marker='x')
+            plt.plot([-100,100], [trigger_lvl, trigger_lvl])
+            try:
+                peak = np.amin([i for i in CH_data_LF_SFF if i<=trigger_lvl])
+                peak_pos = np.argmin(np.abs(CH_data_LF_SFF - peak))
                 plt.scatter(CH_time_LF_SFF[peak_pos], CH_data_LF_SFF[peak_pos], color='black')
-                plt.text(CH_time_LF_SFF[peak_pos], CH_data_LF_SFF[peak_pos]-0.02, 'RESET')
-                print('edge detected')
                 left_edge = CH_time_LF_SFF[peak_pos]+reset_tail
-                left_edge = nearest_value_in_list(left_edge, CH_time_LF_SFF)
+                left_edge = np.argmin(np.abs(CH_time_LF_SFF - left_edge))
                 right_edge = CH_time_LF_SFF[peak_pos]+5/f
-                right_edge = nearest_value_in_list(right_edge, CH_time_LF_SFF)
-            else:
-                print('NO edge detected')
-                left_edge=0
-                right_edge=-1
-            
-            plt.vlines(CH_time_LF_SFF[left_edge],-100,100, color='black', linestyles='dashed')
-            plt.vlines(CH_time_LF_SFF[right_edge],-100,100, color='black', linestyles='dashed')
+                right_edge = np.argmin(np.abs(CH_time_LF_SFF - right_edge))
+                plt.vlines(CH_time_LF_SFF[left_edge],-100,100, color='black', linestyles='dashed')
+                plt.vlines(CH_time_LF_SFF[right_edge],-100,100, color='black', linestyles='dashed')
 
-            CH_data_LF_SFF = CH_data_LF_SFF[left_edge:right_edge]
-            CH_time_LF_SFF = CH_time_LF_SFF[left_edge:right_edge]
+                CH_data_LF_SFF = CH_data_LF_SFF[left_edge:right_edge]
+                CH_time_LF_SFF = CH_time_LF_SFF[left_edge:right_edge]
+            except:
+                print('Could not detect reset pulse')           
             
             oszi['Oscilloscope'].set_trigger_mode('AUTO')
         
-            
         time.sleep(3)
 
         # Fit data
@@ -312,9 +301,10 @@ f_hp, f_tp, C_in = bp.analyse_bode_plot(x_log, y_db, 'Bode Plot', image_path+'bo
 C_ac = 6*1e-15 # Taken from the datasheet
 
 print('------ RESULTS ------')
-print('$f_{hp}=$',f_hp,'Hz\n','$f_{tp}=$',f_tp,'Hz')
+print('$f_{hp}=$',f_hp,'Hz \n$f_{tp}=$',f_tp,'Hz')
 print('$C_{in}=$', C_in,' fF')
-R_off = 2*np.pi/f_hp/C_ac
-print('$R_{off}=$',R_off,'$\\Omega$')
+if(f_hp != None or f_tp != None):
+    R_off = 2*np.pi/f_hp/C_ac
+    print('$R_{off}=$',R_off,'$\\Omega$')
 
 

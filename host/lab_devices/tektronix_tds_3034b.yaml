@@ -13,4 +13,4 @@ hw_drivers:
     type      : tektronix_tds3034b
     interface : Visa
     init      :
-        device : Tektronix tds3034b
+        device : tektronix oscilloscope
