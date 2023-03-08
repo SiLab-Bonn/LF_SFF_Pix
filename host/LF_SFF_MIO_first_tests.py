@@ -68,12 +68,15 @@ while True:
         if channel == "ScanVRESET":
             dut['CONTROL']['RESET']=0x1
             dut['CONTROL'].write()
+            time.sleep()
+            dut['CONTROL']['RESET']=0x0
+            dut['CONTROL'].write()
             measured_VRESET_list = []
             V_out_list = []
             IBN_meas = []
             IBP_meas = []
             for i in range(1,13):
-                target_VRESET = i*0.1
+                target_VRESET = 1.2-i*0.1
                 dut['VRESET'].set_voltage(target_VRESET, unit='V')
                 print('SET VRESET: ', target_VRESET, 'V')
                 measured_VRESET = str(dut['VRESET'].get_voltage(unit='V'))[:6]

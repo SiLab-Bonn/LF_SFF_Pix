@@ -32,11 +32,11 @@ class LF_SFF_MIO(Dut):
 
 
     def load_defaults(self, VDD = 1.2,VDD_Unit = 'V',
-                        VRESET = 0.2, VRESET_Unit = 'V',
+                        VRESET = 1.2, VRESET_Unit = 'V',
                         opAMP_offset = 0, opAMP_offset_Unit = 'V',
                         IBN =  100, IBN_Unit = 'uA', 
-                        IBP = -10, IBP_Unit = 'uA'
-                        ):
+                        IBP = -10, IBP_Unit = 'uA',
+                        print_out=False):
         # Voltages
         #VDD = 1.2
         #VDD_Unit = 'V'
@@ -52,20 +52,23 @@ class LF_SFF_MIO(Dut):
         #IBP_Unit = 'uA'
 
         self['VDD'].set_voltage(VDD, unit=VDD_Unit)
-        print('VDD:', self['VDD'].get_voltage(unit='V'), 'V', self['VDD'].get_current(), 'mA')
         self['VDD'].set_enable(True)
 
         self['IBN'].set_current(IBN, unit=IBN_Unit)
-        print('IBN:', self['IBN'].get_voltage(unit='V'), 'V', self['IBN'].get_current(), 'uA')
 
         self['IBP'].set_current(IBP, unit=IBP_Unit)
-        print('IBP:', self['IBP'].get_voltage(unit='V'), 'V', self['IBP'].get_current(), 'uA')
 
         self['VRESET'].set_voltage(VRESET, unit=VRESET_Unit)
-        print('VRESET:', self['VRESET'].get_voltage(unit='V'), VRESET_Unit, self['VRESET'].get_current(), 'uA')
 
         self['opAMP_offset'].set_voltage(opAMP_offset, unit=opAMP_offset_Unit)
-        print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
+        
+        if print_out:
+            print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
+            print('VRESET:', self['VRESET'].get_voltage(unit='V'), VRESET_Unit, self['VRESET'].get_current(), 'uA')
+            print('IBP:', self['IBP'].get_voltage(unit='V'), 'V', self['IBP'].get_current(), 'uA')
+            print('IBN:', self['IBN'].get_voltage(unit='V'), 'V', self['IBN'].get_current(), 'uA')
+            print('VDD:', self['VDD'].get_voltage(unit='V'), 'V', self['VDD'].get_current(), 'mA')
+
 
     def get_status(self, print_status=True):
             status = {}
