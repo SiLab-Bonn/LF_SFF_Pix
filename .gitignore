@@ -154,3 +154,6 @@ host/bode.csv
 host/bode_backup.csv
 *.pyc
 host/bode copy.csv
+host/output/*
+host/old_junk/*
+host/testing.py

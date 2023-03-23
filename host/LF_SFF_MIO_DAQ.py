@@ -1,5 +1,5 @@
 import yaml
-from LF_SFF_MIO import LF_SFF_MIO
+from host.lab_devices.LF_SFF_MIO import LF_SFF_MIO
 import utils.schematics as sch
 #import LF_SFF_MIO_bode_plot as bode_plot
 import LF_SFF_MIO_Reset_Probe as reset_probe
