@@ -27,7 +27,7 @@ class oscilloscope(Dut):
     def load_ac_sweep_config(self):
         self['Oscilloscope'].set_horizontal_scale(200e-6)
         self['Oscilloscope'].set_vertical_scale('50.0E-3',channel=1)
-        self['Oscilloscope'].set_vertical_scale('20.0E-3',channel=2)
+        self['Oscilloscope'].set_vertical_scale('50.0E-3',channel=2)
         self['Oscilloscope'].set_vertical_position('2.0E0',channel=2)
         self['Oscilloscope'].set_vertical_position('-2.0E0',channel=1)
         self['Oscilloscope'].set_vertical_offset('0.0E0', channel=1)
@@ -38,6 +38,22 @@ class oscilloscope(Dut):
         self['Oscilloscope'].set_acquire_state('RUN')
 
         time.sleep(2)
+
+    def load_IR_LED_config(self):
+        self['Oscilloscope'].set_horizontal_scale(2e-1)
+        self['Oscilloscope'].set_vertical_scale('5.0E-1',channel=1)
+        self['Oscilloscope'].set_vertical_scale('2.0E-2',channel=2)
+        self['Oscilloscope'].set_vertical_position('-2.0E0',channel=1)
+        self['Oscilloscope'].set_vertical_position('2.28E0',channel=2)
+        self['Oscilloscope'].set_vertical_offset('0.0E0', channel=1)
+        self['Oscilloscope'].set_coupling('DC', channel=1)
+        self['Oscilloscope'].set_coupling('AC', channel=2)
+        self['Oscilloscope'].set_trigger_source(channel=2)
+        self['Oscilloscope'].set_trigger_level(-2.6E-2)
+        self['Oscilloscope'].set_trigger_mode('NORM')
+        self['Oscilloscope'].set_trigger_type('EDG')
+        self['Oscilloscope'].set_acquire_state('RUN')
+
 
     #################################
     # General measurement methods

@@ -52,14 +52,14 @@ import matplotlib.gridspec as gridspec
 import yaml
 import sys
 
-
+image_format = '.pdf'
 
 def AC_sweep(load_data=False,DC=False):
     IBN = [80,82,85,87,90,92,95,97,100]
     IBP = [-5,-6,-7,-8,-9,-10]
     I_unit = 'uA'
 
-    frequency_oszi = [1e2,1e3,1e4,1e5,1e6]
+    frequency_oszi = [1e1,1e2,1e3,1e4,1e5,1e6]
     # generate frequency scale that shall be scanned
     frequencies = []
     for i in frequency_oszi:
@@ -83,6 +83,12 @@ def AC_sweep(load_data=False,DC=False):
    
     if 'load_data' in sys.argv[1:]:
         load_data = True  
+
+    if '--name' in sys.argv[1:]:
+        image_path = './output/AC_sweeps/'+sys.argv[sys.argv[1:].index('--name')+2]+'/'
+        data_path = image_path+'data/'
+        print('Custom path: ', image_path)
+
     try:
         IBP_end_of_dynamic_area = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_end_of_dynamic_area.csv', delimiter=',')
         IBN_end_of_dynamic_area = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_end_of_dynamic_area.csv', delimiter=',')
@@ -96,9 +102,7 @@ def AC_sweep(load_data=False,DC=False):
         DC_offset = 0.3
         print('\nSet DC_offset to fallback, because DC sweep results could not be loaded\n')
 
-    if not load_data:
-
-        
+    if not load_data:      
         try:
             dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
             dut.init()
@@ -115,7 +119,10 @@ def AC_sweep(load_data=False,DC=False):
 
         func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
         func_gen.init()
-        func_gen.load_ac_sweep_config(offset=DC_offset, amplitude=0.1, frequency=100)
+        if chip_version == 'DC':
+            func_gen.load_ac_sweep_config(offset=DC_offset, amplitude=0.1, frequency=100)
+        else:
+            func_gen.load_ac_sweep_config(offset=0, amplitude=0.1, frequency=100)
 
         oszi.load_ac_sweep_config()
 
@@ -166,7 +173,7 @@ def AC_sweep(load_data=False,DC=False):
                 plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_in[0], popt_in[1], popt_in[2], popt_in[3]), color='black')
                 plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_out[0], popt_out[1], popt_out[2], popt_out[3]), color='black')
                 plt.legend()
-                #plt.savefig(image_path+'IBN_'+str(f)+'_'+str(I)+'.png')
+                #plt.savefig(image_path+'IBN_'+str(f)+'_'+str(I)+image_format)
                 plt.close()
                 IBN_VOUT[pos].append(popt_out[0])
                 IBN_VOUT_err[pos].append(perr_out[0])
@@ -197,13 +204,13 @@ def AC_sweep(load_data=False,DC=False):
                 plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_in[0], popt_in[1], popt_in[2], popt_in[3]), color='black')
                 plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_out[0], popt_out[1], popt_out[2], popt_out[3]), color='black')
                 plt.legend()
-                #plt.savefig(image_path+'IBP_'+str(f)+'_'+str(I)+'.png')
+                #plt.savefig(image_path+'IBP_'+str(f)+'_'+str(I)+image_format)
                 plt.close()
                 IBP_VOUT[pos].append(popt_out[0])
                 IBP_VOUT_err[pos].append(perr_out[0])
                 IBP_VIN[pos].append(popt_in[0])
                 IBP_VIN_err[pos].append(perr_in[0])
-           
+
 
         # Save data
         for j in range(0, len(IBN)):
@@ -258,11 +265,13 @@ def AC_sweep(load_data=False,DC=False):
     #################################   
     IBN_Gain, IBN_Gain_err, IBN_f_tp, IBN_f_tp_err, IBN_f_hp, IBN_f_hp_err, IBN_C_in, IBN_C_in_err, IBN_R_off, IBN_R_off_err = [[0 for i in range(0, len(IBN))] for j in range(0,10)]
     for i in range(0, len(IBN)):
+        print(IBN[i])
+
         x = np.array(frequencies)
         xerr = np.array(frequencies)*0.05
         y = np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])
         yerr = np.sqrt((1/np.abs(IBN_VIN[i])*IBN_VOUT_err[i])**2+(np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])**2*IBN_VIN_err[i])**2)
-        IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode.png', title='Bodeplot at IBN:'+str(IBN[i])+'uA', show_plot = False, IBN=IBN[i])
+        IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode'+image_format, title='Bodeplot at IBN:'+str(IBN[i])+'uA', show_plot = False, IBN=IBN[i])
 
     
     pltfit.beauty_plot(log_x=True, xlabel='Frequency $f$ / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB')
@@ -276,7 +285,7 @@ def AC_sweep(load_data=False,DC=False):
                 plt.errorbar(x=frequencies, y=10*np.log10(np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])), xerr=np.array(frequencies)*0.05, linestyle='None', marker='.', label='IBN=%.1fuA, $f_{tp}=$Not found, $f_{hp}=$Not found'%(IBN[i]))
 
     plt.legend()
-    plt.savefig(image_path+'IBN_data.png')
+    plt.savefig(image_path+'IBN_data'+image_format)
     plt.close()
 
                 
@@ -290,11 +299,12 @@ def AC_sweep(load_data=False,DC=False):
     #################################   
     IBP_Gain, IBP_Gain_err, IBP_f_tp, IBP_f_tp_err, IBP_f_hp, IBP_f_hp_err, IBP_C_in, IBP_C_in_err, IBP_R_off, IBP_R_off_err = [[0 for i in range(0, len(IBP))] for j in range(0,10)]
     for i in range(0, len(IBP)):
+        print(IBP[i])
         x = np.array(frequencies)
         xerr = np.array(frequencies)*0.05
         y = np.abs(IBP_VOUT[i])/np.abs(IBP_VIN[i])
         yerr = np.sqrt((1/np.abs(IBP_VIN[i])*IBP_VOUT_err[i])**2+(np.abs(IBP_VOUT[i])/np.abs(IBP_VIN[i])**2*IBP_VIN_err[i])**2)
-        IBP_Gain[i], IBP_Gain_err[i], IBP_f_tp[i], IBP_f_tp_err[i], IBP_f_hp[i], IBP_f_hp_err[i],IBP_C_in[i], IBP_C_in_err[i], IBP_R_off[i], IBP_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBP_'+str(IBP[i])+'_bode.png', title='Bodeplot at IBP:'+str(IBP[i])+'uA', show_plot = False, IBP=IBP[i])
+        IBP_Gain[i], IBP_Gain_err[i], IBP_f_tp[i], IBP_f_tp_err[i], IBP_f_hp[i], IBP_f_hp_err[i],IBP_C_in[i], IBP_C_in_err[i], IBP_R_off[i], IBP_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBP_'+str(IBP[i])+'_bode'+image_format, title='Bodeplot at IBP:'+str(IBP[i])+'uA', show_plot = False, IBP=IBP[i])
     
     pltfit.beauty_plot(log_x=True, xlabel='Frequency $f$ / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB')
     for i in range(0, len(IBP)):
@@ -307,7 +317,7 @@ def AC_sweep(load_data=False,DC=False):
                 plt.errorbar(x=frequencies, y=10*np.log10(np.abs(IBP_VOUT[i])/np.abs(IBP_VIN[i])), xerr=np.array(frequencies)*0.05, linestyle='None', marker='.', label='IBP=%.1fuA, $f_{tp}=$Not found, $f_{hp}=$Not found'%(IBP[i]))
 
     plt.legend()
-    plt.savefig(image_path+'IBP_data.png')
+    plt.savefig(image_path+'IBP_data'+image_format)
     plt.close()
 
 
@@ -328,7 +338,7 @@ def AC_sweep(load_data=False,DC=False):
         plt.xlabel('IBP / uA')
         plt.ylabel('$C_{in}$ / fF')
         plt.grid()
-        plt.savefig(image_path+chip_version+'_C_in.png')
+        plt.savefig(image_path+chip_version+'_C_in'+image_format)
         plt.close()
 
         pltfit.beauty_plot(tight=False, title='$R_{off}$ of '+chip_version+' chip') 
@@ -344,26 +354,46 @@ def AC_sweep(load_data=False,DC=False):
         plt.xlabel('IBP / uA')
         plt.ylabel('$R_{off} / M\Omega$')
         plt.grid()
-        plt.savefig(image_path+chip_version+'_R_off.png')
+        plt.savefig(image_path+chip_version+'_R_off'+image_format)
         plt.close()
 
     #################################
-    # Plot C_in results
+    # Plot AC sweep Gain results
     #################################   
     pltfit.beauty_plot(tight=False) 
+
+    IBP_DC_Gain = []
+    IBP_DC_Gain_err = []
+    IBN_DC_Gain = []
+    IBN_DC_Gain_err = []
+
     plt.subplot(2,1,1)
-    plt.errorbar(x=IBN, y=IBN_Gain, yerr=IBN_Gain_err, linestyle='None', marker='.', label='$\\langle G\\rangle =(%.3f\\pm%.3f)$'%(np.mean(IBN_Gain), 1/len(IBN_Gain)*np.sqrt(np.sum([np.array(IBN_Gain_err)**2]))))
+    plt.errorbar(x=IBN, y=IBN_Gain, yerr=IBN_Gain_err, linestyle='None', marker='.', label='AC Sweep: $\\langle G\\rangle =(%.3f\\pm%.3f)$'%(np.mean(IBN_Gain), 1/len(IBN_Gain)*np.sqrt(np.sum([np.array(IBN_Gain_err)**2]))))
+    try:
+        for i in range(0, len(IBN)):
+            IBN_DC_sweep_data = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_'+str(IBN[i])+'_Gain.csv', delimiter=',')[1:,]
+            IBN_DC_Gain.append(IBN_DC_sweep_data[np.argmin(np.abs(IBN_DC_sweep_data[:,0] - DC_offset))][2])
+            IBN_DC_Gain_err.append(IBN_DC_sweep_data[np.argmin(np.abs(IBN_DC_sweep_data[:,0] - DC_offset))][3])
+        plt.errorbar(x=IBN, y=IBN_DC_Gain, yerr=IBN_DC_Gain_err, linestyle='None', marker='.',alpha=0.5, label='DC Sweep: $\\langle G\\rangle =(%.3f\\pm%.3f)$'%(np.mean(IBN_DC_Gain), 1/len(IBN_DC_Gain)*np.sqrt(np.sum([np.array(IBN_DC_Gain_err)**2]))))
+    except: pass
     plt.legend()
     plt.xlabel('IBN / uA')
     plt.ylabel('Gain $G$')
     plt.grid()
     plt.subplot(2,1,2)
-    plt.errorbar(x=IBP, y=IBP_Gain, yerr=IBP_Gain_err, linestyle='None', marker='.', label='$\\langle G\\rangle =(%.3f\\pm%.3f)$'%(np.mean(IBP_Gain), 1/len(IBP_Gain)*np.sqrt(np.sum([np.array(IBP_Gain_err)**2]))))
+    plt.errorbar(x=IBP, y=IBP_Gain, yerr=IBP_Gain_err, linestyle='None', marker='.', label='AC Sweep: $\\langle G\\rangle =(%.3f\\pm%.3f)$'%(np.mean(IBP_Gain), 1/len(IBP_Gain)*np.sqrt(np.sum([np.array(IBP_Gain_err)**2]))))
+    try:
+        for i in range(0, len(IBP)):
+            IBP_DC_sweep_data = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_'+str(IBP[i])+'_Gain.csv', delimiter=',')[1:,]
+            IBP_DC_Gain.append(IBP_DC_sweep_data[np.argmin(np.abs(IBP_DC_sweep_data[:,0] - DC_offset))][2])
+            IBP_DC_Gain_err.append(IBP_DC_sweep_data[np.argmin(np.abs(IBN_DC_sweep_data[:,0] - DC_offset))][3])
+        plt.errorbar(x=IBP, y=IBP_DC_Gain, yerr=IBP_DC_Gain_err, linestyle='None', marker='.',alpha=0.5, label='DC Sweep: $\\langle G\\rangle =(%.3f\\pm%.3f)$'%(np.mean(IBP_DC_Gain), 1/len(IBP_DC_Gain)*np.sqrt(np.sum([np.array(IBP_DC_Gain_err)**2]))))
+    except: pass
     plt.legend()
-    plt.xlabel('IBN / uA')
+    plt.xlabel('IBP / uA')
     plt.ylabel('Gain $G$')
     plt.grid()
-    plt.savefig(image_path+chip_version+'_AC_Gain.png')
+    plt.savefig(image_path+chip_version+'_AC_Gain'+image_format)
     plt.close()
 
 

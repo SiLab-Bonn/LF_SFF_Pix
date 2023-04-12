@@ -38,6 +38,7 @@ import matplotlib.ticker as ticker
 from scipy import optimize
 from scipy import odr
 
+image_format ='.pdf'
 image_path = './Test_Samples/Test_4_AC/'
 data_path = image_path+'./data/'
 
@@ -192,7 +193,7 @@ def reset_probe():
     axs[2].locator_params(axis='y',integer=True,tight=True)
 
     fig.tight_layout()
-    plt.savefig('Test_Samples/Reset_Probe/results_'+chip_version+'.png')
+    plt.savefig('Test_Samples/Reset_Probe/results_'+chip_version+image_format)
     plt.show()
 
 #

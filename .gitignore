@@ -157,3 +157,5 @@ host/bode copy.csv
 host/output/*
 host/old_junk/*
 host/testing.py
+thesis/*
+host/basic_setup_tests/check_function_generator.py

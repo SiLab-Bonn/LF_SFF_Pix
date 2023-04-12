@@ -44,15 +44,19 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
         except:
             print('Could not load DC Gain for bodeplot. Applying defaults: G=(1+-0.00001)')
             
-        
-    f_hp, f_hp_err,f_tp, f_tp_err, C_in = None,None,None,None,None    
-    y = 10*np.log10(np.abs(y)/dc_gain)
+    
+    f_hp, f_hp_err,f_tp, f_tp_err, C_in = None,None,None,None,None  
+    if chip_version == 'AC':  
+        y = 10*np.log10(np.abs(y)/dc_gain)
+        yerr = np.sqrt((np.abs(10/(y*np.log10(10)))*yerr)**2+(10/(dc_gain*np.log(10))*dc_gain_err)**2)
+    else:
+        y = 10*np.log10(np.abs(y))
+        yerr = np.sqrt((np.abs(10/(y*np.log10(10)))*yerr)**2+(10/(dc_gain*np.log(10))*dc_gain_err)**2)
     #yerr = np.abs(10*np.log10(np.abs(yerr)))
-    yerr = np.sqrt((np.abs(10/(y*np.log10(10)))*yerr)**2+(10/(dc_gain*np.log(10))*dc_gain_err)**2)
     x = np.array(x)
     xerr = np.array(xerr)
     yerr = np.array(yerr)
-    pltfit.beauty_plot(log_x=True,xlabel='f / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB', title=title, ylim=[np.min(y)-3,np.max(y)+3], xlim=[60,1.5*1e7])
+    pltfit.beauty_plot(log_x=True,xlabel='f / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB', title=title, ylim=[np.min(y)-3,np.max(y)+3], xlim=[1,1.5*1e7])
     plt.errorbar(x=x,y=y,xerr=xerr,yerr=yerr, linestyle='None', marker='.')
     ###### find pleateau
     plateau_max = np.max(y)
@@ -64,8 +68,8 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
     popt_plateau, perr_plateau =  optimize.curve_fit(const_fit, x[plateau],y[plateau],[plateau_max])
     Gain = 10**(popt_plateau[0]/10)
     Gain_err = 10**(popt_plateau[0]/10-1)*np.log10(10)
-    plt.text(1e4, np.min(y)+1, '$G_{ac}=(%.3f\\pm%.3f)$'%(Gain, Gain_err))
-    plt.text(1e4, np.min(y), '$G_{dc}=(%.3f\\pm%.3f)$'%(dc_gain, dc_gain_err))
+    plt.text(1e4, np.min(y)+1, '$G_{AC sweep}=(%.3f\\pm%.3f)$'%(Gain, Gain_err))
+    plt.text(1e4, np.min(y), '$G_{DC sweep}=(%.3f\\pm%.3f)$'%(dc_gain, dc_gain_err))
     C_in = 0
     C_in_err = 0
     if chip_version != 'DC':
@@ -90,7 +94,7 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
     right = [i for i in range(np.max(plateau), len(y))]
     ###### fit linear functions to sides
     skip_first_n_values_left = 10
-    fit_first_n_values_right = len(right)-2
+    fit_first_n_values_right = len(right)-6
     if len(left)>=6:
         plt.scatter(x=x[left][skip_first_n_values_left:], y=y[left][skip_first_n_values_left:])
         popt_left, perr_left = pltfit.double_err(function=pltfit.func_lin, x=np.log10(x[left][skip_first_n_values_left:]),x_error=np.log10(xerr[left][skip_first_n_values_left:]), y=y[left][skip_first_n_values_left:], y_error=yerr[left][skip_first_n_values_left:], presets=[1,1])
@@ -111,7 +115,7 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
     try:
         R_off = 2*np.pi/(C_ac*f_hp)
         R_off_err = 2*np.pi/(C_ac*f_hp**2)*f_hp_err
-        plt.text(1e4, np.min(y)-2, '$R_{off}=(%.3f\\pm%.3f)$M$\Omega$'%(R_off*1e-6, R_off_err*1e-6))
+        plt.text(1e4, np.min(y)-2, '$R_{off}=(%.4f\\pm%.4f)$M$\Omega$'%(R_off*1e-6, R_off_err*1e-6))
 
         plt.vlines(f_hp,10,-100, linestyles='--', color='black', label='$f_{hp}=(%.3f\\pm%.3f)$Hz'%(f_hp, f_hp_err))        
     except:

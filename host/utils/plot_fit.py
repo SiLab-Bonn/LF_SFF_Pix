@@ -24,6 +24,29 @@ def beauty_plot(create_fig=True,xlabel='', ylabel='',xlim=[0,0], ylim=[0,0],log_
     if legend:
         plt.legend()
 
+def beauty_plot_two_y_scales(x,data1, data2, xlabel, ylabel1, ylabel2, label1, label2, alpha1=1, alpha2=1, legend=True, show=True, xfit1=None, yfit1=None, yfitlabel1=None, xfit2=None, yfit2=None, yfitlabel2=None,image_path=None, title=None):
+    fig, ax1 = plt.subplots()
+    fig.set_figwidth(16)
+    fig.set_figheight(9)
+    beauty_plot(create_fig=False,tight=False)
+    color = 'tab:red'
+    ax1.set_xlabel(xlabel)
+    ax1.set_ylabel(ylabel1, color=color)
+    ax1.plot(x, data1, color=color, label=label1, alpha=alpha1)
+    if xfit1:
+        plt.plot(xfit1, yfit1, color='black', label=yfitlabel1)
+    ax1.tick_params(axis='y', labelcolor=color)
+    ax2 = ax1.twinx()  
+    color = 'tab:blue'
+    ax2.set_ylabel(ylabel2, color=color) 
+    ax2.plot(x, data2, color=color, label=label2, alpha=alpha2)
+    ax2.tick_params(axis='y', labelcolor=color)
+    if xfit2:
+        plt.plot(xfit2, yfit2, color='black', label=yfitlabel2)
+    if title: ax2.set_title(title)
+    if legend: fig.legend()
+    if image_path: plt.savefig(image_path)
+    if show: plt.show()
 
 
 def func_lin(p,x):

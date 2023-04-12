@@ -1,5 +1,5 @@
 ############
-# Script that creates a directory tree
+# Script that creates a directory tree for the measurement outputs
 ############
 
 import os
@@ -12,7 +12,7 @@ def create_dir(curr_dir, sub_conf):
     for sub in sub_conf['sub']:
         create_dir(curr_dir, sub)
 
-AC_pix_in
+
 def create_dir_tree():
     root_dir ='.'
     dir_dict={
@@ -32,7 +32,7 @@ def create_dir_tree():
                     'sub':[]
                     }]
             },{
-                'name':'AC_VRESET',
+                'name':'comparison',
                 'sub':[{
                     'name':'data',
                     'sub':[]
@@ -60,6 +60,21 @@ def create_dir_tree():
                     }]
             },{
                 'name':'AC_R_on',
+                'sub':[{
+                    'name':'data',
+                    'sub':[]
+                    }]
+            },{
+                'name':'DC',
+                'sub':[{
+                    'name':'data',
+                    'sub':[]
+                    }]
+            }]
+        },{
+            'name': 'IR_LED',
+            'sub':[{
+                'name':'AC',
                 'sub':[{
                     'name':'data',
                     'sub':[]

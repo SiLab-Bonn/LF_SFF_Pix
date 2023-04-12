@@ -8,7 +8,7 @@ import time
 from basil.dut import Dut
 import socket
 import numpy as np
-
+import time
 
 class LF_SFF_MIO(Dut):
     
@@ -113,3 +113,10 @@ class LF_SFF_MIO(Dut):
         sync = np.reshape(np.vstack((vals, vals)), -1, order='F')
 
         return val, sync
+
+    def reset(self, sleep=0.01):
+        self['CONTROL']['RESET'] = 0x1 
+        self['CONTROL'].write()
+        time.sleep(sleep)
+        self['CONTROL']['RESET'] = 0x0
+        self['CONTROL'].write()

@@ -1,8 +1,8 @@
 import yaml
-from host.lab_devices.LF_SFF_MIO import LF_SFF_MIO
+from lab_devices.LF_SFF_MIO import LF_SFF_MIO
 import utils.schematics as sch
 #import LF_SFF_MIO_bode_plot as bode_plot
-import LF_SFF_MIO_Reset_Probe as reset_probe
+#import LF_SFF_MIO_Reset_Probe as reset_probe
 import utils.dir_tree as dir_tree
 print('''
             ..::^^^:..                  |      
@@ -49,15 +49,17 @@ channels ={'VDD':[0.0,1.2],
     'IBP':[-1,-10],
     'IBN':[10,100],
     'VRESET':[0.0,1.2],
-    'RESET':[0,1]}
+    'RESET':[0,1],
+    'opAMP_offset':[0,5]}
 
 units ={'VDD':'V',
     'IBP':'uA',
     'IBN':'uA',
     'VRESET':'V',
-    'RESET':'d'}
+    'RESET':'d',
+    'opAMP_offset':'V'}
 
-stream = open("LF_SFF_MIO.yaml", 'r')
+stream = open("./lab_devices/LF_SFF_MIO.yaml", 'r')
 cnfg = yaml.load(stream, Loader=yaml.Loader)
 
 
