@@ -1,8 +1,0 @@
-INTSTYLE=ise
-INFILE=/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.ncd
-OUTFILE=/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise/LF_SFF_MIO.bit
-FAMILY=Spartan3
-PART=xc3s1000-4fg320
-WORKINGDIR=/faust/user/dschuechter/Documents/LF_SFF_Pix/device/ise
-LICENSE=ISE
-USER_INFO=175435115_174154030_210753984_003
