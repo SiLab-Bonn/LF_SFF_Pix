@@ -8,13 +8,14 @@ class function_generator(Dut):
         self['Pulser'].set_enable(1)
 
     def load_ac_sweep_config(self, offset, amplitude, frequency):
-        self['Pulser'].set_pulse_period(1/frequency)
+        self['Pulser'].set_sin(frequency)
         self['Pulser'].set_voltage_high(offset+amplitude/2)
         self['Pulser'].set_voltage_low(offset-amplitude/2)
         self['Pulser'].set_enable(1)
         
-    def load_IR_LED_config(self, voltage_high, frequency):
-        self['Pulser'].set_square(frequency)
+    def load_IR_LED_config(self, voltage_high, frequency, pulse_width):
+        self['Pulser'].set_pulse(frequency)
+        self['Pulser'].set_pulse_width(pulse_width)
         self['Pulser'].set_voltage_high(voltage_high)
         self['Pulser'].set_voltage_low(0)
         self['Pulser'].set_enable(1)    

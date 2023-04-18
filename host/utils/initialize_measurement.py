@@ -9,6 +9,7 @@ def initialize_measurement(measurement):
         chip_version = 'AC'
         image_path = './output/'+measurement+'/AC/'
         data_path = image_path+'data/'
+    load_data = False
     if 'load_data' in sys.argv[1:]:
         load_data = True  
     return load_data, chip_version, image_path, data_path

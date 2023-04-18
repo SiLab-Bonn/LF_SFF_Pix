@@ -30,7 +30,7 @@
 import time
 from basil.dut import Dut
 import numpy as np
-from LF_SFF_MIO import LF_SFF_MIO
+from lab_devices.LF_SFF_MIO import LF_SFF_MIO
 import matplotlib.pyplot as plt
 import yaml
 import sys
@@ -42,7 +42,7 @@ image_format ='.pdf'
 image_path = './Test_Samples/Test_4_AC/'
 data_path = image_path+'./data/'
 
-stream = open("LF_SFF_MIO.yaml", 'r')
+stream = open("./lab_devices/LF_SFF_MIO.yaml", 'r')
 cnfg = yaml.load(stream, Loader=yaml.Loader)
 
 VRESET = 1.2
@@ -202,4 +202,4 @@ def reset_probe():
 # to its default value
 #
 
-#reset_probe()
+reset_probe()

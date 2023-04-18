@@ -9,9 +9,10 @@ from basil.dut import Dut
 import socket
 import numpy as np
 import time
+import os 
 
 class LF_SFF_MIO(Dut):
-    
+
     def boot_seq(self):
         for i in range(3):
             self['CONTROL'] = 0x02 << i
@@ -36,6 +37,7 @@ class LF_SFF_MIO(Dut):
                         opAMP_offset = 0, opAMP_offset_Unit = 'V',
                         IBN =  100, IBN_Unit = 'uA', 
                         IBP = -10, IBP_Unit = 'uA',
+                        DIODE_HV = 0.2, DIODE_HV_Unit = 'V',
                         print_out=False):
         # Voltages
         #VDD = 1.2
@@ -61,13 +63,15 @@ class LF_SFF_MIO(Dut):
         self['VRESET'].set_voltage(VRESET, unit=VRESET_Unit)
 
         self['opAMP_offset'].set_voltage(opAMP_offset, unit=opAMP_offset_Unit)
-        
+        self['DIODE_HV'].set_voltage(DIODE_HV, unit=DIODE_HV_Unit)
+
         if print_out:
             print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
             print('VRESET:', self['VRESET'].get_voltage(unit='V'), VRESET_Unit, self['VRESET'].get_current(), 'uA')
             print('IBP:', self['IBP'].get_voltage(unit='V'), 'V', self['IBP'].get_current(), 'uA')
             print('IBN:', self['IBN'].get_voltage(unit='V'), 'V', self['IBN'].get_current(), 'uA')
             print('VDD:', self['VDD'].get_voltage(unit='V'), 'V', self['VDD'].get_current(), 'mA')
+            print('DIODE_HV:', self['DIODE_HV'].get_voltage(unit='V'), 'V', self['DIODE_HV'].get_current(), 'mA')
 
 
     def get_status(self, print_status=True):
@@ -120,3 +124,20 @@ class LF_SFF_MIO(Dut):
         time.sleep(sleep)
         self['CONTROL']['RESET'] = 0x0
         self['CONTROL'].write()
+    
+    def load_config(self, config_path):
+        limits = {'VDD': [1.5, 'V'],
+            'VRESET': [1.1, 'V'],
+            'IBN': [100, 'uA'],
+            'IBP':[-10, 'uA'],
+            'DIODE_HV': [0.5, 'V']}
+        config = np.genfromtxt(config_path, delimiter=',',dtype='str')[1:]
+        print('Loading config: ')
+        for conf in config:
+            if float(conf[1])<=limits[conf[0]][0] and limits[conf[0]][1] in conf[2]:
+                if 'A' in conf[2]:
+                    self[conf[0]].set_current(float(conf[1]), unit=conf[2])
+                    print('Set ',conf[0], ' = ',  round(self[conf[0]].get_current(unit=conf[2]),2), ' ', conf[2])
+                elif 'V' in conf[2]:
+                    self[conf[0]].set_voltage(float(conf[1]), unit=conf[2])
+                    print('Set ', conf[0], ' = ', round(self[conf[0]].get_voltage(unit=conf[2]),2), ' ', conf[2])

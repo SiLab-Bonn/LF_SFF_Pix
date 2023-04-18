@@ -25,6 +25,7 @@ from lab_devices.oscilloscope import oscilloscope
 from lab_devices.function_generator import function_generator
 import utils.plot_fit as pltfit
 import utils.data_handler as data_handler
+from lab_devices.conifg.config_handler import update_config
 
 import matplotlib.pyplot as plt
 import yaml
@@ -37,6 +38,8 @@ import sys
 image_format = '.pdf'
 
 def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
+    dut_config = update_config('./lab_devices/conifg/LF_SFF_DC_weep.csv')
+
     #Define IBN, IBP, VRESET scan range
     IBN = [80,82,85,87,90,92,95,97,100]
     IBP = [-5,-6,-7,-8,-9,-10]
@@ -114,7 +117,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
             dut['VRESET'].set_voltage(1.2, unit='V')
 
         for V in VRESET:
-            
+            dut_config.check_config(dut)
             dut['VRESET'].set_voltage(V,unit='V')
             time.sleep(0.2)
             print('----------------------\nV_in =',V,'V')

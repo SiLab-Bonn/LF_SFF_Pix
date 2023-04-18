@@ -43,18 +43,19 @@ import numpy as np
 from lab_devices.LF_SFF_MIO import LF_SFF_MIO
 from lab_devices.oscilloscope import oscilloscope
 from lab_devices.function_generator import function_generator
+from lab_devices.conifg.config_handler import update_config
+
 import utils.plot_fit as pltfit
 from host.bode_plot_analyzer import analyse_bode_plot
 import utils.data_handler as data_handler
-
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import yaml
 import sys
 
 image_format = '.pdf'
 
 def AC_sweep(load_data=False,DC=False):
+    dut_config = update_config('./lab_devices/conifg/LF_SFF_AC_weep.csv')
     IBN = [80,82,85,87,90,92,95,97,100]
     IBP = [-5,-6,-7,-8,-9,-10]
     I_unit = 'uA'
@@ -139,6 +140,7 @@ def AC_sweep(load_data=False,DC=False):
         IBP_VOUT_err = [[] for i in range(0, len(IBP))]
         
         for f in frequencies:
+            dut_config.check_config(dut)
             if f in frequency_oszi:
                 set_oszi_freq = f
             else:
