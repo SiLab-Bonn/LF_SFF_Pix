@@ -13,7 +13,7 @@ transfer_layer:
     type  : SiUsb
     init:
       avoid_download : True
-      bit_file : ../device/ise/LF_SFF_MIO.bit
+      bit_file : ../device/work/LF_SFF_MIO.bit
     
 hw_drivers:
   - name      : GPAC
@@ -58,6 +58,11 @@ hw_drivers:
     interface : usb
     base_addr : 0x10020
     base_data_addr: 0x0001000000000000
+
+  - name      : seq_gen
+    type      : seq_gen
+    interface : usb
+    base_addr : 0x11000
 
 registers:
   - name        : CONTROL
@@ -144,3 +149,16 @@ registers:
   - name        : DATA_FIFO
     type        : FunctionalRegister
     hw_driver   : FIFO
+
+  - name        : SEQ
+    type        : TrackRegister
+    hw_driver   : seq_gen
+    seq_width   : 16
+    seq_size    : 8192
+    tracks  : 
+      - name     : RESET
+        position : 0
+      - name     : Trigger
+        position : 1  
+      - name     : SEQ3
+        position : 2

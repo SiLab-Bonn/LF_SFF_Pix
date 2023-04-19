@@ -141,3 +141,27 @@ class LF_SFF_MIO(Dut):
                 elif 'V' in conf[2]:
                     self[conf[0]].set_voltage(float(conf[1]), unit=conf[2])
                     print('Set ', conf[0], ' = ', round(self[conf[0]].get_voltage(unit=conf[2]),2), ' ', conf[2])
+    
+    def take_adc_data(self, channel, how_much = 1000000):
+
+        self['DATA_FIFO'].reset()
+        self[channel].set_data_count(how_much)
+        self[channel].start()
+        
+        nmdata = self['DATA_FIFO'].get_data()
+        
+        while self[channel].is_done() == False:
+            nmdata = np.append(nmdata, self['DATA_FIFO'].get_data())
+        
+        nmdata = np.append(nmdata, self['DATA_FIFO'].get_data())
+        if(how_much/2 != len(nmdata)):
+            print ("Error: Data lost!", how_much/2, len(nmdata))
+        
+        val0 = np.right_shift(np.bitwise_and(nmdata, 0x0fffc000), 14)
+        val1 = np.bitwise_and(nmdata, 0x00003fff)
+        vals = np.right_shift(np.bitwise_and(nmdata, 0x10000000), 28)
+        
+        val = np.reshape(np.vstack((val0, val1)), -1, order='F')
+        sync = np.reshape(np.vstack((vals, vals)), -1, order='F')
+
+        return val, sync

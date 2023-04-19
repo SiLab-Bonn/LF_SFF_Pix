@@ -17,6 +17,7 @@ module LF_SFF_MIO (
 
     input wire FCLK_IN, 
 
+
     //full speed 
     inout wire [7:0] BUS_DATA,
     input wire [15:0] ADD,
@@ -103,15 +104,17 @@ module LF_SFF_MIO (
     wire ADC_ENC;
     wire CLK_160_LOCKED;
     wire BUS_RST;
-
-    assign TX[2:1] = 0;
-    OFDDRRSE OFDDRRSE_ADC_ENC_BUF (
+    
+    wire GPIO_RESET;
+    
+    //assign TX[2:1] = 0;
+    /*OFDDRRSE OFDDRRSE_ADC_ENC_BUF (
         .Q(TX[0]),      
         .C0(ADC_ENC), .C1(~ADC_ENC),  
         .CE(1'b1),    
         .D0(1'b1), .D1(1'b0),
         .R(1'b0), .S(1'b0)
-    );
+    );*/
 
     reset_gen i_reset_gen(.CLK(BUS_CLK), .RST(BUS_RST));
     wire ADC_CLK;
@@ -148,8 +151,8 @@ module LF_SFF_MIO (
     localparam ADC_RX_CH3_BASEADDR = ADC_RX_CH2_HIGHADDR + 1;  // 0x0060
     localparam ADC_RX_CH3_HIGHADDR = ADC_RX_CH3_BASEADDR + 15; // 0x006f
     
-    //localparam SEQ_GEN_BASEADDR = 16'h1000;                     // 0x1000
-    //localparam SEQ_GEN_HIGHADDR = SEQ_GEN_BASEADDR + 15 + 16384;// 0x500f
+    localparam SEQ_GEN_BASEADDR = 16'h1000;                     // 0x1000
+    localparam SEQ_GEN_HIGHADDR = SEQ_GEN_BASEADDR + 15 + 16384;// 0x500f
     
 
     // -------  BUS SYGNALING  ------- //
@@ -186,27 +189,30 @@ module LF_SFF_MIO (
     );
     assign ADC_CSN = !ADC_EN;
 
-    //wire [15:0] SEQ_OUT;
-    //seq_gen 
-    //#( 
-    //    .BASEADDR(SEQ_GEN_BASEADDR), 
-    //    .HIGHADDR(SEQ_GEN_HIGHADDR), 
-    //    .MEM_BYTES(16384), 
-    //    .OUT_BITS(16) 
-    //) i_seq_gen
-    //(
-    //    .BUS_CLK(BUS_CLK),
-    //    .BUS_RST(BUS_RST),
-    //    .BUS_ADD(BUS_ADD),
-    //    .BUS_DATA(BUS_DATA),
-    //    .BUS_RD(BUS_RD),
-    //    .BUS_WR(BUS_WR), 
+    wire [15:0] SEQ_OUT;
+    seq_gen 
+    #( 
+        .BASEADDR(SEQ_GEN_BASEADDR), 
+        .HIGHADDR(SEQ_GEN_HIGHADDR), 
+        .MEM_BYTES(16384), 
+        .OUT_BITS(16) 
+    ) i_seq_gen
+    (
+        .BUS_CLK(BUS_CLK),
+        .BUS_RST(BUS_RST),
+        .BUS_ADD(BUS_ADD),
+        .BUS_DATA(BUS_DATA),
+        .BUS_RD(BUS_RD),
+        .BUS_WR(BUS_WR), 
 
-    //    .SEQ_CLK(ADC_ENC),
-    //    .SEQ_OUT(SEQ_OUT)
-    //);
+        .SEQ_CLK(ADC_ENC),
+        .SEQ_OUT(SEQ_OUT)
+    );
 
     wire [3:0] ADC_SYNC;
+    assign TX[0] = SEQ_OUT[0];
+    assign TX[1] = SEQ_OUT[1];
+    assign TX[2] = SEQ_OUT[2];
     //assign RESET_COL_START_1 = 0;
     //assign RESET_COL_START_2 = 0;
     //assign RESET_ROW_START = 0;
@@ -369,9 +375,7 @@ module LF_SFF_MIO (
     ); 
     `endif
 	 
-	
-
-	wire [1:0] GPIO_NOT_USED;
+    wire [1:0] GPIO_NOT_USED;
     gpio #(
         .BASEADDR(GPIO_BASEADDR),
         .HIGHADDR(GPIO_HIGHADDR),
@@ -385,14 +389,15 @@ module LF_SFF_MIO (
         .BUS_DATA(BUS_DATA),
         .BUS_RD(BUS_RD),
         .BUS_WR(BUS_WR),
-        .IO({LED5, SEL2, SEL1, SEL0, RESET}) //,FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1
+        .IO({LED5, SEL2, SEL1, SEL0, GPIO_RESET}) //,FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1
     );
-
+	 
+    assign RESET = (SEQ_OUT[0] == 1'b1) ? SEQ_OUT[0] : GPIO_RESET;
     assign GPIO_NOT_USED = {LED2, LED1};
-	 assign LED1 = SEL0;
-	 assign LED2 = SEL1;
-	 assign LED3 = SEL2;
-	 assign LED4 = RESET;
+    assign LED1 = SEL0;
+    assign LED2 = SEL1;
+    assign LED3 = SEL2;
+    assign LED4 = RESET;
 
 endmodule
 
