@@ -142,26 +142,72 @@ class LF_SFF_MIO(Dut):
                     self[conf[0]].set_voltage(float(conf[1]), unit=conf[2])
                     print('Set ', conf[0], ' = ', round(self[conf[0]].get_voltage(unit=conf[2]),2), ' ', conf[2])
     
-    def take_adc_data(self, channel, how_much = 1000000):
-
+    def init_adc(self, howmuch=10000):
         self['DATA_FIFO'].reset()
-        self[channel].set_data_count(how_much)
-        self[channel].start()
-        
-        nmdata = self['DATA_FIFO'].get_data()
-        
-        while self[channel].is_done() == False:
-            nmdata = np.append(nmdata, self['DATA_FIFO'].get_data())
-        
-        nmdata = np.append(nmdata, self['DATA_FIFO'].get_data())
-        if(how_much/2 != len(nmdata)):
-            print ("Error: Data lost!", how_much/2, len(nmdata))
-        
-        val0 = np.right_shift(np.bitwise_and(nmdata, 0x0fffc000), 14)
-        val1 = np.bitwise_and(nmdata, 0x00003fff)
-        vals = np.right_shift(np.bitwise_and(nmdata, 0x10000000), 28)
-        
-        val = np.reshape(np.vstack((val0, val1)), -1, order='F')
-        sync = np.reshape(np.vstack((vals, vals)), -1, order='F')
+        self.howmuch = howmuch
+        self.nmdata_buffer = []
 
-        return val, sync
+        for ch in ['OUT_0', 'OUT_1', 'OUT_2', 'OUT_3']:
+            self[ch].reset()
+            self[ch].set_data_count(howmuch)
+            self[ch].set_align_to_sync(False)
+            self[ch].set_single_data(1)
+
+            
+    def start_adc(self):
+        for i in range(10):
+            pattern = 10 + i * 100
+            self['fadc_conf'].enable_pattern(pattern)
+        for ch in ['OUT_0', 'OUT_1', 'OUT_2', 'OUT_3']:  
+            self[ch].set_en_trigger('1')
+
+            self[ch].start()
+
+    def stop_adc(self):
+        self['DATA_FIFO'].reset()
+        for ch in ['OUT_0', 'OUT_1', 'OUT_2', 'OUT_3']:        
+            self[ch].reset()
+
+    def get_adc(self):
+        '''self['ADC_REF'].set_voltage(0.5, unit='V')
+        self.start_adc()
+        single = False
+        nmdata = np.array([])
+        i=0
+        while not (self['OUT_0'].is_done() and self['OUT_1'].is_done() and self['OUT_2'].is_done() and self['OUT_3'].is_done() and self['DATA_FIFO'].get_fifo_size()==0):
+            print(self['OUT_0'].is_done(), self['OUT_1'].is_done() ,self['OUT_2'].is_done(),self['OUT_3'].is_done(), self['DATA_FIFO'].get_fifo_size())
+            nmdata = np.append(nmdata, self['DATA_FIFO'].get_data())
+            i = i + 1
+            print(i)
+                     
+        
+        print('out of while')
+        val1 = nmdata# np.bitwise_and(nmdata, 0x00003fff)
+        #vals = np.right_shift(np.bitwise_and(nmdata, 0x10000000), 28)
+        #valc = np.right_shift(np.bitwise_and(nmdata, 0x60000000), 29)
+
+        #if(not single):
+        #   val0 = np.right_shift(np.bitwise_and(nmdata, 0x0fffc000), 14)
+            #val1 = np.reshape(np.vstack((val0, val1)), -1, order='F')
+        # unused variable sync
+#             sync = np.reshape(np.vstack((vals, vals)), -1, order='F')
+        #    valc = np.reshape(np.vstack((valc, valc)), -1, order='F')
+        # return val1
+        #val = np.empty([2, len(val1) >> 1], dtype=np.int32)
+        #for i in [0, 1]:
+        #    val0 = val1[valc == i]
+        #    if len(val[i, :]) == len(val0):
+        ##        val[i, :] = val1[valc == i]
+        #    elif len(val[i, :]) < len(val0):
+        #        val[i, :] = val1[valc == i][:len(val[i, :])]
+        #        # print "WARN data size: all=",len(val1),"ch%d"%i,len(val[i,:]),"dat=",len(val0)
+        #    else:
+        #        val[i, :len(val0)] = val1[valc == i]
+        #        val[i, len(val0):] = 0
+        #        # print "WARN data size: all=",len(val1),"ch%d"%i,len(val[i,:]),"dat=",len(val0)
+        #print('val')
+        #for val in val1:
+        #    print(hex(int(val)))
+        print([hex(int(i)) for i in val1])
+        return val1'''
+    

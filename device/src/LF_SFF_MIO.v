@@ -210,9 +210,6 @@ module LF_SFF_MIO (
     );
 
     wire [3:0] ADC_SYNC;
-    assign TX[0] = SEQ_OUT[0];
-    assign TX[1] = SEQ_OUT[1];
-    assign TX[2] = SEQ_OUT[2];
     //assign RESET_COL_START_1 = 0;
     //assign RESET_COL_START_2 = 0;
     //assign RESET_ROW_START = 0;
@@ -270,7 +267,7 @@ module LF_SFF_MIO (
             .BASEADDR(ADC_RX_CH0_BASEADDR+16*i), 
             .HIGHADDR(ADC_RX_CH0_HIGHADDR+16*i),
             .ADC_ID(i), 
-            .HEADER_ID(0) 
+            .HEADER_ID(1) 
         ) i_gpac_adc_rx
         (
             /*.ADC_CLK(ADC_CLK),
@@ -398,6 +395,10 @@ module LF_SFF_MIO (
     assign LED2 = SEL1;
     assign LED3 = SEL2;
     assign LED4 = RESET;
+    assign TX[0] = ADC_ENC;
+    assign TX[1] = FIFO_READ[0];
+    assign TX[2] = FIFO_EMPTY_ADC[0];
+
 
 endmodule
 

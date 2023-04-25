@@ -32,6 +32,10 @@ hw_drivers:
     interface : usb
     base_addr : 0x10010
     mem_bytes : 2
+    
+  - name      : fadc_conf
+    type      : FadcConf
+    hw_driver : SPI_FADC
 
   - name      : fadc0_rx
     type      : fadc_rx
@@ -112,7 +116,7 @@ registers:
     arg_names   : [ value ]
     arg_add     : { 'channel': 'VSRC2'}
    
-  - name        : AUX_ADC
+  - name        : ADC_REF
     type        : FunctionalRegister
     hw_driver   : GPAC
     arg_names   : [ value ]
