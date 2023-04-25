@@ -30,43 +30,41 @@ hw_drivers:
   - name      : SPI_FADC
     type      : spi
     interface : usb
-    base_addr : 0x10010
+    base_addr : 0x18840
     mem_bytes : 2
-    
-  - name      : fadc_conf
-    type      : FadcConf
-    hw_driver : SPI_FADC
-
   - name      : fadc0_rx
     type      : fadc_rx
     interface : usb
-    base_addr : 0x10030
-    
+    base_addr : 0x18280
   - name      : fadc1_rx
     type      : fadc_rx
     interface : usb
-    base_addr : 0x10040
-    
+    base_addr : 0x182A0
   - name      : fadc2_rx
     type      : fadc_rx
     interface : usb
-    base_addr : 0x10050
-    
+    base_addr : 0x182C0
   - name      : fadc3_rx
     type      : fadc_rx
     interface : usb
-    base_addr : 0x10060
+    base_addr : 0x182E0
   
-  - name      : FIFO
+  - name      : sram
     type      : sram_fifo
     interface : usb
-    base_addr : 0x10020
-    base_data_addr: 0x0001000000000000
+    base_addr : 0x18100
+    base_data_addr : 0x0001000000000000
 
   - name      : seq_gen
     type      : seq_gen
     interface : usb
     base_addr : 0x11000
+
+user_drivers:
+  - name      : fadc_conf
+    type      : FadcConf
+    hw_driver : SPI_FADC
+
 
 registers:
   - name        : CONTROL
@@ -90,8 +88,6 @@ registers:
         size    : 1
         offset  : 4
 
-
-        
   - name        : VDD
     type        : FunctionalRegister
     hw_driver   : GPAC
@@ -134,25 +130,21 @@ registers:
     arg_names   : [ value ]
     arg_add     : { 'channel': 'ISRC1'}
 
-  - name        : OUT_0
-    type        : FunctionalRegister
-    hw_driver   : fadc0_rx
-  
-  - name        : OUT_1
-    type        : FunctionalRegister
-    hw_driver   : fadc1_rx
-  
-  - name        : OUT_2
-    type        : FunctionalRegister
-    hw_driver   : fadc2_rx
-  
-  - name        : OUT_3
-    type        : FunctionalRegister
-    hw_driver   : fadc3_rx
-
-  - name        : DATA_FIFO
-    type        : FunctionalRegister
-    hw_driver   : FIFO
+#  - name        : OUT_0
+#    type        : FunctionalRegister
+#    hw_driver   : fadc0_rx
+#  
+#  - name        : OUT_1
+#    type        : FunctionalRegister
+#    hw_driver   : fadc1_rx
+#  
+#  - name        : OUT_2
+#    type        : FunctionalRegister
+#    hw_driver   : fadc2_rx
+#  
+#  - name        : OUT_3
+#    type        : FunctionalRegister
+#    hw_driver   : fadc3_rx#
 
   - name        : SEQ
     type        : TrackRegister
