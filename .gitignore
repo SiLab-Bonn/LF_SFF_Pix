@@ -5,6 +5,7 @@ pcb/XTB01*
 pcb/bitmap.png
 device/work/*
 !device/work/README.md
+!device/work/LF_SFF_MIO.bit
 MIO_firmware*
 device/ise/xlnx_auto_0_xdb/cst.xbcd
 device/ise/LF_SFF_MIO_summary.xml

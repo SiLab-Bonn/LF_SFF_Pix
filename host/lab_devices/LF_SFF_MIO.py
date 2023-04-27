@@ -168,7 +168,32 @@ class LF_SFF_MIO(Dut):
         for ch in ['OUT_0', 'OUT_1', 'OUT_2', 'OUT_3']:        
             self[ch].reset()
 
+
+    def calibrate_adc(self):#WIP
+        user_input = input('Enable external voltage source and enter current max. voltage in V: ')
+        V_max = float(user_input)
+        print(V_max)
+    
+    def read_raw_adc(self, nSamples, adc_ch):
+        self['sram'].reset()
+        self[adc_ch].reset()
+        self[adc_ch].set_delay(10)
+        self[adc_ch].set_data_count(nSamples)
+        self[adc_ch].set_single_data(True)
+        self[adc_ch].set_en_trigger(False)
+        time.sleep(2)
+
+        self[adc_ch].start()
+        while not self[adc_ch].is_done():
+            pass
+
+        lost = self[adc_ch].get_count_lost()
+        data = self['sram'].get_data() 
+        data = data & 0x3fff
+        return data
+
     def get_adc(self):
+        pass
         '''self['ADC_REF'].set_voltage(0.5, unit='V')
         self.start_adc()
         single = False
