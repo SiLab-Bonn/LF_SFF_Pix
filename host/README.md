@@ -1,11 +1,20 @@
 # Application Scripts
 
-# Requirements
+## Requirements
 1. Basil
 2. LibUSB
 3. pyvisa
 
-Measurements:
+You also might have to enable access privilige for your user by runnning 
+```sudo chmod a+rw /dev/ttyUSB0```
+prior to execution.
+If you want to enable permanent access for your user to the ```/dev/ttyUSB0``` devices, you might consider adding the user to the ```dialout``` group:
+```sudo usermod -a -G dialout $USER```
+
+
+## Usefull hints
+For some scripts you have to use the oscilloscope (Tektronix TDS 3034B). You might have to power cycle it twice to get actually picked up by ```pyVISA```
+## Measurements
 - ```Script.py``` [command_line_options]: description
 * ```LF_SFF_MIO_DAQ.py```: A rudimentary DAQ that allows the user to run all tests and set parameters manually. This will be upgraded to a proper prompt tool
 * ```LF_SFF_MIO_DC_Sweep.py``` [AC/DC, load_data, --name]: Measure for different IBNs/IBPs the relation between V_IN and V_Out. Returns DC offset and DC Gain.

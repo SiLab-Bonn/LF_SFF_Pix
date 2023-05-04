@@ -1,0 +1,6 @@
+Setting, Value, Unit
+VDD, 1.2,V
+VRESET, 0.2,V
+IBN, 100,uA
+IBP, -10,uA
+DIODE_HV, 0.2,V

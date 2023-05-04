@@ -46,7 +46,7 @@ module LF_SFF_MIO(
      
     // Triggers
     input wire [2:0] LEMO_RX,
-    output wire [2:0] TX, // TX[0] == RJ45 trigger clock output, TX[1] == RJ45 busy output
+    output wire [2:0] TX,
     input wire RJ45_RESET,
     input wire RJ45_TRIGGER,
      
@@ -199,6 +199,25 @@ gpac_adc_iobuf i_gpac_adc_iobuf
 	.ADC_IN3(ADC_IN[3])
 );
 
+wire [15:0] SEQ_OUT;
+seq_gen 
+#( 
+    .BASEADDR(SEQ_GEN_BASEADDR), 
+    .HIGHADDR(SEQ_GEN_HIGHADDR), 
+    .MEM_BYTES(16384), 
+    .OUT_BITS(16) 
+) i_seq_gen
+(
+    .BUS_CLK(BUS_CLK),
+    .BUS_RST(BUS_RST),
+    .BUS_ADD(BUS_ADD),
+    .BUS_DATA(BUS_DATA),
+    .BUS_RD(BUS_RD),
+    .BUS_WR(BUS_WR), 
+
+    .SEQ_CLK(ADC_ENC),
+    .SEQ_OUT(SEQ_OUT)
+);
 
 wire [31:0] FIFO_DATA_ADC [3:0];
 wire [3:0]  FIFO_EMPTY_ADC;
@@ -222,7 +241,7 @@ for (i = 0; i < 4; i = i + 1) begin: adc_gen
 		.ADC_IN(ADC_IN[i]),
 
 		.ADC_SYNC(ADC_SYNC[i]),
-		.ADC_TRIGGER(1'b0),
+		.ADC_TRIGGER(SEQ_OUT[2]),
 
 		.BUS_CLK(BUS_CLK),
 		.BUS_RST(BUS_RST),
@@ -299,25 +318,6 @@ sram_fifo
     .FIFO_READ_ERROR(FIFO_READ_ERROR)
 );
 
-wire [15:0] SEQ_OUT;
-seq_gen 
-#( 
-    .BASEADDR(SEQ_GEN_BASEADDR), 
-    .HIGHADDR(SEQ_GEN_HIGHADDR), 
-    .MEM_BYTES(16384), 
-    .OUT_BITS(16) 
-) i_seq_gen
-(
-    .BUS_CLK(BUS_CLK),
-    .BUS_RST(BUS_RST),
-    .BUS_ADD(BUS_ADD),
-    .BUS_DATA(BUS_DATA),
-    .BUS_RD(BUS_RD),
-    .BUS_WR(BUS_WR), 
-
-    .SEQ_CLK(ADC_ENC),
-    .SEQ_OUT(SEQ_OUT)
-);
 wire [1:0] GPIO_NOT_USED;
 gpio #(
     .BASEADDR(GPIO_BASEADDR),
@@ -340,8 +340,8 @@ assign LED1 = SEL0;
 assign LED2 = SEL1;
 assign LED3 = SEL2;
 assign LED4 = RESET;
-assign TX[0] = SEQ_OUT[0];
-assign TX[1] = SEQ_OUT[1];
-assign TX[2] = SEQ_OUT[3];
+assign TX[0] = SEQ_OUT[0]; // RESET
+assign TX[1] = SEQ_OUT[1]; // Trigger
+assign TX[2] = SEQ_OUT[2]; // ADC_Trigger
 
 endmodule

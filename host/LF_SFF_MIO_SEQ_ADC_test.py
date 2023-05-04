@@ -17,67 +17,40 @@ import sys
 import time
     
 import logging
+from lab_devices.conifg.config_handler import update_config
+
+from bitarray import bitarray
 
 dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
 dut.init()
-dut.load_defaults()
+dut.boot_seq()
+
+dut.load_defaults(VRESET=0)
 
 func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
 func_gen.init()
 
-def test_SEQ():
-    pulse_width = 200*1e-6
+def test_SEQ(dut):
+    
+    dut['SEQ'].reset()
+    dut['SEQ'].set_clk_divide(1)
 
-
-    dut.boot_seq()
-    dut.load_defaults()
-
-
-
-    for i in range(0,int(pulse_width/0.1*1e6)): # 1 unit = 0.1us
-        dut['SEQ']['Trigger'][i]=1
-        #dut['SEQ']['RESET'][i]=0
-
-    for i in range(int(pulse_width/0.1*1e6), int(pulse_width/0.1*1e6)*2):
-        dut['SEQ']['Trigger'][i]=0
-        #dut['SEQ']['RESET'][i]=1
-
-    dut['SEQ'].set_size(pulse_width/0.1*1e6*2)
+    reset       = bitarray('000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000')
+    trigger     = bitarray(''.join(['0' for i in range(0,10)])+''.join(['1' for i in range(0, 5)])+''.join(['0' for i in range(0,35)]))
+    adc_trigger = bitarray('0'+''.join(['1' for i in range(0,48)])+'0')
+    seq_size  = len(adc_trigger)
+    #dut['SEQ'].set_repeat_start(0) 
+    #dut['SEQ'].set_repeat(0) 
+    #dut['SEQ'].set_size(seq_size)
+    #dut['SEQ']['RESET'][0:len(adc_trigger)] =  reset
+    dut['SEQ']['Trigger'][0:len(adc_trigger)] =  trigger
+    dut['SEQ']['ADC_Trigger'][0:len(adc_trigger)] = adc_trigger
     dut['SEQ'].write()
     dut['SEQ'].start()
 
-
-
-
-
-def read_adc_testpattern(adc_ch):
-    dut['sram'].reset()
-    dut[adc_ch].reset()
-    dut[adc_ch].set_delay(10)
-    dut[adc_ch].set_data_count(10)
-    dut[adc_ch].set_single_data(True)
-    dut[adc_ch].set_en_trigger(False)
-
-    for i in range(10):
-        pattern = 10 + i * 100
-        dut['fadc_conf'].enable_pattern(pattern)  
-
-        dut[adc_ch].start()
-        while not dut[adc_ch].is_done():
-            pass
-
-        lost = dut[adc_ch].get_count_lost()
-        data = dut['sram'].get_data() 
-        data = data & 0x3fff
-        if data.tolist() != [pattern]*10 or lost !=0 :
-            logging.error("Wrong ("+str(hex(pattern))+") or lost data :" + str(data) + " Lost: " + str(lost))
-        else:
-            logging.info("OK Data:" + str(data) + " Lost: " + str(lost))
-
 def read_adc(nSamples, adc_ch):
-    data = dut.read_raw_adc(nSamples, adc_ch)
+    data = dut.read_adc(nSamples, adc_ch)
     plt.plot(data, label=adc_ch, alpha=0.5)
-
 
 def adc_test_offset(adc_ch='fadc0_rx'):
     freq = 1e3
@@ -102,11 +75,41 @@ def adc_test_offset(adc_ch='fadc0_rx'):
     plt.savefig('ADC_offset_test.pdf')
     plt.show()
 
-#for adc in ['fadc0_rx']:#,'fadc1_r
-# x','fadc2_rx','fadc3_rx']:
-#    read_adc(1000000, adc)
-#plt.legend()
-#plt.show()
-#for adc_ch in ['fadc0_rx','fadc1_rx','fadc2_rx','fadc3_rx']:
-#    read_adc_testpattern(adc_ch)
-adc_test_offset('fadc3_rx')
+def test_read_pulse():
+    pulse_width = 0.3*1e-6
+    test_SEQ(pulse_width)
+    func_gen.load_IR_LED_ext_config(1.8, pulse_width, int(1/pulse_width*0.1))
+    time.sleep(1)
+    pltfit.beauty_plot(tight=False)
+    for adc_ch in ['fadc0_rx','fadc1_rx','fadc2_rx','fadc3_rx']:
+        data, data_err = dut.read_adc(adc_ch=adc_ch, nSamples=10000)
+        plt.plot(data, label=adc_ch)
+    plt.legend()
+    plt.show()
+    dut_config = update_config('./lab_devices/conifg/LF_SFF_SEQ_ADC_test.csv')
+
+    while True:
+        dut_config.check_config(dut)
+
+#test_read_pulse()
+def read_test_input(adc_ch = 'fadc0_rx'):
+    dut[adc_ch].reset()
+    dut['sram'].reset()
+    dut[adc_ch].set_data_count(100)
+    dut[adc_ch].set_en_trigger(True)
+    test_SEQ()
+    dut[adc_ch].set_delay(10)
+    dut[adc_ch].start()
+    while not dut[adc_ch].is_done():
+        pass
+    data = dut['sram'].get_data() 
+    data = data & 0x3fff
+    plt.plot(data)
+    plt.show()
+
+def demo_capture_one_event():
+    data, data_err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=200)
+    plt.plot(data)
+    plt.show()
+
+demo_capture_one_event()

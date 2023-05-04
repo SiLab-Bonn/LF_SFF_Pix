@@ -156,5 +156,5 @@ registers:
         position : 0
       - name     : Trigger
         position : 1  
-      - name     : SEQ3
+      - name     : ADC_Trigger
         position : 2

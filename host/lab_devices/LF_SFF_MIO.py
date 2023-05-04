@@ -10,6 +10,7 @@ import socket
 import numpy as np
 import time
 import os 
+import logging
 
 class LF_SFF_MIO(Dut):
 
@@ -167,12 +168,6 @@ class LF_SFF_MIO(Dut):
         self['DATA_FIFO'].reset()
         for ch in ['OUT_0', 'OUT_1', 'OUT_2', 'OUT_3']:        
             self[ch].reset()
-
-
-    def calibrate_adc(self):#WIP
-        user_input = input('Enable external voltage source and enter current max. voltage in V: ')
-        V_max = float(user_input)
-        print(V_max)
     
     def read_raw_adc(self, nSamples, adc_ch):
         self['sram'].reset()
@@ -192,47 +187,84 @@ class LF_SFF_MIO(Dut):
         data = data & 0x3fff
         return data
 
-    def get_adc(self):
-        pass
-        '''self['ADC_REF'].set_voltage(0.5, unit='V')
-        self.start_adc()
-        single = False
-        nmdata = np.array([])
-        i=0
-        while not (self['OUT_0'].is_done() and self['OUT_1'].is_done() and self['OUT_2'].is_done() and self['OUT_3'].is_done() and self['DATA_FIFO'].get_fifo_size()==0):
-            print(self['OUT_0'].is_done(), self['OUT_1'].is_done() ,self['OUT_2'].is_done(),self['OUT_3'].is_done(), self['DATA_FIFO'].get_fifo_size())
-            nmdata = np.append(nmdata, self['DATA_FIFO'].get_data())
-            i = i + 1
-            print(i)
-                     
-        
-        print('out of while')
-        val1 = nmdata# np.bitwise_and(nmdata, 0x00003fff)
-        #vals = np.right_shift(np.bitwise_and(nmdata, 0x10000000), 28)
-        #valc = np.right_shift(np.bitwise_and(nmdata, 0x60000000), 29)
+    def read_adc(self, nSamples, adc_ch):
+        data = self.read_raw_adc(nSamples, adc_ch)
+        print(data)
+        a, a_err, b, b_err = self.load_adc_calib(adc_ch)
+        if a and a_err and b and b_err:
+            data = np.array(data)*a+b
+            data_err = np.sqrt((data*a_err)**2+(b_err)**2)
+            return data, data_err # Units V
+        else:
+            logging.error("Could not read calibration data")
+            exit
+            
+    def read_adcs(self, nSamples, adcs):
+        self['sram'].reset()
+        for adc_ch in adcs:
+            self[adc_ch].reset()
+            self[adc_ch].set_delay(10)
+            self[adc_ch].set_data_count(nSamples)
+            self[adc_ch].set_single_data(True)
+            self[adc_ch].set_en_trigger(False)
 
-        #if(not single):
-        #   val0 = np.right_shift(np.bitwise_and(nmdata, 0x0fffc000), 14)
-            #val1 = np.reshape(np.vstack((val0, val1)), -1, order='F')
-        # unused variable sync
-#             sync = np.reshape(np.vstack((vals, vals)), -1, order='F')
-        #    valc = np.reshape(np.vstack((valc, valc)), -1, order='F')
-        # return val1
-        #val = np.empty([2, len(val1) >> 1], dtype=np.int32)
-        #for i in [0, 1]:
-        #    val0 = val1[valc == i]
-        #    if len(val[i, :]) == len(val0):
-        ##        val[i, :] = val1[valc == i]
-        #    elif len(val[i, :]) < len(val0):
-        #        val[i, :] = val1[valc == i][:len(val[i, :])]
-        #        # print "WARN data size: all=",len(val1),"ch%d"%i,len(val[i,:]),"dat=",len(val0)
-        #    else:
-        #        val[i, :len(val0)] = val1[valc == i]
-        #        val[i, len(val0):] = 0
-        #        # print "WARN data size: all=",len(val1),"ch%d"%i,len(val[i,:]),"dat=",len(val0)
-        #print('val')
-        #for val in val1:
-        #    print(hex(int(val)))
-        print([hex(int(i)) for i in val1])
-        return val1'''
+        
+    def read_adc_testpattern(self, adc_ch):
+        self['sram'].reset()
+        self[adc_ch].reset()
+        self[adc_ch].set_delay(10)
+        self[adc_ch].set_data_count(10)
+        self[adc_ch].set_single_data(True)
+        self[adc_ch].set_en_trigger(False)
+
+        for i in range(10):
+            pattern = 10 + i * 100
+            self['fadc_conf'].enable_pattern(pattern)  
+
+            self[adc_ch].start()
+            while not self[adc_ch].is_done():
+                pass
+
+            lost = self[adc_ch].get_count_lost()
+            data = self['sram'].get_data() 
+            data = data & 0x3fff
+            if data.tolist() != [pattern]*10 or lost !=0 :
+                logging.error("Wrong ("+str(hex(pattern))+") or lost data :" + str(data) + " Lost: " + str(lost))
+            else:
+                logging.info("OK Data:" + str(data) + " Lost: " + str(lost))
     
+    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples):
+            self[adc_ch].reset()
+            self['sram'].reset()
+            self[adc_ch].set_data_count(nSamples)
+            self[adc_ch].set_en_trigger(True)
+            SEQ_config(self)
+            self[adc_ch].set_delay(10)
+            self[adc_ch].start()
+            while not self[adc_ch].is_done():
+                pass
+            data = self['sram'].get_data() 
+            data = data & 0x3fff
+            data, data_err = self.calibreate_data(data, adc_ch)
+            return data, data_err
+    
+    def load_adc_calib(self, adc_ch):
+        try:
+            calib = np.genfromtxt('./output/ADC_Calibration/data/'+adc_ch+'.csv', delimiter=',')
+            calib = calib[1:]
+            a, a_err, b, b_err = calib[0][0],calib[0][1],calib[1][0],calib[1][1]
+            logging.info('Successfully loaded ADC calibratio for %s'%(adc_ch))
+            return a, a_err, b, b_err
+        except:
+            logging.error('Calibration for %s not found! Please run LF_SFF_MIO_Calibrate_ADC.py!'%(adc_ch))
+            return None, None, None, None
+        
+    def calibreate_data(self, data, adc_ch):
+        a, a_err, b, b_err = self.load_adc_calib(adc_ch)
+        if a:
+            data = a*data+b
+            data_err = np.std(data)
+            return data, data_err
+        else:
+            logging.error('MISSING ADC calibration')
+            exit
