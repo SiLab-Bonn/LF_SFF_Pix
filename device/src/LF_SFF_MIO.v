@@ -127,7 +127,7 @@ localparam GPIO_BASEADDR = 16'h0000;
 localparam GPIO_HIGHADDR = 16'h000f;
 
 localparam SEQ_GEN_BASEADDR = 16'h1000;                     // 0x1000
-localparam SEQ_GEN_HIGHADDR = SEQ_GEN_BASEADDR + 15 + 16384;// 0x500f
+localparam SEQ_GEN_HIGHADDR = SEQ_GEN_BASEADDR + 32 + 16384;// 0x500f
 
 // -------  BUS SYGNALING  ------- //
 wire [15:0] BUS_ADD;
@@ -204,7 +204,7 @@ seq_gen
 #( 
     .BASEADDR(SEQ_GEN_BASEADDR), 
     .HIGHADDR(SEQ_GEN_HIGHADDR), 
-    .MEM_BYTES(16384), 
+    .MEM_BYTES(8192), 
     .OUT_BITS(16) 
 ) i_seq_gen
 (

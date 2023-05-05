@@ -238,9 +238,9 @@ class LF_SFF_MIO(Dut):
             self['sram'].reset()
             self[adc_ch].set_data_count(nSamples)
             self[adc_ch].set_en_trigger(True)
-            SEQ_config(self)
+            self[adc_ch].set_single_data(True)
             self[adc_ch].set_delay(10)
-            self[adc_ch].start()
+            SEQ_config(self, nSamples)
             while not self[adc_ch].is_done():
                 pass
             data = self['sram'].get_data() 

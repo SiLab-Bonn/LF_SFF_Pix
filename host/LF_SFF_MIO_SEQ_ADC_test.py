@@ -30,21 +30,21 @@ dut.load_defaults(VRESET=0)
 func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
 func_gen.init()
 
-def test_SEQ(dut):
+def test_SEQ(dut, overhead):
     
     dut['SEQ'].reset()
     dut['SEQ'].set_clk_divide(1)
 
-    reset       = bitarray('000000000000000000000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000')
-    trigger     = bitarray(''.join(['0' for i in range(0,10)])+''.join(['1' for i in range(0, 5)])+''.join(['0' for i in range(0,35)]))
-    adc_trigger = bitarray('0'+''.join(['1' for i in range(0,48)])+'0')
-    seq_size  = len(adc_trigger)
-    #dut['SEQ'].set_repeat_start(0) 
-    #dut['SEQ'].set_repeat(0) 
-    #dut['SEQ'].set_size(seq_size)
-    #dut['SEQ']['RESET'][0:len(adc_trigger)] =  reset
-    dut['SEQ']['Trigger'][0:len(adc_trigger)] =  trigger
-    dut['SEQ']['ADC_Trigger'][0:len(adc_trigger)] = adc_trigger
+    reset       = bitarray('0000000000000000000000000')
+    trigger     = bitarray('0000000100000000000000000')
+    adc_trigger = bitarray('0100000000000000000000000')
+    seq_size  = len(trigger)
+    dut['SEQ'].set_repeat_start(0) 
+    dut['SEQ'].set_repeat(0) 
+    dut['SEQ'].set_size(seq_size+overhead)
+    dut['SEQ']['RESET'][0:len(trigger)] =  reset
+    dut['SEQ']['Trigger'][0:len(trigger)] =  trigger
+    dut['SEQ']['ADC_Trigger'][0:len(trigger)] = adc_trigger
     dut['SEQ'].write()
     dut['SEQ'].start()
 
@@ -108,8 +108,9 @@ def read_test_input(adc_ch = 'fadc0_rx'):
     plt.show()
 
 def demo_capture_one_event():
-    data, data_err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=200)
+    pltfit.beauty_plot(tight=False)
+    data, data_err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=40000)
     plt.plot(data)
     plt.show()
-
 demo_capture_one_event()
+dut.close()

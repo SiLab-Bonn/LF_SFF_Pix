@@ -150,7 +150,7 @@ registers:
     type        : TrackRegister
     hw_driver   : seq_gen
     seq_width   : 16
-    seq_size    : 8192
+    seq_size    : 4096
     tracks  : 
       - name     : RESET
         position : 0
