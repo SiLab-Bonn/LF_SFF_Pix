@@ -55,7 +55,7 @@ import sys
 image_format = '.pdf'
 
 def AC_sweep(load_data=False,DC=False):
-    dut_config = update_config('./lab_devices/conifg/LF_SFF_AC_weep.csv')
+    dut_config = update_config('./lab_devices/conifg/LF_SFF_AC_Sweep.csv')
     IBN = [80,82,85,87,90,92,95,97,100]
     IBP = [-5,-6,-7,-8,-9,-10]
     I_unit = 'uA'
@@ -271,6 +271,7 @@ def AC_sweep(load_data=False,DC=False):
 
         x = np.array(frequencies)
         xerr = np.array(frequencies)*0.05
+        print(np.abs(IBN_VOUT[i]),np.abs(IBN_VIN[i]))
         y = np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])
         yerr = np.sqrt((1/np.abs(IBN_VIN[i])*IBN_VOUT_err[i])**2+(np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])**2*IBN_VIN_err[i])**2)
         IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode'+image_format, title='Bodeplot at IBN:'+str(IBN[i])+'uA', show_plot = False, IBN=IBN[i])

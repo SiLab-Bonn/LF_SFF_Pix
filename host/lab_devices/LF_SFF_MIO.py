@@ -233,14 +233,15 @@ class LF_SFF_MIO(Dut):
             else:
                 logging.info("OK Data:" + str(data) + " Lost: " + str(lost))
     
-    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples):
+    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples, leadSamples=0):
             self[adc_ch].reset()
             self['sram'].reset()
-            self[adc_ch].set_data_count(nSamples)
+            self[adc_ch].set_data_count(nSamples+leadSamples)
             self[adc_ch].set_en_trigger(True)
             self[adc_ch].set_single_data(True)
             self[adc_ch].set_delay(10)
-            SEQ_config(self, nSamples)
+            SEQ_config(self, nSamples,leadSamples)
+            #time.sleep(0.1)
             while not self[adc_ch].is_done():
                 pass
             data = self['sram'].get_data() 

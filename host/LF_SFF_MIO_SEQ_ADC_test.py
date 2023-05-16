@@ -21,6 +21,7 @@ from lab_devices.conifg.config_handler import update_config
 
 from bitarray import bitarray
 
+load_data, chip_version, image_path, data_path = init_meas('IR_LED')
 dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
 dut.init()
 dut.boot_seq()
@@ -30,18 +31,18 @@ dut.load_defaults(VRESET=0)
 func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
 func_gen.init()
 
-def test_SEQ(dut, overhead):
+def test_SEQ(dut, overhead, leadSamples):
     
     dut['SEQ'].reset()
     dut['SEQ'].set_clk_divide(1)
 
-    reset       = bitarray('0000000000000000000000000')
-    trigger     = bitarray('0000000100000000000000000')
-    adc_trigger = bitarray('0100000000000000000000000')
+    reset       = bitarray('0000000000000000000000000000000000'+'0'*leadSamples)
+    trigger     = bitarray('000000000000000000000'+'0'*leadSamples+'1000000000000')
+    adc_trigger = bitarray('1110000000000000000000000000000000'+'0'*leadSamples)
     seq_size  = len(trigger)
     dut['SEQ'].set_repeat_start(0) 
     dut['SEQ'].set_repeat(0) 
-    dut['SEQ'].set_size(seq_size+overhead)
+    dut['SEQ'].set_size(len(adc_trigger)+overhead)
     dut['SEQ']['RESET'][0:len(trigger)] =  reset
     dut['SEQ']['Trigger'][0:len(trigger)] =  trigger
     dut['SEQ']['ADC_Trigger'][0:len(trigger)] = adc_trigger
@@ -108,9 +109,11 @@ def read_test_input(adc_ch = 'fadc0_rx'):
     plt.show()
 
 def demo_capture_one_event():
-    pltfit.beauty_plot(tight=False)
-    data, data_err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=40000)
+    data, data_err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=4000, leadSamples = 100)
+    pltfit.beauty_plot(figsize=[10,10],tight=False, xlim=[0, len(data)], xlabel='ADC data points', ylabel='Voltage / V', title='IR LED Pulse of 200ns', label_size=22)
     plt.plot(data)
+    plt.savefig(image_path+'ADC_Test_Pulse.pdf',bbox_inches='tight')
     plt.show()
+
 demo_capture_one_event()
 dut.close()

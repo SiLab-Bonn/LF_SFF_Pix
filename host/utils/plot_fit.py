@@ -6,13 +6,17 @@ import numpy as np
 from scipy import optimize
 from scipy import odr
 
-def beauty_plot(create_fig=True,xlabel='', ylabel='',xlim=[0,0], ylim=[0,0],log_x=False, log_y=False, figsize=[16,9], grid=True, grid_linestyle='-', title='', legend=False, nrows=0, ncols=0, tight=True):
+def beauty_plot(create_fig=True,xlabel='', ylabel='',xlim=[0,0], ylim=[0,0],log_x=False, log_y=False, figsize=[16,9], grid=True, grid_linestyle='-', title='', legend=False, nrows=0, ncols=0, tight=True, fontsize=15, label_size=None):
+    plt.rcParams["font.family"] = "serif"
+    plt.rcParams['font.size'] = fontsize
+    if label_size:
+        fontsize = label_size
     if create_fig:
         plt.figure(figsize=(figsize[0],figsize[1]))
     plt.grid(grid, linestyle=grid_linestyle)
-    plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+    plt.title(title, fontsize=fontsize)
+    plt.xlabel(xlabel, fontsize=fontsize)
+    plt.ylabel(ylabel, fontsize=fontsize)
     if tight:
         plt.tight_layout()
     if log_x:
