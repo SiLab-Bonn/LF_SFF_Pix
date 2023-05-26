@@ -132,3 +132,5 @@ host/testing.py
 thesis/*
 host/basic_setup_tests/check_function_generator.py
 host/LF_SFF_Pix.code-workspace
+*.eps
+*.emf

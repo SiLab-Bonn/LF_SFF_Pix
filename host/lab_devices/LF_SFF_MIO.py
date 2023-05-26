@@ -11,6 +11,8 @@ import numpy as np
 import time
 import os 
 import logging
+import sys
+sys.path.append("../")
 
 class LF_SFF_MIO(Dut):
 
@@ -33,7 +35,7 @@ class LF_SFF_MIO(Dut):
         self['CONTROL'].write()
 
 
-    def load_defaults(self, VDD = 1.2,VDD_Unit = 'V',
+    def load_defaults(self, VDD = 1.8,VDD_Unit = 'V',
                         VRESET = 1.2, VRESET_Unit = 'V',
                         opAMP_offset = 0, opAMP_offset_Unit = 'V',
                         IBN =  100, IBN_Unit = 'uA', 
@@ -41,7 +43,7 @@ class LF_SFF_MIO(Dut):
                         DIODE_HV = 0.2, DIODE_HV_Unit = 'V',
                         print_out=False):
         # Voltages
-        #VDD = 1.2
+        #VDD = 1.8
         #VDD_Unit = 'V'
         #VRESET = 1.1
         #VRESET_Unit = 'V'
@@ -233,16 +235,19 @@ class LF_SFF_MIO(Dut):
             else:
                 logging.info("OK Data:" + str(data) + " Lost: " + str(lost))
     
-    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples, leadSamples=0):
+    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples, delta_trigger, overhead=0):
             self[adc_ch].reset()
             self['sram'].reset()
-            self[adc_ch].set_data_count(nSamples+leadSamples)
-            self[adc_ch].set_en_trigger(True)
+            
+            self[adc_ch].set_data_count(nSamples)
             self[adc_ch].set_single_data(True)
-            self[adc_ch].set_delay(10)
-            SEQ_config(self, nSamples,leadSamples)
+            self[adc_ch].set_en_trigger(True)
+            #self[adc_ch].set_delay(10)
+            SEQ_config(self, overhead,delta_trigger)
             #time.sleep(0.1)
             while not self[adc_ch].is_done():
+                pass
+            while self['sram'].get_FIFO_INT_SIZE()!=nSamples:
                 pass
             data = self['sram'].get_data() 
             data = data & 0x3fff
@@ -269,3 +274,20 @@ class LF_SFF_MIO(Dut):
         else:
             logging.error('MISSING ADC calibration')
             exit
+
+    def get_DC_offset(self, chip_version):
+        #try:
+        IBP_end_of_dynamic_area = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_end_of_dynamic_area.csv', delimiter=',')
+        IBN_end_of_dynamic_area = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_end_of_dynamic_area.csv', delimiter=',')
+        DC_offset = np.average([IBP_end_of_dynamic_area[1][1],IBN_end_of_dynamic_area[1][1]])
+        print('\nSuccessfully loaded DC sweep results')
+        print('DC offset set to: ', DC_offset, '\n')
+        if DC_offset <= 0.09:
+            DC_offset = 0.10
+            print('But it was smaller than 100mV. Therefore the DC offset was set to 100mV')
+        return DC_offset
+    
+        #except:
+        #    DC_offset = 0.5
+        #    print('\nSet DC_offset to fallback (',DC_offset,'V), because DC sweep results could not be loaded\n')
+        #    return DC_offset
