@@ -71,6 +71,9 @@ def func_cos(x,a,b,c,d):
 def func_cos_lin(x,a,b,c,d,e):
     return a*np.cos(b*x+c)+d*x+e
 
+def func_gauss(p, x):
+    a,b,c,d = p
+    return a*np.exp(-(x-b)**2/2/c**2)+d
 
 def guess_cos_params(y,f):
     ampl_limits = [np.amin(y),np.amax(y)]

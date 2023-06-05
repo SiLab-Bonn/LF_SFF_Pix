@@ -53,13 +53,7 @@ def create_dir_tree():
                     'sub':[]
                     }]
             },{
-                'name':'AC_reset_pulse',
-                'sub':[{
-                    'name':'data',
-                    'sub':[]
-                    }]
-            },{
-                'name':'AC_R_on',
+                'name':'AC_R_ext',
                 'sub':[{
                     'name':'data',
                     'sub':[]
@@ -78,11 +72,17 @@ def create_dir_tree():
                 'sub':[{
                     'name':'data',
                     'sub':[]
+                    },{
+                    'name':'control_pics',
+                    'sub':[]
                     }]
             },{
                 'name':'DC',
                 'sub':[{
                     'name':'data',
+                    'sub':[]
+                    },{
+                    'name':'control_pics',
                     'sub':[]
                     }]
             }]

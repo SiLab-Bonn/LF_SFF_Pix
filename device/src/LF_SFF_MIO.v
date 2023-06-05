@@ -55,7 +55,7 @@ module LF_SFF_MIO(
     inout SCL,
 
     //debug
-	output wire LED1,
+	 output wire LED1,
     output wire LED2,
     output wire LED3,
     output wire LED4,
@@ -226,6 +226,7 @@ wire [3:0]  ADC_ERROR;
 wire ADC_TRIGGER;
 wire [3:0] ADC_SYNC;
 
+wire [0:3] status_LED;
 genvar i;
 generate
 for (i = 0; i < 4; i = i + 1) begin: adc_gen
@@ -254,7 +255,8 @@ for (i = 0; i < 4; i = i + 1) begin: adc_gen
 		.FIFO_EMPTY(FIFO_EMPTY_ADC[i]),
 		.FIFO_DATA(FIFO_DATA_ADC[i]),
 
-		.LOST_ERROR(ADC_ERROR[i])
+		.LOST_ERROR(ADC_ERROR[i]),
+		.status_LED(status_LED[i])
 	);
   end
 	endgenerate
@@ -336,7 +338,7 @@ gpio #(
 );
 assign RESET = (SEQ_OUT[0] == 1'b1) ? SEQ_OUT[0] : GPIO_RESET;
 assign GPIO_NOT_USED = {LED2, LED1};
-assign LED1 = SEL0;
+assign LED1 = status_LED[0];//SEL0;
 assign LED2 = SEL1;
 assign LED3 = SEL2;
 assign LED4 = RESET;

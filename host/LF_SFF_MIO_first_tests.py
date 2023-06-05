@@ -6,7 +6,7 @@
 import time
 from basil.dut import Dut
 import numpy as np
-from LF_SFF_MIO import LF_SFF_MIO
+from lab_devices.LF_SFF_MIO import LF_SFF_MIO
 import yaml
 
 

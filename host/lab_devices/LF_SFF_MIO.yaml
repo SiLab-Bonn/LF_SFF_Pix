@@ -130,6 +130,12 @@ registers:
     arg_names   : [ value ]
     arg_add     : { 'channel': 'ISRC1'}
 
+  - name        : VMeas
+    type        : FunctionalRegister
+    hw_driver   : GPAC
+    arg_names   : [ value ]
+    arg_add     : { 'channel': 'ISRC3'}
+
 #  - name        : OUT_0
 #    type        : FunctionalRegister
 #    hw_driver   : fadc0_rx

@@ -53,4 +53,5 @@ for i in range(0, len(x)-1):
 pltfit.beauty_plot(figsize=[10,10], xlabel='$V_{IN}$ / V', ylabel='Gain $G$', fontsize=20)
 plt.scatter([(x[i+1]+x[i])/2 for i in range(0, len(x)-1)], gain)
 plt.savefig('../output/sim/DC_Sweep/DC_Sweep_Gain_sim.pdf',bbox_inches='tight')
+plt.show()
 plt.close()

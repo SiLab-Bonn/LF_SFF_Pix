@@ -11,9 +11,9 @@
 #  ----- | MIO | GPIO | LF_SFF |       
 #  |     -----------------------            
 #  |               |______|
-#  |        VSRC3 (AC/DC)  Pixel 10              
+#  |        ISRC3 (AC/DC)  Pixel 10              
 #  PC                      Matrix 1               
-#                  
+#  GND -> PWELL_BIAS & DIODE_HV
 # !!!! NOTE: Keep in mind to not use PIX_IN on the AC chip !!!!                                 
 #
 
@@ -41,7 +41,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
     dut_config = update_config('./lab_devices/conifg/LF_SFF_DC_Sweep.csv')
 
     #Define IBN, IBP, VRESET scan range
-    IBN = [80,82,85,87,90,92,95,97,100]
+    IBN = [20,40,60,80,82,85,87,90,92,95,97,100]
     IBP = [-5,-6,-7,-8,-9,-10]
     I_unit = 'uA'
     VRESET = np.array([0.05*i for i in range(0,10)])
@@ -53,7 +53,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
 
     image_path = './output/DC_sweeps/AC/'
     data_path = image_path+'data/'
-    threshold = 0.3
+    threshold = 0.15
     
     chip_version = 'AC'
     if 'DC' in sys.argv[1:] or DC==True:
@@ -72,7 +72,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
             dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
             dut.init()
             dut.boot_seq()
-            dut.load_defaults(VRESET = VRESET_start)
+            dut.load_defaults(VRESET = VRESET_start, print_out=True)
         except:
             print('Firmware not flashed. This can be because a firmware was already flashed or your setup is broken')
         if use_oszi:
@@ -131,11 +131,11 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
                     IBN_VOUT[pos].append(((np.average(waveform))-baseline)*1000)
                     IBN_VOUT_err[pos].append(np.std(waveform)*1000)
                 else:
-                    IBN_VOUT[pos].append((dut['ADC_REF'].get_voltage(unit='mV')))
+                    IBN_VOUT[pos].append((dut['VMeas'].get_voltage(unit='mV')))
                     IBN_VOUT_err[pos].append(10)
                 IBN_In[pos].append(dut['VRESET'].get_voltage(unit='V')) 
                 IBN_In_err[pos].append(0.002)
-                print('IBN =', I,'uA', '| V_IN =', np.round(IBN_In[pos][-1],3),'V', '| V_OUT =', np.round(IBN_VOUT[pos][-1]/1000,3),'V')
+                print('IBN =', I,'uA | IBN meas =', dut['IBN'].get_current(unit=I_unit) ,'| V_IN =', np.round(IBN_In[pos][-1],3),'V', '| V_OUT =', np.round(IBN_VOUT[pos][-1]/1000,3),'V')
             dut['IBN'].set_current(IBN[-1],unit=I_unit)
             for I in IBP:
                 pos = IBP.index(I)
@@ -147,11 +147,11 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
                     IBP_VOUT[pos].append(((np.average(waveform))-baseline)*1000)
                     IBP_VOUT_err[pos].append(np.std(waveform)*1000)
                 else:
-                    IBP_VOUT[pos].append((dut['ADC_REF'].get_voltage(unit='mV')))
+                    IBP_VOUT[pos].append((dut['VMeas'].get_voltage(unit='mV')))
                     IBP_VOUT_err[pos].append(10)
                 IBP_In[pos].append(dut['VRESET'].get_voltage(unit='V'))
                 IBP_In_err[pos].append(0.002) 
-                print('IBP =', I,'uA', '| V_IN =', np.round(IBP_In[pos][-1],3),'V', '| V_OUT =', np.round(IBP_VOUT[pos][-1]/1000,3),'V')
+                print('IBP =', I,'uA| IBP meas =', dut['IBP'].get_current(unit=I_unit), '| V_IN =', np.round(IBP_In[pos][-1],3),'V', '| V_OUT =', np.round(IBP_VOUT[pos][-1]/1000,3),'V')
 
         IBN_meas_err = [0.1 for i in range(0, len(IBN_meas))]
         IBP_meas_err = [0.1 for i in range(0, len(IBP_meas))]
@@ -189,7 +189,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
     # I. IBN Results
     #################################
 
-    pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title='Gain $G$ vs. $V_{in}$ for different IBN')
+    pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title=chip_version+' coupled chip\nGain $G$ vs. $V_{in}$ for different IBN')
     IBN_Gain = []
     IBN_Gain_err = []
     IBN_Gain_IN = []
@@ -212,10 +212,11 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
 
     for i in range(0, len(IBN)):
         data_handler.save_data([IBN_Gain_IN[i],IBN_Gain_IN_err[i], IBN_Gain[i], IBN_Gain_err[i]], data_path+'IBN_'+str(IBN[i])+'_Gain.csv', 'IBN_In, IBN_In_err, Gain, Gain_err')
+    #max_gain_pos = np.average([IBN_Gain_IN[i][np.argmax(IBN_Gain[i])] for i in range(0, len(IBN_Gain_IN))])
 
     # Output vs. V_In  with variable IBN
     # find end of dynamic area:
-    end_of_dynamic_area_pos_default = 5
+    '''end_of_dynamic_area_pos_default = 5
     end_of_dynamic_area = []
     end_of_dynamic_area_pos = []
     for i in range(0, len(IBN)):
@@ -235,23 +236,29 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
 
     end_of_dynamic_area = np.average(end_of_dynamic_area)
     end_of_dynamic_area_pos = np.argmin(np.abs(IBP_In[0] - end_of_dynamic_area))
-    
+    '''
+    end_of_dynamic_area = 0.8
+    end_of_dynamic_area_pos =np.argmin(np.abs(IBP_In[0] - end_of_dynamic_area))-1
+    max_gain_pos = 0.5*end_of_dynamic_area
+    data_handler.save_data([max_gain_pos, np.max(IBN_Gain)], data_path+'IBN_DC_offset.csv', 'V_IN, IBN_GAIN_MAX')
+
     data_handler.save_data([end_of_dynamic_area, end_of_dynamic_area/2], data_path+'IBN_end_of_dynamic_area.csv', 'end_of_dyn_area, end_of_dyn_area/2')
 
-    pltfit.beauty_plot(xlim=[np.min(VRESET), np.max(VRESET)+0.1],ylim=[np.min(IBN_VOUT)-30, np.max(IBN_VOUT)+30],xlabel='$V_{IN}$ / V', ylabel='$V_{OUT}$ / mV', title=chip_version+': VOUT vs. VIN for different IBN')
+    pltfit.beauty_plot(xlim=[np.min(VRESET), np.max(VRESET)+0.1],ylim=[np.min(IBN_VOUT)-30, np.max(IBN_VOUT)+30],xlabel='$V_{IN}$ / V', ylabel='$V_{OUT}$ / mV', title=chip_version+' coupled chip\nVOUT vs. VIN for different IBN')
+    ignore_last = 4
     for i in range(0, len(IBN_In)):
-        IBN_In_slope = IBN_In[i][0:end_of_dynamic_area_pos]
-        IBN_In_slope_err = IBN_In_err[i][0:end_of_dynamic_area_pos]
-        IBN_VOUT_slope = IBN_VOUT[i][0:end_of_dynamic_area_pos]
-        IBN_VOUT_slope_err = IBN_VOUT_err[i][0:end_of_dynamic_area_pos]
+        IBN_In_slope = IBN_In[i][0:end_of_dynamic_area_pos-ignore_last]
+        IBN_In_slope_err = IBN_In_err[i][0:end_of_dynamic_area_pos-ignore_last]
+        IBN_VOUT_slope = IBN_VOUT[i][0:end_of_dynamic_area_pos-ignore_last]
+        IBN_VOUT_slope_err = IBN_VOUT_err[i][0:end_of_dynamic_area_pos-ignore_last]
         slope_popt, slope_perr = pltfit.double_err(function=pltfit.func_lin, x=IBN_In_slope, y=IBN_VOUT_slope,x_error=IBN_In_slope_err,y_error=IBN_VOUT_slope_err, presets=[1,1])
         plt.errorbar(x=IBN_In[i],y=IBN_VOUT[i], xerr=IBN_In_err[i],yerr=IBN_VOUT_err[i], marker='.', label='IBN = %.1f uA: $V_{Out}=(%.3f\\pm%.3f)\\cdot V_{In}+(%.3f\\pm%.3f)V$'%(IBN[i], slope_popt[0]/1000, slope_perr[0]/1000, slope_popt[1]/1000,slope_perr[1]/1000), linestyle='None', color=colors[i])
-        plt.plot(np.linspace(np.min(IBN_In_slope)-0.1, np.max(IBN_In_slope)+0.1,100), pltfit.func_lin(slope_popt,np.linspace(np.min(IBN_In_slope)-0.1, np.max(IBN_In_slope)+0.1,100)), color=colors[i])
-    plt.fill_between([-10, end_of_dynamic_area], -1000,1000,alpha=0.2, color='gray')   
-    plt.vlines(end_of_dynamic_area,-1000,1000, color='black', linestyle='--')
+        plt.plot(np.linspace(np.min(IBN_In_slope)-0.1, end_of_dynamic_area,100), pltfit.func_lin(slope_popt,np.linspace(np.min(IBN_In_slope)-0.1, end_of_dynamic_area,100)), color=colors[i])
+    plt.fill_between([-10, end_of_dynamic_area], -1000,10000,alpha=0.2, color='gray')   
+    plt.vlines(end_of_dynamic_area,-1000,10000, color='black', linestyle='--')
     plt.text(end_of_dynamic_area+0.01, np.min(IBN_VOUT[0]), 'end of dynamic area: '+str(np.round(end_of_dynamic_area*1000,1))+'mV',rotation = 90)
-    plt.vlines(end_of_dynamic_area/2,-1000,1000, color='black', linestyle='--') 
-    plt.text(end_of_dynamic_area/2+0.01, np.min(IBN_VOUT[0]), 'DC offset: '+str(np.round(end_of_dynamic_area/2*1000,1))+'mV',rotation = 90)
+    plt.vlines(max_gain_pos,-1000,10000, color='black', linestyle='--') 
+    plt.text(max_gain_pos+0.01, np.min(IBN_VOUT[0]), 'DC offset: '+str(np.round(max_gain_pos*1000,1))+'mV',rotation = 90)
     plt.legend(loc='right')
     plt.savefig(image_path+chip_version+'_IBN_V_In_VOUT'+image_format,bbox_inches='tight')
     #plt.show()    
@@ -264,7 +271,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
     # II. IBP Results
     #################################
     
-    pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title='Gain $G$ vs. $V_{in}$ for different IBP')
+    pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title=chip_version+' coupled chip\nGain $G$ vs. $V_{in}$ for different IBP')
     IBP_Gain = []
     IBP_Gain_err = []
     IBP_Gain_IN = []
@@ -285,10 +292,11 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
 
     for i in range(0, len(IBP)):
         data_handler.save_data([IBP_Gain_IN[i],IBP_Gain_IN_err[i], IBP_Gain[i], IBP_Gain_err[i]], data_path+'IBP_'+str(IBP[i])+'_Gain.csv', 'IBP_In, IBP_In_err, Gain, Gain_err')
-
+    #max_gain_pos = np.average([IBP_Gain_IN[i][np.argmax(IBP_Gain[i])] for i in range(0, len(IBP_Gain_IN))])
+    data_handler.save_data([max_gain_pos, np.max(IBP_Gain)], data_path+'IBP_DC_offset.csv', 'V_IN, IBP_GAIN_MAX')
     # Output vs. V_In  with variable IBP
     # find end of dynamic area:
-    end_of_dynamic_area_pos_default = 5
+    '''end_of_dynamic_area_pos_default = 5
     end_of_dynamic_area = []
     end_of_dynamic_area_pos = []
     for i in range(0, len(IBP)):
@@ -308,24 +316,26 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
 
     end_of_dynamic_area = np.average(end_of_dynamic_area)
     end_of_dynamic_area_pos = np.argmin(np.abs(IBP_In[0] - end_of_dynamic_area))
+    '''
+
     # Save position of dynamic area
     data_handler.save_data([end_of_dynamic_area, end_of_dynamic_area/2], data_path+'IBP_end_of_dynamic_area.csv', 'end_of_dyn_area, end_of_dyn_area/2')
 
 
-    pltfit.beauty_plot(xlim=[np.min(VRESET), np.max(VRESET)+0.1],ylim=[np.min(IBP_VOUT)-30, np.max(IBP_VOUT)+30],xlabel='$V_{IN}$ / V', ylabel='$V_{OUT}$ / mV', title=chip_version+': VOUT vs. VIN for different IBP')
+    pltfit.beauty_plot(xlim=[np.min(VRESET), np.max(VRESET)+0.1],ylim=[np.min(IBP_VOUT)-30, np.max(IBP_VOUT)+30],xlabel='$V_{IN}$ / V', ylabel='$V_{OUT}$ / mV', title=chip_version+' coupled chip\nVOUT vs. VIN for different IBP')
     for i in range(0, len(IBP_In)):
-        IBP_In_slope = IBP_In[i][0:end_of_dynamic_area_pos]
-        IBP_In_slope_err = IBP_In_err[i][0:end_of_dynamic_area_pos]
-        IBP_VOUT_slope = IBP_VOUT[i][0:end_of_dynamic_area_pos]
-        IBP_VOUT_slope_err = IBP_VOUT_err[i][0:end_of_dynamic_area_pos]
+        IBP_In_slope = IBP_In[i][0:end_of_dynamic_area_pos-ignore_last]
+        IBP_In_slope_err = IBP_In_err[i][0:end_of_dynamic_area_pos-ignore_last]
+        IBP_VOUT_slope = IBP_VOUT[i][0:end_of_dynamic_area_pos-ignore_last]
+        IBP_VOUT_slope_err = IBP_VOUT_err[i][0:end_of_dynamic_area_pos-ignore_last]
         slope_popt, slope_perr = pltfit.double_err(function=pltfit.func_lin, x=IBP_In_slope, y=IBP_VOUT_slope,x_error=IBP_In_slope_err,y_error=IBP_VOUT_slope_err, presets=[1,1])
         plt.errorbar(x=IBP_In[i],y=IBP_VOUT[i], xerr=IBP_In_err[i],yerr=IBP_VOUT_err[i], marker='.', label='IBP = %.1f uA: $V_{Out}=(%.3f\\pm%.3f)\\cdot V_{In}+(%.3f\\pm%.3f)V$'%(IBP[i], slope_popt[0]/1000, slope_perr[0]/1000, slope_popt[1]/1000, slope_perr[1]/1000), linestyle='None', color=colors[i])
-        plt.plot(np.linspace(np.min(IBP_In_slope)-0.1, np.max(IBP_In_slope)+0.1,100), pltfit.func_lin(slope_popt,np.linspace(np.min(IBP_In_slope)-0.1, np.max(IBP_In_slope)+0.1,100)), color=colors[i])
-    plt.fill_between([-10, end_of_dynamic_area], -1000,1000,alpha=0.2, color='gray')   
-    plt.vlines(end_of_dynamic_area,-1000,1000, color='black', linestyle='--')
+        plt.plot(np.linspace(np.min(IBP_In_slope)-0.1, end_of_dynamic_area,100), pltfit.func_lin(slope_popt,np.linspace(np.min(IBP_In_slope)-0.1, end_of_dynamic_area,100)), color=colors[i])
+    plt.fill_between([-10, end_of_dynamic_area], -1000,10000,alpha=0.2, color='gray')   
+    plt.vlines(end_of_dynamic_area,-1000,10000, color='black', linestyle='--')
     plt.text(end_of_dynamic_area+0.01, np.min(IBP_VOUT[0]), 'end of dynamic area: '+str(np.round(end_of_dynamic_area*1000,1))+'mV',rotation = 90)
-    plt.vlines(end_of_dynamic_area/2,-1000,1000, color='black', linestyle='--') 
-    plt.text(end_of_dynamic_area/2+0.01, np.min(IBP_VOUT[0]), 'DC offset: '+str(np.round(end_of_dynamic_area/2*1000,1))+'mV',rotation = 90)
+    plt.vlines(max_gain_pos,-1000,10000, color='black', linestyle='--') 
+    plt.text(max_gain_pos+0.01, np.min(IBP_VOUT[0]), 'DC offset: '+str(np.round(max_gain_pos*1000,1))+'mV',rotation = 90)
     plt.legend(loc='right')
     plt.savefig(image_path+chip_version+'_IBP_V_In_VOUT'+image_format,bbox_inches='tight')
     #plt.show()    
@@ -364,7 +374,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
             IBN_comparison_x_err[i] = 1/len(compare_data_x)*np.sqrt((np.array(compare_data_x_err)**2+(np.array(IBN_Gain_err[i]))**2))
             IBN_comparison[i] = np.abs(compare_data/IBN_Gain[i])
             IBN_comparison_err[i] = np.sqrt((1/np.array(IBN_Gain[i])*compare_data_err)**2+(compare_data/np.array(IBN_Gain[i])**2*IBN_Gain_err[i])**2)
-            pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title='Gain $G$ comparison for AC and DC chip versions for fixed IBN='+str(IBN[i])+'uA')
+            pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title=chip_version+' coupled chip\nGain $G$ comparison for AC and DC chip versions for fixed IBN='+str(IBN[i])+'uA')
             plt.errorbar(x=compare_data_x, xerr=compare_data_x_err, y=compare_data, yerr=compare_data_err, label = compare_chip_version, linestyle='None', marker='.', color='orange')
             plt.errorbar(x = IBN_Gain_IN[0],xerr=IBN_Gain_IN_err[0], y=IBN_Gain[i], yerr=np.array(IBN_Gain_err[i]), linestyle='None', marker='.', color=colors[0], label=chip_version)
             plt.legend()
@@ -391,7 +401,7 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
             IBP_comparison[i] = np.abs(compare_data/IBP_Gain[i])
             IBP_comparison_err[i] = np.sqrt((1/np.array(IBP_Gain[i])*compare_data_err)**2+(compare_data/np.array(IBP_Gain[i])**2*IBP_Gain_err[i])**2)
 
-            pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title='Gain $G$ comparison for AC and DC chip versions for fixed IBP='+str(IBP[i])+'uA')
+            pltfit.beauty_plot(figsize=[10,10],xlabel='$V_{IN}$ / V', ylabel='Gain $G$', title=chip_version+' coupled chip\nGain $G$ comparison for AC and DC chip versions for fixed IBP='+str(IBP[i])+'uA')
             plt.errorbar(x=compare_data_x, xerr=compare_data_x_err, y=compare_data, yerr=compare_data_err, label = compare_chip_version, linestyle='None', marker='.', color='orange')
             plt.errorbar(x = IBP_Gain_IN[i],xerr=IBP_Gain_IN_err[i], y=IBP_Gain[i], yerr=np.array(IBP_Gain_err[i]), linestyle='None', marker='.', color=colors[0], label=chip_version)
             plt.legend()

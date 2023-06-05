@@ -57,11 +57,13 @@ image_format = '.pdf'
 
 def AC_sweep(load_data=False,DC=False):
     dut_config = update_config('./lab_devices/conifg/LF_SFF_AC_Sweep.csv')
-    IBN = [80,82,85,87,90,92,95,97,100]
-    IBP = [-5,-6,-7,-8,-9,-10]
+    #IBN = [80,82,85,87,90,92,95,97,100]
+    #IBP = [-5,-6,-7,-8,-9,-10]
+    IBN = [100]
+    IBP = []
     I_unit = 'uA'
 
-    frequency_oszi = [1e0,1e1,1e2,1e3,1e4,1e5,1e6]
+    frequency_oszi = [1e2, 1e3,1e4,1e5,1e6] #[1e0,1e1,1e2,1e3,1e4,1e5,1e6] we can skip f<1e3 since noise is dominating
     # generate frequency scale that shall be scanned
     frequencies = []
     for i in frequency_oszi:
@@ -73,6 +75,10 @@ def AC_sweep(load_data=False,DC=False):
     frequency_oszi.extend(add_freq)
     frequency_oszi = np.sort(frequency_oszi)
     
+    # Determins if user has applied an external resistor in VRESET
+    R_ext = False
+    R_ext_err = False
+
     if 'DC' in sys.argv[1:] or DC==True:
         chip_version='DC'
         image_path = './output/AC_sweeps/DC/'
@@ -83,6 +89,13 @@ def AC_sweep(load_data=False,DC=False):
         image_path = './output/AC_sweeps/AC/'
         data_path = image_path+'data/'
    
+    if 'R_ext' in sys.argv[1:]:
+        chip_version = 'AC'
+        image_path = './output/AC_sweeps/AC_R_ext/'
+        data_path = image_path+'data/'
+        R_ext = 1e6
+        R_ext_err = R_ext*0.02
+   
     if 'load_data' in sys.argv[1:]:
         load_data = True  
 
@@ -90,33 +103,44 @@ def AC_sweep(load_data=False,DC=False):
         image_path = './output/AC_sweeps/'+sys.argv[sys.argv[1:].index('--name')+2]+'/'
         data_path = image_path+'data/'
         print('Custom path: ', image_path)
+    DIODE_HV = 0
+    PWELL_BIAS = -3
 
-    if not load_data:  
+    if not load_data: 
+        
         try:
             dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
             dut.init()
             dut.boot_seq()
             DC_offset = dut.get_DC_offset(chip_version=chip_version)    
-            dut.load_defaults(VRESET = DC_offset, DIODE_HV=1.8)
+            dut.load_defaults(VRESET = DC_offset, DIODE_HV=DIODE_HV)
+            print('DIODE_HV set to: ', dut['DIODE_HV'].get_voltage())
+            data_handler.save_data([DC_offset], data_path+'DC_offset.txt')
         except:
             print('Firmware not flashed. This can be because a firmware was already flashed or your setup is broken')
-
-        dut['CONTROL']['RESET'] = 0x0
-        dut['CONTROL'].write()
-        
+        print('Resetting')
+        dut.reset(sleep=1)
+        time.sleep(3)
+        if not R_ext:
+            dut['CONTROL']['RESET'] = 0x0
+            dut['CONTROL'].write()
+        else:
+            dut['CONTROL']['RESET'] = 0x1
+            dut['CONTROL'].write()
+            
         oszi = oscilloscope(yaml.load(open("./lab_devices/tektronix_tds_3034b.yaml", 'r'), Loader=yaml.Loader))
         oszi.init()
 
         sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
         sm.init()
-        sm.pixel_depletion()
+        sm.pixel_depletion(PW_BIAS=PWELL_BIAS)
 
         func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
         func_gen.init()
         if chip_version == 'DC':
             func_gen.load_ac_sweep_config(offset=DC_offset, amplitude=0.1, frequency=100)
         else:
-            func_gen.load_ac_sweep_config(offset=0, amplitude=0.1, frequency=100)
+            func_gen.load_ac_sweep_config(offset=DIODE_HV, amplitude=0.1, frequency=100)
 
         oszi.load_ac_sweep_config()
 
@@ -144,16 +168,21 @@ def AC_sweep(load_data=False,DC=False):
             print('-----------------\n',f,' Hz')
             func_gen['Pulser'].set_pulse_period(1/f)
             oszi['Oscilloscope'].set_horizontal_scale(1/set_oszi_freq)
+            #dut.reset(sleep=1)
+            #time.sleep(3)
 
             for I in IBN:
                 while True:
                     print('IBN =', I,'uA')
                     pos = IBN.index(I)
                     dut['IBN'].set_current(I,unit=I_unit)
+
                     if f<=3:
-                        time.sleep(10)
-                    elif f <= 100:
+                        time.sleep(10.1)
+                    if f <=10:
                         time.sleep(5)
+                    elif f <= 100:
+                        time.sleep(3)
                     else:
                         time.sleep(0.5)
                     IBN_meas[pos].append(dut['IBN'].get_current(unit=I_unit))
@@ -171,7 +200,7 @@ def AC_sweep(load_data=False,DC=False):
                     plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_in[0], popt_in[1], popt_in[2], popt_in[3]), color='black')
                     plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_out[0], popt_out[1], popt_out[2], popt_out[3]), color='black')
                     plt.legend()
-                    plt.savefig(image_path+'IBN_'+str(f)+'_'+str(I)+image_format,bbox_inches='tight')
+                    plt.savefig(image_path+'fits/'+'IBN_'+str(f)+'_'+str(I)+image_format,bbox_inches='tight')
                     plt.close()
                     IBN_VOUT[pos].append(popt_out[0])
                     IBN_VOUT_err[pos].append(perr_out[0])
@@ -188,9 +217,11 @@ def AC_sweep(load_data=False,DC=False):
                     pos = IBP.index(I)
                     dut['IBP'].set_current(I,unit=I_unit)
                     if f<=5:
-                        time.sleep(10)
+                        time.sleep(10.1)
+                    if f <=10:
+                        time.sleep(5)
                     elif f <= 100:
-                        time.sleep(2)
+                        time.sleep(3)
                     else:
                         time.sleep(0.5)
                     IBP_meas[pos].append(dut['IBP'].get_current(unit=I_unit))
@@ -208,7 +239,7 @@ def AC_sweep(load_data=False,DC=False):
                     plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_in[0], popt_in[1], popt_in[2], popt_in[3]), color='black')
                     plt.plot(waveform_in_x, pltfit.func_cos(waveform_in_x, popt_out[0], popt_out[1], popt_out[2], popt_out[3]), color='black')
                     plt.legend()
-                    plt.savefig(image_path+'IBP_'+str(f)+'_'+str(I)+image_format,bbox_inches='tight')
+                    plt.savefig(image_path+'fits/'+'IBP_'+str(f)+'_'+str(I)+image_format,bbox_inches='tight')
                     plt.close()
                     IBP_VOUT[pos].append(popt_out[0])
                     IBP_VOUT_err[pos].append(perr_out[0])
@@ -236,6 +267,9 @@ def AC_sweep(load_data=False,DC=False):
                         f.write('\n')
         data_handler.success_message_data_taking()
     else: # load data
+        DC_offset = np.genfromtxt(data_path+'DC_offset.txt')
+        print(DC_offset)
+
         IBN_VIN = [[] for i in range(0, len(IBN))]
         IBN_VIN_err = [[] for i in range(0, len(IBN))]
         IBN_meas = [[] for i in range(0, len(IBN))]
@@ -278,7 +312,7 @@ def AC_sweep(load_data=False,DC=False):
         xerr = np.array(frequencies)*0.05
         y = np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])
         yerr = np.sqrt((1/np.abs(IBN_VIN[i])*IBN_VOUT_err[i])**2+(np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])**2*IBN_VIN_err[i])**2)
-        IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode'+image_format, title='Bodeplot at IBN:'+str(IBN[i])+'uA', show_plot = False, IBN=IBN[i])
+        IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode'+image_format, title=chip_version+' coupled chip\nBodeplot: $I_{BN}=$%.2f$\\mu$A, $I_{BP}=$%.2f$\\mu$A, DIODE_HV=%.2fV, PWELL_BIAS=%2f'%(IBN[i], -10, DIODE_HV, PWELL_BIAS), show_plot = False, IBN=IBN[i], R_ext=R_ext, R_ext_err=R_ext_err)
 
     
     pltfit.beauty_plot(log_x=True, xlabel='Frequency $f$ / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB')
@@ -311,7 +345,7 @@ def AC_sweep(load_data=False,DC=False):
         xerr = np.array(frequencies)*0.05
         y = np.abs(IBP_VOUT[i])/np.abs(IBP_VIN[i])
         yerr = np.sqrt((1/np.abs(IBP_VIN[i])*IBP_VOUT_err[i])**2+(np.abs(IBP_VOUT[i])/np.abs(IBP_VIN[i])**2*IBP_VIN_err[i])**2)
-        IBP_Gain[i], IBP_Gain_err[i], IBP_f_tp[i], IBP_f_tp_err[i], IBP_f_hp[i], IBP_f_hp_err[i],IBP_C_in[i], IBP_C_in_err[i], IBP_R_off[i], IBP_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBP_'+str(IBP[i])+'_bode'+image_format, title='Bodeplot at IBP:'+str(IBP[i])+'uA', show_plot = False, IBP=IBP[i])
+        IBP_Gain[i], IBP_Gain_err[i], IBP_f_tp[i], IBP_f_tp_err[i], IBP_f_hp[i], IBP_f_hp_err[i],IBP_C_in[i], IBP_C_in_err[i], IBP_R_off[i], IBP_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBP_'+str(IBP[i])+'_bode'+image_format, title='Bodeplot at IBP:'+str(IBP[i])+'uA', show_plot = False, IBP=IBP[i], R_ext=R_ext, R_ext_err=R_ext_err)
     
     pltfit.beauty_plot(log_x=True, xlabel='Frequency $f$ / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB')
     for i in range(0, len(IBP)):

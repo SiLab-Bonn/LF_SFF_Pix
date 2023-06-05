@@ -20,7 +20,7 @@ class function_generator(Dut):
         self['Pulser'].set_voltage_low(0)
         self['Pulser'].set_enable(1)    
         self['Pulser'].set_burst_state('ON')
-        self['Pulser'].set_burst_mode('TRIGgered')
+        self['Pulser'].set_burst_mode('GATed')
         self['Pulser'].set_trigger_source('BUS')
 
     def load_IR_LED_ext_config(self, voltage_high, pulse_width, frequency):

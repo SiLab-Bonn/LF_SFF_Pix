@@ -41,6 +41,7 @@ class LF_SFF_MIO(Dut):
                         IBN =  100, IBN_Unit = 'uA', 
                         IBP = -10, IBP_Unit = 'uA',
                         DIODE_HV = 0.2, DIODE_HV_Unit = 'V',
+                        VMeas = 0, VMEAS_Unit = 'uA',
                         print_out=False):
         # Voltages
         #VDD = 1.8
@@ -68,6 +69,7 @@ class LF_SFF_MIO(Dut):
         self['opAMP_offset'].set_voltage(opAMP_offset, unit=opAMP_offset_Unit)
         self['DIODE_HV'].set_voltage(DIODE_HV, unit=DIODE_HV_Unit)
 
+        self['VMeas'].set_current(VMeas, unit=VMEAS_Unit)
         if print_out:
             print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
             print('VRESET:', self['VRESET'].get_voltage(unit='V'), VRESET_Unit, self['VRESET'].get_current(), 'uA')
@@ -75,6 +77,7 @@ class LF_SFF_MIO(Dut):
             print('IBN:', self['IBN'].get_voltage(unit='V'), 'V', self['IBN'].get_current(), 'uA')
             print('VDD:', self['VDD'].get_voltage(unit='V'), 'V', self['VDD'].get_current(), 'mA')
             print('DIODE_HV:', self['DIODE_HV'].get_voltage(unit='V'), 'V', self['DIODE_HV'].get_current(), 'mA')
+            print('VMeas: ', self['VMeas'].get_voltage(unit='V'), 'V', self['VMeas'].get_current(), 'uA')
 
 
     def get_status(self, print_status=True):
@@ -183,6 +186,10 @@ class LF_SFF_MIO(Dut):
         self[adc_ch].start()
         while not self[adc_ch].is_done():
             pass
+            
+        while self['sram'].get_FIFO_INT_SIZE()<=nSamples-1:
+        #    print(self['sram'].get_FIFO_INT_SIZE())
+            pass
 
         lost = self[adc_ch].get_count_lost()
         data = self['sram'].get_data() 
@@ -235,7 +242,7 @@ class LF_SFF_MIO(Dut):
             else:
                 logging.info("OK Data:" + str(data) + " Lost: " + str(lost))
     
-    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples, delta_trigger, overhead=0):
+    def read_triggered_adc(self, adc_ch, SEQ_config, nSamples, delta_trigger, overhead=0, calibrate_data = True):
             self[adc_ch].reset()
             self['sram'].reset()
             
@@ -245,15 +252,23 @@ class LF_SFF_MIO(Dut):
             #self[adc_ch].set_delay(10)
             SEQ_config(self, overhead,delta_trigger)
             #time.sleep(0.1)
+
             while not self[adc_ch].is_done():
                 pass
-            while self['sram'].get_FIFO_INT_SIZE()!=nSamples:
+            
+            while self['sram'].get_FIFO_INT_SIZE()<=nSamples-1:
+            #    print(self['sram'].get_FIFO_INT_SIZE())
                 pass
+            #time.sleep(1)
+
             data = self['sram'].get_data() 
             data = data & 0x3fff
-            data, data_err = self.calibreate_data(data, adc_ch)
-            return data, data_err
-    
+
+            if calibrate_data:
+                data, data_err = self.calibreate_data(data, adc_ch)
+                return data, data_err
+            else:
+                return data, np.zeros(nSamples)
     def load_adc_calib(self, adc_ch):
         try:
             calib = np.genfromtxt('./output/ADC_Calibration/data/'+adc_ch+'.csv', delimiter=',')
@@ -277,9 +292,9 @@ class LF_SFF_MIO(Dut):
 
     def get_DC_offset(self, chip_version):
         #try:
-        IBP_end_of_dynamic_area = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_end_of_dynamic_area.csv', delimiter=',')
-        IBN_end_of_dynamic_area = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_end_of_dynamic_area.csv', delimiter=',')
-        DC_offset = np.average([IBP_end_of_dynamic_area[1][1],IBN_end_of_dynamic_area[1][1]])
+        IBN_DC_offset = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_DC_offset.csv', delimiter=',')
+        IBP_DC_offset = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_DC_offset.csv', delimiter=',')
+        DC_offset = np.average([IBN_DC_offset[1][0],IBP_DC_offset[1][0]])
         print('\nSuccessfully loaded DC sweep results')
         print('DC offset set to: ', DC_offset, '\n')
         if DC_offset <= 0.09:
