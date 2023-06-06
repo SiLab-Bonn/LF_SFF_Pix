@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
 from scipy import odr
+import pylandau
+from scipy.optimize import curve_fit
 
 def beauty_plot(create_fig=True,xlabel='', ylabel='',xlim=[0,0], ylim=[0,0],log_x=False, log_y=False, figsize=[16,9], grid=True, grid_linestyle='-', title='', legend=False, nrows=0, ncols=0, tight=True, fontsize=15, label_size=None):
     plt.rcParams["font.family"] = "serif"
@@ -52,6 +54,11 @@ def beauty_plot_two_y_scales(x,data1, data2, xlabel, ylabel1, ylabel2, label1, l
     if image_path: plt.savefig(image_path)
     if show: plt.show()
 
+
+
+def func_landau(p, x):
+    mpv, eta, sigma, A = p
+    return pylandau.langau(x, mpv, eta, sigma, A)
 
 def func_lin(p,x):
     a,b=p
@@ -115,3 +122,11 @@ def fit_no_err(function, x, y, presets):
     return popt, perr
 
 
+def fit_landau_yerr(x, y, yerr, p, bounds = [1, 10000]):
+    mpv, eta, sigma, A = p
+    coeff, pcov = curve_fit(pylandau.langau, x, y,
+                        sigma=yerr,
+                        absolute_sigma=True,
+                        p0=(mpv, eta, sigma, A),
+                        bounds=(bounds[0], bounds[1]))
+    return coeff, pcov

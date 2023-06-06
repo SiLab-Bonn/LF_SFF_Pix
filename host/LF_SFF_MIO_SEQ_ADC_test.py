@@ -33,6 +33,7 @@ from lab_devices.sourcemeter import sourcemeter
 import utils.pulse_analyzer as pa 
 from scipy.stats import norm
 import matplotlib.mlab as mlab
+import random as ran
 
 load_data, chip_version, image_path, data_path = init_meas('IR_LED')
 if not load_data:
@@ -47,9 +48,9 @@ if not load_data:
     func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
     func_gen.init()
 
-    sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
-    sm.init()
-    sm.pixel_depletion(PW_BIAS=-0.05)
+#    sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
+#    sm.init()
+#    sm.pixel_depletion(PW_BIAS=-0.05)
 
 def test_SEQ(dut, overhead, delta_trigger):
     dut['SEQ'].reset()
@@ -179,60 +180,52 @@ def demo_fast_offline_event_analyse(n_events):
     overhead = nSamples
     if not load_data:
         data_baseline = []
-        #for i in range(n_events): # no events capture
-        #    dut.reset(sleep=1)
-        #    time.sleep(1)
-        #    print('idle data: %i/%i'%(i+1,n_events))
-        #    data_meas = dut.read_raw_adc(nSamples=nSamples, adc_ch='fadc0_rx')
-        #    data_baseline.append(np.average(data_meas))
         data_event = []
         for i in range(n_events):
-            dut.reset(sleep=1)
+            dut.reset(sleep=1e-1)
             print('event data: %i/%i'%(i+1,n_events))
-            time.sleep(1)
+            time.sleep(1e-1)
             data, err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=nSamples, delta_trigger = delta_trigger, overhead=overhead, calibrate_data=False)
-            #data_event.append(pa.fast_online_analysis(data=data_evt_meas, baseline=np.average(data_evt_meas[:delta_trigger])))
             baseline, event = pa.fast_triggered_signal(data=data, baseline_end=delta_trigger, skip_region=0, signal_duration=30)
             data_baseline.append(baseline)
             data_event.append(event)
-            plt.plot(data)
+            '''plt.plot(data)
             plt.hlines(baseline, 0, len(data), color='black')
             plt.hlines(event, 0, len(data), color='black') 
             plt.savefig(image_path+'control_pics/'+str(i)+'.png',bbox_inches='tight')
-            plt.close()
+            plt.close()'''
 
         data_handler.save_data(data=[data_baseline, data_event], output_path=data_path+'demo_fast_offline_event_analyse.csv',header='baseline, events')
     else:
         data = np.round(np.genfromtxt(data_path+'demo_fast_offline_event_analyse.csv', delimiter=',')[1:],0)
         data_baseline = np.round(data,0)[:,0]
         data_event = np.round(data,0)[:,1]
-    pltfit.beauty_plot()
+    pltfit.beauty_plot(xlabel='ADC register entry', ylabel='# of hits', title=chip_version+ ': '+str(n_events)+' IR LED Pulses')
     binwidth = 1
     baseline_n, baseline_bins, baseline_patches = plt.hist(data_baseline,edgecolor='black', label='baseline', bins=range(int(min(data_baseline)), int(max(data_baseline)) + binwidth, binwidth), alpha=0.8)
     baseline_bins = [(baseline_bins[i+1]+baseline_bins[i])/2 for i in range(0, len(baseline_bins)-1)]
-    baseline_popt, perr = pltfit.double_err(function=pltfit.func_gauss, x=baseline_bins, x_error=[0.01 for i in range(len(baseline_bins))], y=baseline_n, y_error=[0.01 for i in range(len(baseline_n))], presets=[np.mean(baseline_n),np.mean(baseline_bins),1,0])
-    plt.plot(np.linspace(np.min(baseline_bins), np.max(baseline_bins),100), pltfit.func_gauss(p=baseline_popt, x=np.linspace(np.min(baseline_bins), np.max(baseline_bins),100)), color='black', linestyle='dashed')
+    baseline_popt, baseline_perr = pltfit.double_err(function=pltfit.func_gauss, x=baseline_bins, x_error=[0.01 for i in range(len(baseline_bins))], y=baseline_n, y_error=[0.01 for i in range(len(baseline_n))], presets=[np.mean(baseline_n),np.mean(baseline_bins),1,0])
+    plt.plot(np.linspace(np.min(baseline_bins), np.max(baseline_bins),100), pltfit.func_gauss(p=baseline_popt, x=np.linspace(np.min(baseline_bins), np.max(baseline_bins),100)), color='black', linestyle='dashed', label='$\#_{baseline}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(baseline_popt[0], baseline_perr[0],baseline_popt[1], baseline_perr[1],baseline_popt[2], baseline_perr[2]))
     event_n, event_bins, event_patches = plt.hist(data_event,edgecolor='black', label='events', bins=range(int(min(data_event)), int(max(data_event)) + binwidth, binwidth), alpha=0.8)
     event_bins = [(event_bins[i+1]+event_bins[i])/2 for i in range(0, len(event_bins)-1)]
-    event_popt, perr = pltfit.double_err(function=pltfit.func_gauss, x=event_bins, x_error=[0.01 for i in range(len(event_bins))], y=event_n, y_error=[0.01 for i in range(len(event_n))], presets=[np.mean(event_n),np.mean(event_bins),1,0])
-    plt.plot(np.linspace(np.min(event_bins), np.max(event_bins),100), pltfit.func_gauss(p=event_popt, x=np.linspace(np.min(event_bins), np.max(event_bins),100)), color='black', linestyle='dashed')
-
+    event_popt, event_perr = pltfit.double_err(function=pltfit.func_gauss, x=event_bins, x_error=[0.01 for i in range(len(event_bins))], y=event_n, y_error=[0.01 for i in range(len(event_n))], presets=[np.mean(event_n),np.mean(event_bins),1,0])
+    plt.plot(np.linspace(np.min(event_bins), np.max(event_bins),100), pltfit.func_gauss(p=event_popt, x=np.linspace(np.min(event_bins), np.max(event_bins),100)), color='black', linestyle='-.', label='$\#_{event}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(event_popt[0], event_perr[0],event_popt[1], event_perr[1],event_popt[2], event_perr[2]))
     plt.legend()
-    plt.xlabel('ADC register entry')
-    plt.ylabel('# of hits')
     plt.savefig(image_path+'demo_fast_offline_event_analysis.pdf',bbox_inches='tight')
     plt.show()
 
 def demo_threshold_trigger(adc_ch='fadc0_rx', nSamples = 4096):
+    dut.reset()
     dut[adc_ch].reset()
     dut['sram'].reset()
     
     dut[adc_ch].set_data_count(nSamples)
     dut[adc_ch].set_single_data(True)
-    dut[adc_ch].set_threshold_trigger(True)
-    dut[adc_ch].set_threshold_trigger_value(10200)
+    dut[adc_ch].set_threshold_trigger_value(30)
+    dut[adc_ch].set_threshold_trigger(3)
+    print('THRESHOLD MODE: ', dut[adc_ch].get_threshold_trigger_mode())
     print(dut[adc_ch].get_threshold_trigger_value())
-    time.sleep(2)
+    time.sleep(5)
     dut['sram'].reset()
     
     while not dut[adc_ch].is_done():
@@ -242,17 +235,112 @@ def demo_threshold_trigger(adc_ch='fadc0_rx', nSamples = 4096):
     overhead=nSamples
     while dut['sram'].get_FIFO_INT_SIZE()<=nSamples-1:
         print(dut['sram'].get_FIFO_INT_SIZE())
-
     lost = dut[adc_ch].get_count_lost()
     data = dut['sram'].get_data() 
     data = data & 0x3fff
     plt.plot(data)
     plt.show()
 
+def demo_fit_offline_analysis(n_events):
+    nSamples=4096
+    delta_trigger = 500
+    overhead = nSamples
+    if not load_data:
+        data_baseline = []
+        data_event = []
+        for i in range(n_events):
+            dut.reset(sleep=1)
+            print('event data: %i/%i'%(i+1,n_events))
+            time.sleep(1)
+            data, err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=nSamples, delta_trigger = delta_trigger, overhead=overhead, calibrate_data=False)
+        data_handler.save_data(data=[data, err], output_path=data_path+'demo_fit_offline_event_analyse.csv',header='baseline, events')
+    else:
+        data_in = np.round(np.genfromtxt(data_path+'demo_fit_offline_event_analyse.csv', delimiter=',')[1:],0)
+        data = np.round(data_in,0)[:,0]
+        err = np.round(data_in,0)[:,1]
+
+    x = np.linspace(0, len(data), len(data))
+    print(len(x), len(data))
+    plt.plot(data)
+    err = [0.1 for i in range(len(x))]
+    print(np.argmin(data))
+    print(np.min(data)-np.average(data))
+    preset = [500,1,1,12]
+    popt, perr = pa.fit_landau(x=x, y=data, yerr=err, bounds=[0, len(x)],p=preset)
+    print(popt)
+    plt.plot(x, pltfit.func_landau(popt,np.array(x)), color='black')
+    plt.show()
+
+def online_SEQ():
+    delta_trigger = 500
+    overhead = 4096*ran.randrange(10,20)
+    dut['SEQ'].reset()
+    dut['SEQ'].set_clk_divide(1)
+    np.random.rand()
+    trigger     = bitarray('0'*delta_trigger+'1'+'0'*overhead)
+    seq_size  = len(trigger)
+    dut['SEQ'].set_repeat_start(0) 
+    dut['SEQ'].set_repeat(0)  # else records many events
+    dut['SEQ'].set_size(len(trigger))
+    dut['SEQ']['Trigger'][0:len(trigger)] =  trigger
+    dut['SEQ'].write()
+    dut['SEQ'].start()
+
+def online_analysis(n_events, adc_ch='fadc0_rx'):
+    nSamples = 4096
+    n_captured = 0
+    n_tried_captures = 0
+    if not load_data:
+        dut['sram'].reset()
+        dut[adc_ch].reset()
+        online_SEQ()
+        dut[adc_ch].set_delay(10)
+        dut[adc_ch].set_data_count(nSamples)
+        dut[adc_ch].set_single_data(True)
+        dut[adc_ch].set_en_trigger(False)
+        dut[adc_ch].start()
+
+        captured_base = []
+        captured_event = []
+        while n_captured != n_events:
+            n_tried_captures += 1
+            while dut['sram'].get_FIFO_INT_SIZE()<=nSamples-1:
+                pass
+            data = dut['sram'].get_data() 
+            data = data & 0x3fff
+            base, event = pa.online_analyser(data=data,threshold_x=10, threshold_y=20)
+            if base and event:
+                captured_base.append(base)
+                captured_event.append(event)
+                n_captured += 1
+                dut['sram'].reset()
+                print(n_captured, '/', n_events)
+            
+            dut.reset(1e-9)
+            dut[adc_ch].start()
+        print('captured ', n_events, ' events in ', n_tried_captures, ' tries -> ', n_events/n_tried_captures*100,'%')
+        data_handler.save_data([captured_base, captured_event], data_path+'online_analysis.csv', 'base, events')
+    else:
+        data = np.round(np.genfromtxt(data_path+'online_analysis.csv', delimiter=',')[1:],0)
+        captured_base = np.round(data,0)[:,0]
+        captured_event = np.round(data,0)[:,1]
+    pltfit.beauty_plot(xlabel='ADC register entry', ylabel='# of hits', title=chip_version+ ': '+str(n_events)+' IR LED Pulses online detected without trigger')
+    binwidth = 1
+    baseline_n, baseline_bins, baseline_patches = plt.hist(captured_base,edgecolor='black', label='baseline', bins=range(int(min(captured_base)), int(max(captured_base)) + binwidth, binwidth), alpha=0.8)        # data analysis
+    baseline_bins = [(baseline_bins[i+1]+baseline_bins[i])/2 for i in range(0, len(baseline_bins)-1)]
+    baseline_popt, baseline_perr = pltfit.double_err(function=pltfit.func_gauss, x=baseline_bins, x_error=[0.01 for i in range(len(baseline_bins))], y=baseline_n, y_error=[0.01 for i in range(len(baseline_n))], presets=[np.mean(baseline_n),np.mean(baseline_bins),1,0])
+    plt.plot(np.linspace(np.min(baseline_bins), np.max(baseline_bins),100), pltfit.func_gauss(p=baseline_popt, x=np.linspace(np.min(baseline_bins), np.max(baseline_bins),100)), color='black', linestyle='dashed', label='$\#_{baseline}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(baseline_popt[0], baseline_perr[0],baseline_popt[1], baseline_perr[1],baseline_popt[2], baseline_perr[2]))
+    
+    event_n, event_bins, event_patches = plt.hist(captured_event,edgecolor='black', label='IR PULSE', bins=range(int(min(captured_event)), int(max(captured_event)) + binwidth, binwidth), alpha=0.8)        # data analysis
+    event_bins = [(event_bins[i+1]+event_bins[i])/2 for i in range(0, len(event_bins)-1)]
+    event_popt, event_perr = pltfit.double_err(function=pltfit.func_gauss, x=event_bins, x_error=[0.01 for i in range(len(event_bins))], y=event_n, y_error=[0.01 for i in range(len(event_n))], presets=[np.mean(event_n),np.mean(event_bins),1,0])
+    plt.plot(np.linspace(np.min(event_bins), np.max(event_bins),100), pltfit.func_gauss(p=event_popt, x=np.linspace(np.min(event_bins), np.max(event_bins),100)), color='black', linestyle='-.', label='$\#_{event}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(event_popt[0], event_perr[0],event_popt[1], event_perr[1],event_popt[2], event_perr[2]))
+    plt.legend()
+    plt.show()
 
 #demo_capture_one_event()
 #demo_capture_multiple_events(n_events=10)
 #demo_avrg_multiple_events(n_events=10)
-#demo_fast_offline_event_analyse(n_events=1000)
-demo_threshold_trigger()
+demo_fast_offline_event_analyse(n_events=1000)
+#online_analysis(10000)
 dut.close()
