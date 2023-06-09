@@ -60,6 +60,10 @@ def func_landau(p, x):
     mpv, eta, sigma, A = p
     return pylandau.langau(x, mpv, eta, sigma, A)
 
+def func_const(p,x):
+    a = p[0]
+    return 0*x+a
+
 def func_lin(p,x):
     a,b=p
     return a*x+b
@@ -81,6 +85,14 @@ def func_cos_lin(x,a,b,c,d,e):
 def func_gauss(p, x):
     a,b,c,d = p
     return a*np.exp(-(x-b)**2/2/c**2)+d
+
+def func_exp(p,x):
+    a,b,c,d = p
+    return a*np.exp((b*x)+c)+d
+
+def func_log(p,x):
+    a,b,c,d = p
+    return a*np.log(b*x+c)+d
 
 def guess_cos_params(y,f):
     ampl_limits = [np.amin(y),np.amax(y)]
@@ -110,6 +122,15 @@ def guess_cos_params(y,f):
 def double_err(function, x, x_error, y, y_error, presets):
     model = odr.Model(function)
     data = odr.RealData(x, y, sx=x_error, sy=y_error)
+    out = odr.ODR(data, model, beta0=presets).run()
+    popt = out.beta
+    perr = out.sd_beta
+
+    return popt,perr
+
+def no_err(function, x, y, presets):
+    model = odr.Model(function)
+    data = odr.RealData(x, y)
     out = odr.ODR(data, model, beta0=presets).run()
     popt = out.beta
     perr = out.sd_beta

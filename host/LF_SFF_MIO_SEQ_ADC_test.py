@@ -48,9 +48,9 @@ if not load_data:
     func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
     func_gen.init()
 
-#    sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
-#    sm.init()
-#    sm.pixel_depletion(PW_BIAS=-0.05)
+    #sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
+    #sm.init()
+    #sm.pixel_depletion(PW_BIAS=-3)
 
 def test_SEQ(dut, overhead, delta_trigger):
     dut['SEQ'].reset()
@@ -186,14 +186,17 @@ def demo_fast_offline_event_analyse(n_events):
             print('event data: %i/%i'%(i+1,n_events))
             time.sleep(1e-1)
             data, err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=nSamples, delta_trigger = delta_trigger, overhead=overhead, calibrate_data=False)
+            print(data)
             baseline, event = pa.fast_triggered_signal(data=data, baseline_end=delta_trigger, skip_region=0, signal_duration=30)
             data_baseline.append(baseline)
             data_event.append(event)
-            '''plt.plot(data)
+            data_handler.save_data([data,err], data_path+'demo.csv', 'data, err')
+            plt.plot(data)
             plt.hlines(baseline, 0, len(data), color='black')
             plt.hlines(event, 0, len(data), color='black') 
             plt.savefig(image_path+'control_pics/'+str(i)+'.png',bbox_inches='tight')
-            plt.close()'''
+            plt.show()
+            plt.close()
 
         data_handler.save_data(data=[data_baseline, data_event], output_path=data_path+'demo_fast_offline_event_analyse.csv',header='baseline, events')
     else:
@@ -253,7 +256,7 @@ def demo_fit_offline_analysis(n_events):
             print('event data: %i/%i'%(i+1,n_events))
             time.sleep(1)
             data, err = dut.read_triggered_adc(adc_ch='fadc0_rx',SEQ_config=test_SEQ, nSamples=nSamples, delta_trigger = delta_trigger, overhead=overhead, calibrate_data=False)
-        data_handler.save_data(data=[data, err], output_path=data_path+'demo_fit_offline_event_analyse.csv',header='baseline, events')
+        data_handler.save_data(data=[data, err], output_path=data_path+'demo_fit_offline_event_analyse.csv',header='baseline, err')
     else:
         data_in = np.round(np.genfromtxt(data_path+'demo_fit_offline_event_analyse.csv', delimiter=',')[1:],0)
         data = np.round(data_in,0)[:,0]
@@ -286,11 +289,16 @@ def online_SEQ():
     dut['SEQ'].write()
     dut['SEQ'].start()
 
-def online_analysis(n_events, adc_ch='fadc0_rx'):
+
+def online_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BIAS=-2, control_plots=False):
+
     nSamples = 4096
     n_captured = 0
     n_tried_captures = 0
     if not load_data:
+        sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
+        sm.init()
+        sm.pixel_depletion(PW_BIAS=PW_BIAS)
         dut['sram'].reset()
         dut[adc_ch].reset()
         online_SEQ()
@@ -308,15 +316,21 @@ def online_analysis(n_events, adc_ch='fadc0_rx'):
                 pass
             data = dut['sram'].get_data() 
             data = data & 0x3fff
-            base, event = pa.online_analyser(data=data,threshold_x=10, threshold_y=20)
+            if fit:
+                base, event = pa.fit_exp(data=data,threshold_x=10, title=chip_version+': IR LED Pulse of 200ns, PW_BIAS='+str(PW_BIAS)+'V', threshold_y=10, control_plots=control_plots, image_path=image_path+'control_pics/online_analysis_demo_'+str(n_captured)+'.pdf', area = [4925,5025])
+            else:
+                base, event = pa.online_analyser(data=data,threshold_x=10, threshold_y=40)
             if base and event:
                 captured_base.append(base)
                 captured_event.append(event)
+                if event <=0:
+                    time.sleep(2)
                 n_captured += 1
                 dut['sram'].reset()
                 print(n_captured, '/', n_events)
             
             dut.reset(1e-9)
+            time.sleep(1e-6)
             dut[adc_ch].start()
         print('captured ', n_events, ' events in ', n_tried_captures, ' tries -> ', n_events/n_tried_captures*100,'%')
         data_handler.save_data([captured_base, captured_event], data_path+'online_analysis.csv', 'base, events')
@@ -324,23 +338,30 @@ def online_analysis(n_events, adc_ch='fadc0_rx'):
         data = np.round(np.genfromtxt(data_path+'online_analysis.csv', delimiter=',')[1:],0)
         captured_base = np.round(data,0)[:,0]
         captured_event = np.round(data,0)[:,1]
-    pltfit.beauty_plot(xlabel='ADC register entry', ylabel='# of hits', title=chip_version+ ': '+str(n_events)+' IR LED Pulses online detected without trigger')
+    pltfit.beauty_plot(xlabel='ADC register entry', ylabel='# of hits', title=chip_version+ ': '+str(len(data))+' IR LED Pulses online detected without trigger (pulse width=200ns, PW_BIAS='+str(PW_BIAS)+'V)')
     binwidth = 1
-    baseline_n, baseline_bins, baseline_patches = plt.hist(captured_base,edgecolor='black', label='baseline', bins=range(int(min(captured_base)), int(max(captured_base)) + binwidth, binwidth), alpha=0.8)        # data analysis
-    baseline_bins = [(baseline_bins[i+1]+baseline_bins[i])/2 for i in range(0, len(baseline_bins)-1)]
-    baseline_popt, baseline_perr = pltfit.double_err(function=pltfit.func_gauss, x=baseline_bins, x_error=[0.01 for i in range(len(baseline_bins))], y=baseline_n, y_error=[0.01 for i in range(len(baseline_n))], presets=[np.mean(baseline_n),np.mean(baseline_bins),1,0])
-    plt.plot(np.linspace(np.min(baseline_bins), np.max(baseline_bins),100), pltfit.func_gauss(p=baseline_popt, x=np.linspace(np.min(baseline_bins), np.max(baseline_bins),100)), color='black', linestyle='dashed', label='$\#_{baseline}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(baseline_popt[0], baseline_perr[0],baseline_popt[1], baseline_perr[1],baseline_popt[2], baseline_perr[2]))
-    
+    try:
+        baseline_n, baseline_bins, baseline_patches = plt.hist(captured_base,edgecolor='black', label='baseline', bins=range(int(min(captured_base)), int(max(captured_base)) + binwidth, binwidth), alpha=0.8)        # data analysis
+        baseline_bins = [(baseline_bins[i+1]+baseline_bins[i])/2 for i in range(0, len(baseline_bins)-1)]
+        baseline_popt, baseline_perr = pltfit.double_err(function=pltfit.func_gauss, x=baseline_bins, x_error=[0.01 for i in range(len(baseline_bins))], y=baseline_n, y_error=[0.01 for i in range(len(baseline_n))], presets=[np.max(baseline_n), baseline_bins[np.argmax(baseline_n)], 2,0])
+        plt.plot(np.linspace(np.min(baseline_bins), np.max(baseline_bins),10000), pltfit.func_gauss(p=baseline_popt, x=np.linspace(np.min(baseline_bins), np.max(baseline_bins),10000)), color='black', linestyle='dashed', label='$\#_{baseline}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(baseline_popt[0], baseline_perr[0],baseline_popt[1], baseline_perr[1],baseline_popt[2], baseline_perr[2]))
+        
+    except: pass
     event_n, event_bins, event_patches = plt.hist(captured_event,edgecolor='black', label='IR PULSE', bins=range(int(min(captured_event)), int(max(captured_event)) + binwidth, binwidth), alpha=0.8)        # data analysis
-    event_bins = [(event_bins[i+1]+event_bins[i])/2 for i in range(0, len(event_bins)-1)]
-    event_popt, event_perr = pltfit.double_err(function=pltfit.func_gauss, x=event_bins, x_error=[0.01 for i in range(len(event_bins))], y=event_n, y_error=[0.01 for i in range(len(event_n))], presets=[np.mean(event_n),np.mean(event_bins),1,0])
-    plt.plot(np.linspace(np.min(event_bins), np.max(event_bins),100), pltfit.func_gauss(p=event_popt, x=np.linspace(np.min(event_bins), np.max(event_bins),100)), color='black', linestyle='-.', label='$\#_{event}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(event_popt[0], event_perr[0],event_popt[1], event_perr[1],event_popt[2], event_perr[2]))
+    
+    try:
+        event_bins = [(event_bins[i+1]+event_bins[i])/2 for i in range(0, len(event_bins)-1)]
+        event_popt, event_perr = pltfit.double_err(function=pltfit.func_gauss, x=event_bins, x_error=[0.01 for i in range(len(event_bins))], y=event_n, y_error=[0.01 for i in range(len(event_n))], presets=[np.max(event_n),event_bins[np.argmax(event_n)],4,0])
+        plt.plot(np.linspace(np.min(event_bins), np.max(event_bins),10000), pltfit.func_gauss(p=event_popt, x=np.linspace(np.min(event_bins), np.max(event_bins),10000)), color='black', linestyle='-.', label='$\#_{event}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(event_popt[0], event_perr[0],event_popt[1], event_perr[1],event_popt[2], event_perr[2]))
+    except: pass
     plt.legend()
+    plt.savefig(image_path+'online_analysis_demo.pdf', bbox_inches='tight')
     plt.show()
 
 #demo_capture_one_event()
 #demo_capture_multiple_events(n_events=10)
 #demo_avrg_multiple_events(n_events=10)
-demo_fast_offline_event_analyse(n_events=1000)
-#online_analysis(10000)
+#demo_fast_offline_event_analyse(n_events=2)
+#demo_fit_offline_analysis(n_events=1)
+online_analysis(100000, fit=True, control_plots=True, PW_BIAS=-2)
 dut.close()

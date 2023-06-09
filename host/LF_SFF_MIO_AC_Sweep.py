@@ -312,7 +312,7 @@ def AC_sweep(load_data=False,DC=False):
         xerr = np.array(frequencies)*0.05
         y = np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])
         yerr = np.sqrt((1/np.abs(IBN_VIN[i])*IBN_VOUT_err[i])**2+(np.abs(IBN_VOUT[i])/np.abs(IBN_VIN[i])**2*IBN_VIN_err[i])**2)
-        IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode'+image_format, title=chip_version+' coupled chip\nBodeplot: $I_{BN}=$%.2f$\\mu$A, $I_{BP}=$%.2f$\\mu$A, DIODE_HV=%.2fV, PWELL_BIAS=%2f'%(IBN[i], -10, DIODE_HV, PWELL_BIAS), show_plot = False, IBN=IBN[i], R_ext=R_ext, R_ext_err=R_ext_err)
+        IBN_Gain[i], IBN_Gain_err[i], IBN_f_tp[i], IBN_f_tp_err[i], IBN_f_hp[i], IBN_f_hp_err[i],IBN_C_in[i], IBN_C_in_err[i], IBN_R_off[i], IBN_R_off_err[i]= analyse_bode_plot(x=x, y=y, xerr=xerr, yerr=yerr, chip_version=chip_version, DC_offset=DC_offset, output_path=image_path+'IBN_'+str(IBN[i])+'_bode'+image_format, title=chip_version+' coupled chip\nBodeplot: $I_{BN}=$%.2f$\\mu$A, $I_{BP}=$%.2f$\\mu$A, DIODE_HV=%.2fV, PWELL_BIAS=%2fV'%(IBN[i], -10, DIODE_HV, PWELL_BIAS), show_plot = False, IBN=IBN[i], R_ext=R_ext, R_ext_err=R_ext_err)
 
     
     pltfit.beauty_plot(log_x=True, xlabel='Frequency $f$ / Hz', ylabel='$V_{pp}(LF SFF)/V_{pp}(IN)$ in dB')
