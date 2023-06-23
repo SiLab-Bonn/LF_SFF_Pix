@@ -12,6 +12,9 @@ import time
 import os 
 import logging
 import sys
+from bitarray import bitarray
+import random as ran
+
 sys.path.append("../")
 
 class LF_SFF_MIO(Dut):
@@ -42,6 +45,7 @@ class LF_SFF_MIO(Dut):
                         IBP = -10, IBP_Unit = 'uA',
                         DIODE_HV = 0.2, DIODE_HV_Unit = 'V',
                         VMeas = 0, VMEAS_Unit = 'uA',
+                        ADC_REF = 0, ADC_REF_Unit = 'V',
                         print_out=False):
         # Voltages
         #VDD = 1.8
@@ -68,7 +72,7 @@ class LF_SFF_MIO(Dut):
 
         self['opAMP_offset'].set_voltage(opAMP_offset, unit=opAMP_offset_Unit)
         self['DIODE_HV'].set_voltage(DIODE_HV, unit=DIODE_HV_Unit)
-
+        #self['ADC_REF'].set_voltage(ADC_REF, unit=ADC_REF_Unit) 
         self['VMeas'].set_current(VMeas, unit=VMEAS_Unit)
         if print_out:
             print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
@@ -216,8 +220,7 @@ class LF_SFF_MIO(Dut):
             self[adc_ch].set_data_count(nSamples)
             self[adc_ch].set_single_data(True)
             self[adc_ch].set_en_trigger(False)
-
-        
+ 
     def read_adc_testpattern(self, adc_ch):
         self['sram'].reset()
         self[adc_ch].reset()
@@ -242,6 +245,37 @@ class LF_SFF_MIO(Dut):
             else:
                 logging.info("OK Data:" + str(data) + " Lost: " + str(lost))
     
+
+    def single_signal_SEQ(self, overhead, delta_trigger):
+        self['SEQ'].reset()
+        self['SEQ'].set_clk_divide(1)
+        reset       = bitarray('0'+'0'*delta_trigger+'0'*overhead)
+        trigger     = bitarray('0'*delta_trigger+'1'+'0'*overhead)
+        adc_trigger = bitarray('1'+'0'*delta_trigger+'0'*overhead)
+
+        seq_size  = len(trigger)
+        self['SEQ'].set_repeat_start(0) 
+        self['SEQ'].set_repeat(1)  # else records many events
+        self['SEQ'].set_size(len(adc_trigger))
+        self['SEQ']['RESET'][0:len(trigger)] =  reset
+        self['SEQ']['Trigger'][0:len(trigger)] =  trigger
+        self['SEQ']['ADC_Trigger'][0:len(trigger)] = adc_trigger
+        self['SEQ'].write()
+        self['SEQ'].start()
+    
+    def pseudo_random_test_SEQ(self, overhead, delta_trigger):
+            overhead = 4096*ran.randrange(3,5)
+            self['SEQ'].reset()
+            self['SEQ'].set_clk_divide(1)
+            trigger     = bitarray('0'*500+'1'+'0'*overhead)
+            seq_size  = len(trigger)
+            self['SEQ'].set_repeat_start(0) 
+            self['SEQ'].set_repeat(0)  # else records many events
+            self['SEQ'].set_size(len(trigger))
+            self['SEQ']['Trigger'][0:len(trigger)] =  trigger
+            self['SEQ'].write()
+            self['SEQ'].start()
+            
     def read_triggered_adc(self, adc_ch, SEQ_config, nSamples, delta_trigger, overhead=0, calibrate_data = True):
             self[adc_ch].reset()
             self['sram'].reset()
@@ -250,7 +284,7 @@ class LF_SFF_MIO(Dut):
             self[adc_ch].set_single_data(True)
             self[adc_ch].set_en_trigger(True)
             #self[adc_ch].set_delay(10)
-            SEQ_config(self, overhead,delta_trigger)
+            SEQ_config(overhead, delta_trigger)
             #time.sleep(0.1)
 
             while not self[adc_ch].is_done():
@@ -269,6 +303,7 @@ class LF_SFF_MIO(Dut):
                 return data, data_err
             else:
                 return data, np.zeros(nSamples)
+    
     def load_adc_calib(self, adc_ch):
         try:
             calib = np.genfromtxt('./output/ADC_Calibration/data/'+adc_ch+'.csv', delimiter=',')
@@ -291,18 +326,16 @@ class LF_SFF_MIO(Dut):
             exit
 
     def get_DC_offset(self, chip_version):
-        #try:
-        IBN_DC_offset = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_DC_offset.csv', delimiter=',')
-        IBP_DC_offset = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_DC_offset.csv', delimiter=',')
-        DC_offset = np.average([IBN_DC_offset[1][0],IBP_DC_offset[1][0]])
-        print('\nSuccessfully loaded DC sweep results')
-        print('DC offset set to: ', DC_offset, '\n')
-        if DC_offset <= 0.09:
-            DC_offset = 0.10
-            print('But it was smaller than 100mV. Therefore the DC offset was set to 100mV')
-        return DC_offset
-    
-        #except:
-        #    DC_offset = 0.5
-        #    print('\nSet DC_offset to fallback (',DC_offset,'V), because DC sweep results could not be loaded\n')
-        #    return DC_offset
+        try:
+            IBN_DC_offset = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBN_DC_offset.csv', delimiter=',')
+            IBP_DC_offset = np.genfromtxt('./output/DC_sweeps/'+chip_version+'/data/IBP_DC_offset.csv', delimiter=',')
+            DC_offset = np.average([IBN_DC_offset[1][0],IBP_DC_offset[1][0]])
+            print('\nSuccessfully loaded DC sweep results')
+            print('DC offset set to: ', DC_offset, '\n')
+            if DC_offset <= 0.09:
+                DC_offset = 0.10
+                print('But it was smaller than 100mV. Therefore the DC offset was set to 100mV')
+            return DC_offset
+        except:
+            return 0.4
+

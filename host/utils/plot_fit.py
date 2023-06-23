@@ -86,6 +86,10 @@ def func_gauss(p, x):
     a,b,c,d = p
     return a*np.exp(-(x-b)**2/2/c**2)+d
 
+def func_gauss_no_offset(p, x):
+    a,b,c = p
+    return a*np.exp(-(x-b)**2/2/c**2)
+
 def func_exp(p,x):
     a,b,c,d = p
     return a*np.exp((b*x)+c)+d

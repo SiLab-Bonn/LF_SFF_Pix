@@ -45,10 +45,10 @@ tests = {'reset_probe':'Reset Probe',
          }
 
 
-channels ={'VDD':[0.0,1.2],
+channels ={'VDD':[0.0,1.8],
     'IBP':[-1,-10],
     'IBN':[10,100],
-    'VRESET':[0.0,1.2],
+    'VRESET':[0.0,1.8],
     'RESET':[0,1],
     'opAMP_offset':[0,5]}
 

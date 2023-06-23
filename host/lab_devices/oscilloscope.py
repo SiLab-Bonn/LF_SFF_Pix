@@ -28,7 +28,7 @@ class oscilloscope(Dut):
         self['Oscilloscope'].set_horizontal_scale(200e-6)
         self['Oscilloscope'].set_vertical_scale('50.0E-3',channel=1)
         self['Oscilloscope'].set_vertical_scale('50.0E-3',channel=2)
-        self['Oscilloscope'].set_vertical_position('2.0E0',channel=2)
+        self['Oscilloscope'].set_vertical_position('20E-3',channel=2)
         self['Oscilloscope'].set_vertical_position('-2.0E0',channel=1)
         self['Oscilloscope'].set_vertical_offset('0.0E0', channel=1)
         self['Oscilloscope'].set_coupling('AC', channel=1)
@@ -59,7 +59,7 @@ class oscilloscope(Dut):
        
 
 
-
+        
     #################################
     # General measurement methods
     #################################

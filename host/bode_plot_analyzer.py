@@ -68,7 +68,7 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
     popt_plateau, perr_plateau =  optimize.curve_fit(const_fit, x[plateau],y[plateau],[plateau_max])
     Gain = 10**(popt_plateau[0]/10)
     Gain_err = 10**(popt_plateau[0]/10-1)*np.log10(10)
-    text_pos = -15
+    text_pos = np.min(y)
     plt.text(1e4, text_pos+1, '$G_{AC}=(%.3f\\pm %.3f)$'%(Gain, Gain_err))
     plt.text(1e4, text_pos, '$G_{DC}=(%.3f\\pm %.3f)$'%(dc_gain, dc_gain_err))
     C_in = 0
@@ -124,8 +124,13 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
             R_off = 2*np.pi/(C_ac*f_hp)
             R_off_err = 2*np.pi/(C_ac*f_hp**2)*f_hp_err
             plt.text(1e4, text_pos-2, '$R_{off}=(%.4f\\pm %.4f)$M$\Omega$'%(R_off*1e-6, R_off_err*1e-6))
-
-            plt.vlines(f_hp,10,-100, linestyles='--', color='black', label='$f_{hp}=(%.3f\\pm %.3f)$Hz'%(f_hp, f_hp_err))        
+            f_hp_order = len(str(int(f_hp[0])))
+            if f_hp_order == 3 or f_hp_order == 4:
+                f_hp_order_unit = 'k'
+            if f_hp_order >=5:
+                f_hp_order_unit = 'M'
+            print(f_hp)
+            plt.vlines(f_hp,10,-100, linestyles='--', color='black', label='$f_{hp}=(%.3f\\pm %.3f)$%sHz'%(f_hp/(10**f_hp_order), f_hp_err/(10**f_hp_order), f_hp_order_unit))        
         except:
             print('Could not find f_hp')
     else:

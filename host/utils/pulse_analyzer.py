@@ -6,10 +6,18 @@ def fast_online_analysis(data, baseline):
     #return np.max(np.greater(data-baseline,threshold), initial=-1)
     return np.min(data)
 
-def fast_triggered_signal(data, baseline_end, skip_region, signal_duration):
+def fast_triggered_signal(data, baseline_end, skip_region, signal_duration, title, image_path, control_pics=False):
     baseline = np.average(data[:baseline_end])
     event = np.min(data[baseline_end+skip_region:baseline_end+skip_region+signal_duration])#np.average(data[baseline_end+skip_region:baseline_end+skip_region+signal_duration])
-    return baseline, event
+    if control_pics:
+        pltfit.beauty_plot(figsize=[10,10], xlabel='ADC data points', ylabel='ADC units', title=title, fontsize=20)
+        plt.plot(data)
+        plt.hlines(baseline, 0, len(data), color='black')
+        plt.hlines(event, 0, len(data), color='black')
+        plt.savefig(image_path,bbox_inches='tight')
+        #plt.show()
+        plt.close()
+    return baseline, event, 0
 
 def fit_landau(x, y, yerr, p, bounds):
     # p = mpv, eta, sigma, A
@@ -53,58 +61,44 @@ def fit_first_order(data, threshold_x,threshold_y, control_plots = False):
     else:
         return None, None
 
-def fit_exp(data,title, threshold_x,threshold_y, control_plots=False, area=None, image_path=None):
-    skip_after_peak = 1
-    y_max = np.argmax(data)
-    box_pts = 30
-    data1 = np.convolve(data, np.ones(box_pts)/box_pts, mode='same')
+def smooth_data(y, box_pts=10):
+    return np.convolve(y, np.ones(box_pts)/box_pts, mode='same')[int(box_pts/2):-int(box_pts/2)]
 
-    data1=data1[int(box_pts/2):-int(box_pts/2)]
-    
-    data_min = np.min(data1)
-    data_min_pos = np.argmin(data1)+int(box_pts/2)
-    if data_min_pos >= len(data1):
-        return None, None
-    if np.abs(np.average(data))-np.abs(data_min)>=threshold_y:
-        try:
-            baseline_end = data_min_pos-20
-            if baseline_end <= 0:
-                baseline_end = 0
-            x_baseline = np.linspace(0, baseline_end, baseline_end)
-            y_baseline = data[:baseline_end]
-
-            x_event = np.linspace(data_min_pos, len(data), len(data)-data_min_pos) 
-            y_event = data[data_min_pos:]
-            
-            popt_base, perr_base = pltfit.no_err(pltfit.func_const, x=x_baseline, y=y_baseline, presets=[np.average(y_baseline)])
-
-            popt_event, perr_event = pltfit.no_err(pltfit.func_exp, x=x_event, y=y_event, presets=[-1.29409829e+01,-4.82084142e-03,2.73505430e+00, popt_base[0]])
-            event_point = [pltfit.func_const(x=x_baseline[-1], p=popt_base),pltfit.func_exp(x=x_event[0], p=popt_event)]
-            if popt_event[0]>=0 or popt_event[0]<=-1e3 or event_point[0] <= 0 or event_point[1] <= 0:
-                return None, None 
-            if area:
-                if not (event_point[0] >= area[0] and event_point[0] <= area[1] and event_point[1] >= area[0] and event_point[1] <= area[1]):
-                    return None, None 
-            if control_plots:
-                pltfit.beauty_plot(figsize=[10,10], xlabel='ADC data points', ylabel='ADC units', title=title, fontsize=20)
-                plt.plot(data, label='measured data')
-                plt.plot(np.linspace(box_pts/2, len(data)-box_pts/2, len(data)-box_pts),data1, alpha=0.8, label='smoothed data')    
-                #plt.plot(data_min_pos, data1[data_min_pos], marker='x', color='black')
-                plt.plot([x_baseline[-1],x_event[0]], event_point, color='black')
-                plt.plot(x_event, pltfit.func_exp(x=x_event, p=popt_event), color='black')
-                plt.plot(x_baseline, pltfit.func_const(x=x_baseline, p=popt_base), color='black', label='fit')
-                plt.legend()
-                if image_path:
-                    plt.savefig(image_path)
-                plt.close()
-                #plt.show()
-            print(event_point)
-            return event_point[0], event_point[1]
-        except:
-            return None, None
-
+def fit_exp(data, title, threshold_y, control_plots=False, area=None, image_path=None, smooth_data=False, calibrate_data=False):
+    if calibrate_data:
+        pltfit.beauty_plot(xlabel='ADC data points', ylabel='Voltage U / V', title=title, fontsize=20)
     else:
-        return None, None
+        pltfit.beauty_plot(xlabel='ADC data points', ylabel='ADC units', title=title, fontsize=20)
+    plt.plot(data, label='measured data')
+    
+    if smooth_data: data = smooth_data(data)
+    data_min = np.min(data)
+    data_min_pos = np.argmin(data)
+   
+    baseline_avoid_fitting_event = 10
+    x_baseline = np.linspace(0, len(data[:data_min_pos-baseline_avoid_fitting_event]), len(data[:data_min_pos-baseline_avoid_fitting_event]))
+    y_baseline = data[:data_min_pos-baseline_avoid_fitting_event]
+    popt_base, perr_base = pltfit.no_err(pltfit.func_const, x=x_baseline, y=y_baseline, presets=[np.average(y_baseline)])
+
+    x_event = np.linspace(data_min_pos, len(data),len(data)-data_min_pos)    
+    y_event = data[data_min_pos:]
+    popt_event, perr_event = pltfit.no_err(pltfit.func_exp, x=x_event, y=y_event, presets=[-(np.average(y_baseline)-data_min),-4.82084142e-03,2.73505430e+00, popt_base[0]])
+    if np.abs(pltfit.func_exp(p=popt_event, x=data_min_pos))>=popt_base[0]-threshold_y:
+        plt.close()
+        return None, None, None
+    if control_plots:
+        if smooth_data: plt.plot(data, label='smoothed data')
+        plt.plot(x_baseline, pltfit.func_const(p=popt_base, x=x_baseline),color='black')
+        plt.plot(x_event, pltfit.func_exp(p=popt_event, x=x_event), color='black', label = '$(%.3f\\pm %.3f)\\cdot\\exp(\\frac{-(x-(%.3f\\pm %.3f))}{(%.3f\\pm %.3f)})+(%.3f\\pm %.3f)$'%(popt_event[0], perr_event[0],popt_event[1], perr_event[1],popt_event[2], perr_event[2], popt_event[3], perr_event[3]))
+        plt.plot([data_min_pos-baseline_avoid_fitting_event,data_min_pos], [pltfit.func_const(p=popt_base, x=data_min_pos-baseline_avoid_fitting_event),pltfit.func_exp(p=popt_event, x=(data_min_pos))], color='black')
+        plt.legend()
+        plt.show()
+        if image_path:
+            plt.savefig(image_path,bbox_inches='tight')    
+    plt.close()
+
+    return popt_base[0], pltfit.func_exp(p=popt_event, x=data_min_pos), popt_event[2]
+
 
 
 

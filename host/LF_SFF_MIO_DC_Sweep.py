@@ -112,9 +112,14 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
                 vertical_pos = float(oszi['Oscilloscope'].get_vertical_position(channel=2).split(' ')[1])
                 vertical_scale = float(oszi['Oscilloscope'].get_vertical_scale(channel=2).split(' ')[1])
                 baseline = vertical_pos*vertical_scale
+            #if chip_version != 'DC':
             dut['CONTROL']['RESET'] = 0x1
             dut['CONTROL'].write()
-            dut['VRESET'].set_voltage(1.2, unit='V')
+            #else:
+            #    dut['CONTROL']['RESET'] = 0x0
+            #    dut['CONTROL'].write()
+
+            dut['VRESET'].set_voltage(1.8, unit='V')
 
         for V in VRESET:
             dut_config.check_config(dut)
@@ -204,7 +209,6 @@ def DC_sweep(DC=False, use_pix_in=False, load_data=False, use_oszi = False):
         IBN_Gain_IN.append([IBN_In[i][j]+(IBN_In[i][j+1]-IBN_In[i][j])/2 for j in range(0, len(IBN_In[i])-1)])
         IBN_Gain_IN_err.append(np.abs([(IBN_In[i][j+1]-IBN_In[i][j])/2 for j in range(0, len(IBN_In[i])-1)]))
         plt.errorbar(x = IBN_Gain_IN[i],xerr=IBN_Gain_IN_err[i], y=IBN_Gain[i], yerr=IBN_Gain_err[i], linestyle='None', marker='.', color=colors[i], label='IBN='+str(IBN[i])+'uA')
-
     plt.legend()
     plt.savefig(image_path+chip_version+'_IBN_Gain_V_In'+image_format,bbox_inches='tight')
     #plt.show()    
