@@ -70,6 +70,8 @@ import matplotlib.mlab as mlab
 import random as ran
 import numpy as np
 
+
+
 #####
 # Configure experiment
 #####
@@ -258,6 +260,9 @@ def untriggered_offline_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BI
     plt.show()
 
 
-triggered_offlines_analysis(n_events=10, fit=True, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=2024, threshold_y=150)
-#untriggered_offline_analysis(n_events=1000, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True)
+#triggered_offlines_analysis(n_events=10, fit=True, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150)
+untriggered_offline_analysis(n_events=10, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True)
 
+# Deactivate the output of the lab devices
+if not load_data:
+    dut.deactivate_devices(sm=sm, func_gen=func_gen)

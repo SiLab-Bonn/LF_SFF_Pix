@@ -36,6 +36,8 @@ from scipy.stats import norm
 import matplotlib.mlab as mlab
 import random as ran
 
+
+
 load_data, chip_version, image_path, data_path = init_meas('IR_LED')
 if not load_data:
     dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))

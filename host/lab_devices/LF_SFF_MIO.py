@@ -14,11 +14,21 @@ import logging
 import sys
 from bitarray import bitarray
 import random as ran
+from usb.core import find as finddev
 
 sys.path.append("../")
 
 class LF_SFF_MIO(Dut):
 
+    # These two lines reset the MIOs USB connection. This is necessary to avoid 
+    # [Errno 110] Operation timed out 
+    # The downside is, that it will always reset the device and therefor flash the 
+    # firmware everytime a script instanciates the DUT. This was done anyways s.t. the
+    # experiment can be controlled remotely without the operator physically resetting
+    # the device if needed
+    dev = finddev(idVendor=0x5312, idProduct=0x0200)
+    dev.reset()
+    
     def boot_seq(self):
         for i in range(3):
             self['CONTROL'] = 0x02 << i
@@ -338,4 +348,11 @@ class LF_SFF_MIO(Dut):
             return DC_offset
         except:
             return 0.4
+        
+    def deactivate_devices(self, sm=False, func_gen=False):
+        print(sm)
+        if sm:
+            sm['sourcemeter'].off()
+        if func_gen:
+            func_gen['Pulser'].set_enable(0)
 

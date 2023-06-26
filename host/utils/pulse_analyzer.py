@@ -14,7 +14,7 @@ def fast_triggered_signal(data, baseline_end, skip_region, signal_duration, titl
         plt.plot(data)
         plt.hlines(baseline, 0, len(data), color='black')
         plt.hlines(event, 0, len(data), color='black')
-        plt.savefig(image_path,bbox_inches='tight')
+        plt.savefig(image_path, bbox_inches='tight')
         #plt.show()
         plt.close()
     return baseline, event, 0
@@ -33,8 +33,6 @@ def fit_first_order(data, threshold_x,threshold_y, control_plots = False):
     #y = data[1:,0]
     skip_after_peak = 1
     y_max = np.argmax(data)
-
-
 
     data_min_pos = np.argmin(data)
     data_max_pos = np.argmax(data)
@@ -56,7 +54,7 @@ def fit_first_order(data, threshold_x,threshold_y, control_plots = False):
             plt.plot(np.array([x_base[-1], x_event[0]]), event_point, color='black')
             plt.plot(x_base, pltfit.func_lin(p=popt_base, x=x_base), color='black')
             plt.plot(x_event, pltfit.func_lin(x=x_event, p=popt_event), color='black')
-            plt.show()
+            #plt.show()
         return event_point[0], event_point[1]
     else:
         return None, None
@@ -92,7 +90,7 @@ def fit_exp(data, title, threshold_y, control_plots=False, area=None, image_path
         plt.plot(x_event, pltfit.func_exp(p=popt_event, x=x_event), color='black', label = '$(%.3f\\pm %.3f)\\cdot\\exp(\\frac{-(x-(%.3f\\pm %.3f))}{(%.3f\\pm %.3f)})+(%.3f\\pm %.3f)$'%(popt_event[0], perr_event[0],popt_event[1], perr_event[1],popt_event[2], perr_event[2], popt_event[3], perr_event[3]))
         plt.plot([data_min_pos-baseline_avoid_fitting_event,data_min_pos], [pltfit.func_const(p=popt_base, x=data_min_pos-baseline_avoid_fitting_event),pltfit.func_exp(p=popt_event, x=(data_min_pos))], color='black')
         plt.legend()
-        plt.show()
+        #plt.show()
         if image_path:
             plt.savefig(image_path,bbox_inches='tight')    
     plt.close()
