@@ -23,6 +23,8 @@ def beauty_plot(create_fig=True,xlabel='', ylabel='',xlim=[0,0], ylim=[0,0],log_
         plt.tight_layout()
     if log_x:
         plt.xscale('log',base=10) 
+    if log_y:
+        plt.yscale('log',base=10)
     if xlim != [0,0]:
         plt.xlim(xlim[0],xlim[1])
     if ylim != [0,0]:

@@ -13,7 +13,7 @@
 #
 # You don"t have to adjust the trigger/Channel levels/offsets. Everything is handled automatically.
 # If you can't see a trigger at 100Hz like in the picture below, restart the script, until it triggers correctly
-#
+# 
 
 
 from lab_devices.LF_SFF_MIO import LF_SFF_MIO
@@ -27,6 +27,8 @@ import time
 
 # This script automatically calibrates the ADC on the GPAC Card by applying external voltages and reading them in
 
+# STILL BROKEN!!
+
 def calibrate_ADC():
     nSamples = 10000
     offset = 0.5
@@ -35,20 +37,22 @@ def calibrate_ADC():
 
     dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
     dut.init()
-    dut.load_defaults()
-    dut['ADC_REF'].set_voltage(offset)
-    voltages = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
+    dut.load_defaults(DIODE_HV=0)
+    time.sleep(100)
+    dut['ADC_REF'].set_voltage(offset*2)
+    voltages = [0, 0.05, 0.1, 0.15, 0.2, 0.3, 0.4]
     ch_list =['fadc0_rx','fadc1_rx','fadc2_rx','fadc3_rx']
     data = [[[] for i in voltages] for j in ch_list]
     data_err = [[[] for i in voltages] for j in ch_list]
     input_data = [[[] for i in voltages] for j in ch_list]
     input_data_err = [[[] for i in voltages] for j in ch_list]
     for adc_ch in ch_list:    
-        pltfit.beauty_plot(tight=False, figsize=[10,10], fontsize=18, label_size=20)
+        pltfit.beauty_plot(tight=False, figsize=[10,10], fontsize=20, label_size=20)
         input('Plug in %s and continue by pressing [ENTER]'%(adc_ch))
         for V in voltages:
-            dut['opAMP_offset'].set_voltage(offset+V)
-            input_data[ch_list.index(adc_ch)][voltages.index(V)] = dut['opAMP_offset'].get_voltage()-dut['ADC_REF'].get_voltage()
+            dut['DIODE_HV'].set_voltage(offset+V)
+            print('V_in = %.2f, V_ref = %.2f'%(dut['DIODE_HV'].get_voltage(),dut['ADC_REF'].get_voltage()))
+            input_data[ch_list.index(adc_ch)][voltages.index(V)] = dut['DIODE_HV'].get_voltage()-dut['ADC_REF'].get_voltage()
             input_data_err[ch_list.index(adc_ch)][voltages.index(V)] = 0.005
             time.sleep(0.1)
             meas = dut.read_raw_adc(nSamples, adc_ch)

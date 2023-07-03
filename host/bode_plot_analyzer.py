@@ -32,6 +32,7 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
             dc_gain_select = np.argmin(np.abs(dc_gain[1:,0]-DC_offset))
             dc_gain_err = dc_gain[dc_gain_select][3]
             dc_gain = dc_gain[dc_gain_select][2]
+            time.sleep(1)
         except:
             print('Could not load DC Gain for bodeplot. Applying defaults: G=(1+-0.00001)')
 
@@ -121,8 +122,8 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
     R_off_err = 0
     if not R_ext:
         try:
-            R_off = 2*np.pi/(C_ac*f_hp)
-            R_off_err = 2*np.pi/(C_ac*f_hp**2)*f_hp_err
+            R_off = 2*np.pi/((C_ac+C_in)*f_hp) # Check equation!
+            R_off_err = np.sqrt((2*np.pi/((C_ac+C_in)*f_hp**2)*f_hp_err)**2+(2*np.pi/((C_ac+C_in)**2*f_hp**2)*C_in_errwolf)**2)
             plt.text(1e4, text_pos-2, '$R_{off}=(%.4f\\pm %.4f)$M$\Omega$'%(R_off*1e-6, R_off_err*1e-6))
             f_hp_order = len(str(int(f_hp[0])))
             if f_hp_order == 3 or f_hp_order == 4:
@@ -150,6 +151,7 @@ def analyse_bode_plot(x,y,xerr,yerr, title, chip_version, DC_offset, output_path
         plt.show()
     plt.close()
     return Gain, Gain_err, f_lp, f_lp_err, f_hp, f_hp_err, C_in, C_in_err, R_off, R_off_err
+    # C_in is in units of fF!
 
 #data=np.genfromtxt("bode.csv", delimiter=',')
 #y = data[0:,1]

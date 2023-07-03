@@ -8,6 +8,23 @@
 # real data acquisition. The applied data acquistion is found in the
 # LF_SFF_MIO_IR_LED.py script.
 #
+# Hardware Setup:
+#                                 Function Generator________
+#      VSRC2 __ DIODE_HV                    |               |
+#           |   | PW_BIAS_________SMU_____  | RS232         |
+# -----------------------                  ||               |
+# | MIO | GPIO | LF_SFF |       MIO------Computer           |
+# -----------------------            USB    |               |
+#        Pixel  X  |                        | RJ45          |
+#        Matrix Y  |                        |               |
+#                  |______________________Oszi______________|__________IR-LED
+#
+# Additionally:
+# -Plug in TX1 in EXT_TRIG of function gen
+# -Plug in TX1 in Oszi
+# -Plug in TX2 in Oszi to observe start of ADC_Trigger (Signal that triggers the ADC
+# to write data to FIFO)
+#
 
 import time
 import numpy as np
@@ -36,8 +53,6 @@ from scipy.stats import norm
 import matplotlib.mlab as mlab
 import random as ran
 
-
-
 load_data, chip_version, image_path, data_path = init_meas('IR_LED')
 if not load_data:
     dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
@@ -50,7 +65,6 @@ if not load_data:
     else:
         dut.load_defaults(VRESET=0, DIODE_HV=dut.get_DC_offset(chip_version=chip_version))
         print('DIODE_HV: ', dut['DIODE_HV'].get_voltage(),'V')
-
 
     func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
     func_gen.init()
@@ -272,7 +286,6 @@ def demo_threshold_trigger(adc_ch='fadc3_rx', nSamples = 4096):
     print(dut[adc_ch].get_threshold_trigger_value())
     time.sleep(5)
     dut['sram'].reset()
-    
     while not dut[adc_ch].is_done():
         pass
     i = 1
@@ -300,7 +313,6 @@ def online_SEQ():
     dut['SEQ']['Trigger'][0:len(trigger)] =  trigger
     dut['SEQ'].write()
     dut['SEQ'].start()
-
 
 def demo_untriggered_event_analysis(n_events, adc_ch='fadc3_rx', fit = False, PW_BIAS=-2, control_plots=False):
     nSamples = 4096
@@ -373,7 +385,6 @@ sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader
 sm.init()
 sm.pixel_depletion(PW_BIAS=-3)
 time.sleep(1)
-
 
 #demo_capture_one_event()
 #demo_capture_multiple_events(n_events=1)

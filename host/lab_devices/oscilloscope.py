@@ -58,6 +58,13 @@ class oscilloscope(Dut):
             self['Oscilloscope'].set_vertical_position('-5.0E0',channel=2)
        
 
+    def load_PWELL_VRESET_conifg(self):
+        self['Oscilloscope'].set_horizontal_scale(200e-6)
+        self['Oscilloscope'].set_vertical_scale('200.0E-3',channel=2)
+        self['Oscilloscope'].set_vertical_position('0',channel=2)
+        self['Oscilloscope'].set_coupling('DC', channel=2)
+        self['Oscilloscope'].set_acquire_state('RUN')
+        time.sleep(2)
 
         
     #################################

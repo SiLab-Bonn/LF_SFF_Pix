@@ -62,11 +62,8 @@ def fit_first_order(data, threshold_x,threshold_y, control_plots = False):
 def smooth_data(y, box_pts=10):
     return np.convolve(y, np.ones(box_pts)/box_pts, mode='same')[int(box_pts/2):-int(box_pts/2)]
 
-def fit_exp(data, title, threshold_y, control_plots=False, area=None, image_path=None, smooth_data=False, calibrate_data=False):
-    if calibrate_data:
-        pltfit.beauty_plot(xlabel='ADC data points', ylabel='Voltage U / V', title=title, fontsize=20)
-    else:
-        pltfit.beauty_plot(xlabel='ADC data points', ylabel='ADC units', title=title, fontsize=20)
+def fit_exp(data, title, threshold_y, control_plots=False, image_path=None, smooth_data=False, calibrate_data=False):
+    pltfit.beauty_plot(xlabel='ADC data points', ylabel='ADC units', title=title, fontsize=20)
     plt.plot(data, label='measured data')
     
     if smooth_data: data = smooth_data(data)
@@ -86,10 +83,11 @@ def fit_exp(data, title, threshold_y, control_plots=False, area=None, image_path
         return None, None, None
     if control_plots:
         if smooth_data: plt.plot(data, label='smoothed data')
-        plt.plot(x_baseline, pltfit.func_const(p=popt_base, x=x_baseline),color='black')
-        plt.plot(x_event, pltfit.func_exp(p=popt_event, x=x_event), color='black', label = '$(%.3f\\pm %.3f)\\cdot\\exp(\\frac{-(x-(%.3f\\pm %.3f))}{(%.3f\\pm %.3f)})+(%.3f\\pm %.3f)$'%(popt_event[0], perr_event[0],popt_event[1], perr_event[1],popt_event[2], perr_event[2], popt_event[3], perr_event[3]))
-        plt.plot([data_min_pos-baseline_avoid_fitting_event,data_min_pos], [pltfit.func_const(p=popt_base, x=data_min_pos-baseline_avoid_fitting_event),pltfit.func_exp(p=popt_event, x=(data_min_pos))], color='black')
-        plt.legend()
+        if not calibrate_data:
+            plt.plot(x_baseline, pltfit.func_const(p=popt_base, x=x_baseline),color='black')
+            plt.plot(x_event, pltfit.func_exp(p=popt_event, x=x_event), color='black', label = '$(%.3f\\pm %.3f)\\cdot\\exp(\\frac{-(x-(%.3f\\pm %.3f))}{(%.3f\\pm %.3f)})+(%.3f\\pm %.3f)$'%(popt_event[0], perr_event[0],popt_event[1], perr_event[1],popt_event[2], perr_event[2], popt_event[3], perr_event[3]))
+            plt.plot([data_min_pos-baseline_avoid_fitting_event,data_min_pos], [pltfit.func_const(p=popt_base, x=data_min_pos-baseline_avoid_fitting_event),pltfit.func_exp(p=popt_event, x=(data_min_pos))], color='black')
+            plt.legend()
         #plt.show()
         if image_path:
             plt.savefig(image_path,bbox_inches='tight')    

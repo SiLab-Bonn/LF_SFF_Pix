@@ -55,7 +55,7 @@ class LF_SFF_MIO(Dut):
                         IBP = -10, IBP_Unit = 'uA',
                         DIODE_HV = 0.2, DIODE_HV_Unit = 'V',
                         VMeas = 0, VMEAS_Unit = 'uA',
-                        ADC_REF = 0, ADC_REF_Unit = 'V',
+                        ADC_REF = 1, ADC_REF_Unit = 'V',
                         print_out=False):
         # Voltages
         #VDD = 1.8
@@ -82,7 +82,7 @@ class LF_SFF_MIO(Dut):
 
         self['opAMP_offset'].set_voltage(opAMP_offset, unit=opAMP_offset_Unit)
         self['DIODE_HV'].set_voltage(DIODE_HV, unit=DIODE_HV_Unit)
-        #self['ADC_REF'].set_voltage(ADC_REF, unit=ADC_REF_Unit) 
+        self['ADC_REF'].set_voltage(ADC_REF, unit=ADC_REF_Unit) 
         self['VMeas'].set_current(VMeas, unit=VMEAS_Unit)
         if print_out:
             print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
@@ -327,9 +327,10 @@ class LF_SFF_MIO(Dut):
         
     def calibreate_data(self, data, adc_ch):
         a, a_err, b, b_err = self.load_adc_calib(adc_ch)
+        offset_fix = self['ADC_REF'].get_voltage()/2
         if a:
-            data = a*data+b
-            data_err = np.std(data)
+            data = a*data+b#+offset_fix
+            data_err = np.sqrt(b_err**2+(np.array(data)*a_err)**2)
             return data, data_err
         else:
             logging.error('MISSING ADC calibration')

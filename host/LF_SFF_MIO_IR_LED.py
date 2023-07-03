@@ -91,14 +91,14 @@ if not load_data:
 
     func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
     func_gen.init()
-    pulse_width = 100*1e-9 
+    pulse_width = 200*1e-9 
     func_gen.load_IR_LED_ext_config(3.0, pulse_width, 10**6)
 
     sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
     sm.init()
 
 
-def triggered_offlines_analysis(n_events, PW_BIAS, fit=False, control_pics=False, adc='fadc0_rx', nSamples = 4096, delta_trigger=500, threshold_y = 150,  calibrate_data=False):
+def triggered_offlines_analysis(n_events, PW_BIAS, DIODE_HV=1.8, fit=False, control_pics=False, adc='fadc0_rx', nSamples = 4096, delta_trigger=500, threshold_y = 150,  calibrate_data=False, area=None):
     overhead = nSamples
     ####
     # Take/Load data
@@ -111,14 +111,14 @@ def triggered_offlines_analysis(n_events, PW_BIAS, fit=False, control_pics=False
 
         for i in range(n_events):
             while True:
-                print('event data: %i/%i - ADC: %s, PW_BIAS: %.2f'%(i+1,n_events, adc, PW_BIAS))
+                print('event data: %i/%i - ADC: %s, PW_BIAS: %.2f, DIODE_HV: %.2f'%(i+1,n_events, adc, PW_BIAS, DIODE_HV))
                 dut.reset(sleep=1e-1)
                 time.sleep(2e-1)
                 data, err = dut.read_triggered_adc(adc_ch=adc,SEQ_config=dut.single_signal_SEQ, nSamples=nSamples, delta_trigger=delta_trigger, overhead=overhead, calibrate_data=calibrate_data)
                 if fit:
-                    baseline, event, event_time = pa.fit_exp(data=data, title=chip_version+': IR LED Pulse of %.2fns,'%(pulse_width*1e9)+' PW_BIAS='+str(PW_BIAS)+'V', threshold_y=threshold_y, control_plots=control_pics, image_path=image_path+'control_pics/online_analysis_demo_'+str(PW_BIAS)+'_'+str(i)+'.pdf', smooth_data=False, calibrate_data=calibrate_data)
+                    baseline, event, event_time = pa.fit_exp(data=data, title=chip_version+': IR LED Pulse of %.2fns,'%(pulse_width*1e9)+' PW_BIAS='+str(PW_BIAS)+'V, Diode_HV='+str(DIODE_HV)+'V', threshold_y=threshold_y, control_plots=control_pics, image_path=image_path+'control_pics/triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_'+str(i)+'.pdf', smooth_data=False, calibrate_data=calibrate_data)
                 else:
-                    baseline, event, event_time = pa.fast_triggered_signal(data=data, baseline_end=delta_trigger, skip_region=0, signal_duration=30, title=chip_version+': IR LED Pulse of %.2fns,'%(pulse_width*1e9)+' PW_BIAS='+str(PW_BIAS)+'V', image_path=image_path+'control_pics/online_analysis_demo_'+str(PW_BIAS)+'_'+str(i)+'.pdf', control_pics=control_pics)
+                    baseline, event, event_time = pa.fast_triggered_signal(data=data, baseline_end=delta_trigger, skip_region=0, signal_duration=30, title=chip_version+': IR LED Pulse of %.2fns,'%(pulse_width*1e9)+' PW_BIAS='+str(PW_BIAS)+'V', image_path=image_path+'control_pics/triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_'+str(i)+'.pdf', control_pics=control_pics)
                 if baseline and event:
                     data_event_time.append(event_time)
                     data_baseline.append(baseline)
@@ -126,12 +126,15 @@ def triggered_offlines_analysis(n_events, PW_BIAS, fit=False, control_pics=False
                     break
                 else:
                     pass
-        data_handler.save_data(data=[data_baseline, data_event, data_event_time], output_path=data_path+'demo_fast_offline_event_analyse_'+str(PW_BIAS)+'.csv',header='baseline, events, time tau')
+        data_handler.save_data(data=[data_baseline, data_event, data_event_time], output_path=data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'.csv',header='baseline, events, time tau')
     else:
-        data = np.round(np.genfromtxt(data_path+'demo_fast_offline_event_analyse_'+str(PW_BIAS)+'.csv', delimiter=',')[1:],0)
+        data = np.round(np.genfromtxt(data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'.csv', delimiter=',')[1:],0)
         data_baseline = np.round(data,0)[:,0]
         data_event = np.round(data,0)[:,1]
         data_event_time = data[:,2]
+    if area:
+        data_baseline = [i for i in data_baseline if i>=area[0]and i<=area[1]]
+        data_event = [i for i in data_event if i>=area[0]and i<=area[1]]
 
     ####
     # Analyse data
@@ -152,13 +155,16 @@ def triggered_offlines_analysis(n_events, PW_BIAS, fit=False, control_pics=False
     plt.plot(x_base_gauss, pltfit.func_gauss_no_offset(p=baseline_popt, x=x_base_gauss), color='black', linestyle='dashed', label='$\#_{baseline}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(baseline_popt[0], baseline_perr[0],baseline_popt[1], baseline_perr[1],baseline_popt[2], baseline_perr[2]))
     plt.plot(x_event_gauss, pltfit.func_gauss_no_offset(p=event_popt, x=x_event_gauss), color='black', linestyle='-.', label='$\#_{event}(x)=(%.2f\\pm%.2f)\\cdot\\exp{(\\frac{-(x-(%.2f\\pm%.2f))^2}{(%.2f\\pm%.2f)^2})}$'%(event_popt[0], event_perr[0],event_popt[1], event_perr[1],event_popt[2], event_perr[2]))
     plt.legend()
-    plt.savefig(image_path+'triggered_offlines_analysis'+str(PW_BIAS)+'.pdf',bbox_inches='tight')
-    plt.show()
-    #plt.close()
-    data_handler.save_data(data=[baseline_popt[1], event_popt[1], event_popt[2]], header='baseline_pos, event_pos, event_tau', output_path=data_path+'triggered_offlines_analysis'+str(PW_BIAS)+'.csv')
+    plt.savefig(image_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'.pdf',bbox_inches='tight')
+    #plt.show()
+    plt.close()
+    data_handler.save_data(data=[baseline_popt[1], event_popt[1], event_popt[2]], header='baseline_pos, event_pos, event_tau', output_path=data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_pos.csv')
     return baseline_popt[1], event_popt[1], np.average(data_event_time)
 
-def triggered_offline_analysis_range(PWELL_range, n_events, fit=True, control_pics=True, adc='fadc0_rx'):
+###
+# Measure for different PWELL voltages the output signal properties and compare them
+###
+def triggered_offline_analysis_PWELL_range(PWELL_range, n_events, fit=True, control_pics=True, adc='fadc0_rx', DIODE_HV=1.8):
     base_pos = []
     event_pos = []
     event_time_const = []
@@ -168,21 +174,52 @@ def triggered_offline_analysis_range(PWELL_range, n_events, fit=True, control_pi
             base_pos.append(base)
             event_pos.append(event)
             event_time_const.append(event_time)
+            time.sleep(10)
     else:
         for PW_BIAS in PWELL_range:
-            data = np.genfromtxt(data_path+'triggered_offlines_analysis'+str(PW_BIAS)+'.csv', delimiter=',')
+            data = np.genfromtxt(data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_pos', delimiter=',')
             base_pos.append(data[1][0])
             event_pos.append(data[1][1])
             event_time_const.append(data[1][2])
-    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$x_{base}-x_{event}$')
+    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$\\mu_{base}-\\mu_{event}$')
     plt.scatter(PWELL_range, y = np.array(base_pos)-np.array(event_pos))
     plt.savefig(image_path+'compare_different_PWELL_BIAS.pdf')
-    plt.show()
+    #plt.show()
     pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$\\tau$ / ADC units')
     plt.scatter(PWELL_range, y = event_time_const)
     plt.savefig(image_path+'compare_different_PWELL_BIAS_event_time.pdf')
     plt.show()  
- 
+
+###
+# Measure for different DIODE_HV voltages the output signal properties and compare them
+###
+def triggered_offline_analysis_DIODE_HV_range(DIODE_HV_range, PW_BIAS, n_events, fit=True, control_pics=True, adc='fadc0_rx', area=None):
+    base_pos = []
+    event_pos = []
+    event_time_const = []
+    if not load_data:
+        for DIODE_HV in DIODE_HV_range:
+            dut['DIODE_HV'].set_voltage(DIODE_HV)
+            time.sleep(0.1)
+            base, event, event_time = triggered_offlines_analysis(n_events, PW_BIAS, DIODE_HV=DIODE_HV, fit=fit, control_pics=control_pics, area=area)
+            base_pos.append(base)
+            event_pos.append(event)
+            event_time_const.append(event_time)
+    else:
+        for DIODE_HV in DIODE_HV_range:
+            data = np.genfromtxt(data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_pos.csv', delimiter=',')
+            base_pos.append(data[1][0])
+            event_pos.append(data[1][1])
+            event_time_const.append(data[1][2])
+    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='DIODE_HV / V', ylabel='$\Delta\\mu=\\mu_{base}-\\mu_{event}$', title=chip_version+': $\Delta\\mu$ in dependence of DIODE_HV (PWELL_BIAS=%.1fV)'%(PW_BIAS))
+    plt.scatter(DIODE_HV_range, y = np.array(base_pos)-np.array(event_pos))
+    plt.savefig(image_path+'compare_different_DIODE_HV.pdf')
+    plt.show()
+    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='DIODE_HV / V', ylabel='$\\tau$ / ADC units', title=chip_version+': $\\tau$ in dependence of DIODE_HV (PWELL_BIAS=%.1fV)'%(PW_BIAS))
+    plt.scatter(DIODE_HV_range, y = event_time_const)
+    plt.savefig(image_path+'compare_different_DIODE_HV_event_time.pdf')
+    plt.show()  
+
 ####
 # Brute force method to read a signal by periodically reading the ADC and searching for a signal
 ####
@@ -213,7 +250,7 @@ def untriggered_offline_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BI
             data = dut['sram'].get_data() 
             data = data & 0x3fff
             if fit:
-                base, event, tau = pa.fit_exp(data=data, title=chip_version+': IR LED Pulse of %.2fns,'%(pulse_width*1e9)+' PW_BIAS='+str(PW_BIAS)+'V', threshold_y=150, control_plots=control_plots, image_path=image_path+'control_pics/online_analysis_demo_'+str(PW_BIAS)+'_'+str(n_tried_captures)+'.pdf', smooth_data=False)
+                base, event, tau = pa.fit_exp(data=data, title=chip_version+': IR LED Pulse of %.2fns,'%(pulse_width*1e9)+' PW_BIAS='+str(PW_BIAS)+'V', threshold_y=150, control_plots=control_plots, image_path=image_path+'control_pics/online_analysis_demo_'+str(PW_BIAS)+'_'+str(n_captured)+'.pdf', smooth_data=False)
             else:
                 base, event = pa.online_analyser(data=data,threshold_x=10, threshold_y=40)
             if base and event:
@@ -260,8 +297,11 @@ def untriggered_offline_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BI
     plt.show()
 
 
-#triggered_offlines_analysis(n_events=10, fit=True, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150)
-untriggered_offline_analysis(n_events=10, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True)
+#triggered_offlines_analysis(n_events=10,DIODE_HV=1.8, fit=True, control_pics=True, PW_BIAS=-1, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150, area=[7000,7500])
+#triggered_offlines_analysis(n_events=10,DIODE_HV=1.8, fit=False, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150, calibrate_data=True)
+untriggered_offline_analysis(n_events=10, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True, threshold_y=100)
+#triggered_offline_analysis_PWELL_range(PWELL_range=[-1,-2,-3,-4],adc='fadc0_rx', control_pics=True,fit=False, n_events=3, DIODE_HV=0.1)
+#triggered_offline_analysis_DIODE_HV_range(DIODE_HV_range=[0.5, 0.8, 1.0, 1.2, 1.4, 1.5,1.6, 1.7, 1.8], PW_BIAS=-3, n_events=1000, fit=True, control_pics=True, adc='fadc0_rx', area=[7000,7500])
 
 # Deactivate the output of the lab devices
 if not load_data:

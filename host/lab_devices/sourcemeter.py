@@ -11,7 +11,7 @@ class sourcemeter(Dut):
         if PW_BIAS <= 0:
             self['sourcemeter'].set_voltage(PW_BIAS)
             self['sourcemeter'].set_voltage_limit(-6)
-            self['sourcemeter'].set_current_limit(5*1e-6)
+            self['sourcemeter'].set_current_limit(10*1e-6)
             self['sourcemeter'].on()
             print('SET PW_BIAS to ', self['sourcemeter'].get_voltage(), 'V')
         else:
