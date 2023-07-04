@@ -79,6 +79,7 @@ def fit_exp(data, title, threshold_y, control_plots=False, image_path=None, smoo
     y_event = data[data_min_pos:]
     popt_event, perr_event = pltfit.no_err(pltfit.func_exp, x=x_event, y=y_event, presets=[-(np.average(y_baseline)-data_min),-4.82084142e-03,2.73505430e+00, popt_base[0]])
     if np.abs(pltfit.func_exp(p=popt_event, x=data_min_pos))>=popt_base[0]-threshold_y:
+        plt.show()
         plt.close()
         return None, None, None
     if control_plots:
@@ -88,7 +89,7 @@ def fit_exp(data, title, threshold_y, control_plots=False, image_path=None, smoo
             plt.plot(x_event, pltfit.func_exp(p=popt_event, x=x_event), color='black', label = '$(%.3f\\pm %.3f)\\cdot\\exp(\\frac{-(x-(%.3f\\pm %.3f))}{(%.3f\\pm %.3f)})+(%.3f\\pm %.3f)$'%(popt_event[0], perr_event[0],popt_event[1], perr_event[1],popt_event[2], perr_event[2], popt_event[3], perr_event[3]))
             plt.plot([data_min_pos-baseline_avoid_fitting_event,data_min_pos], [pltfit.func_const(p=popt_base, x=data_min_pos-baseline_avoid_fitting_event),pltfit.func_exp(p=popt_event, x=(data_min_pos))], color='black')
             plt.legend()
-        #plt.show()
+#        plt.show()
         if image_path:
             plt.savefig(image_path,bbox_inches='tight')    
     plt.close()

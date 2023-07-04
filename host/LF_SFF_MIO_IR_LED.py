@@ -297,9 +297,9 @@ def untriggered_offline_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BI
     plt.show()
 
 
-#triggered_offlines_analysis(n_events=10,DIODE_HV=1.8, fit=True, control_pics=True, PW_BIAS=-1, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150, area=[7000,7500])
+triggered_offlines_analysis(n_events=10,DIODE_HV=0.4, fit=True, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=100, area=[7000,7500])
 #triggered_offlines_analysis(n_events=10,DIODE_HV=1.8, fit=False, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150, calibrate_data=True)
-untriggered_offline_analysis(n_events=10, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True, threshold_y=100)
+#untriggered_offline_analysis(n_events=10, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True, threshold_y=100)
 #triggered_offline_analysis_PWELL_range(PWELL_range=[-1,-2,-3,-4],adc='fadc0_rx', control_pics=True,fit=False, n_events=3, DIODE_HV=0.1)
 #triggered_offline_analysis_DIODE_HV_range(DIODE_HV_range=[0.5, 0.8, 1.0, 1.2, 1.4, 1.5,1.6, 1.7, 1.8], PW_BIAS=-3, n_events=1000, fit=True, control_pics=True, adc='fadc0_rx', area=[7000,7500])
 
