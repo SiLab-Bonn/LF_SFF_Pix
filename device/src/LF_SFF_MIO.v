@@ -337,8 +337,8 @@ gpio #(
     .IO({LED5, SEL2, SEL1, SEL0, GPIO_RESET}) //,FPGA_BUTTON, GPIO_NOT_USED, LED5, LED4, LED3, LED2, LED1
 );
 assign RESET = (SEQ_OUT[0] == 1'b1) ? SEQ_OUT[0] : GPIO_RESET;
-assign GPIO_NOT_USED = {LED2, LED1};
-assign LED1 = status_LED[0];//SEL0;
+assign GPIO_NOT_USED = {LED3, LED2, LED1};
+assign LED1 = SEL0;
 assign LED2 = SEL1;
 assign LED3 = SEL2;
 assign LED4 = RESET;

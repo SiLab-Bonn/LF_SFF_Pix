@@ -26,9 +26,10 @@ class LF_SFF_MIO(Dut):
     # firmware everytime a script instanciates the DUT. This was done anyways s.t. the
     # experiment can be controlled remotely without the operator physically resetting
     # the device if needed
-    dev = finddev(idVendor=0x5312, idProduct=0x0200)
-    dev.reset()
-    
+    try:
+        dev = finddev(idVendor=0x5312, idProduct=0x0200)
+        dev.reset()
+    except: pass
     def boot_seq(self):
         for i in range(3):
             self['CONTROL'] = 0x02 << i
@@ -49,7 +50,7 @@ class LF_SFF_MIO(Dut):
 
 
     def load_defaults(self, VDD = 1.8,VDD_Unit = 'V',
-                        VRESET = 1.2, VRESET_Unit = 'V',
+                        VRESET = 0.4, VRESET_Unit = 'V',
                         opAMP_offset = 0, opAMP_offset_Unit = 'V',
                         IBN =  100, IBN_Unit = 'uA', 
                         IBP = -10, IBP_Unit = 'uA',
@@ -85,14 +86,15 @@ class LF_SFF_MIO(Dut):
         self['ADC_REF'].set_voltage(ADC_REF, unit=ADC_REF_Unit) 
         self['VMeas'].set_current(VMeas, unit=VMEAS_Unit)
         if print_out:
+            print('--------- LFSFF MIO SETTINGS ---------')
             print('opAMP_offset:', self['opAMP_offset'].get_voltage(unit='V'), VRESET_Unit, self['opAMP_offset'].get_current(), 'uA')
             print('VRESET:', self['VRESET'].get_voltage(unit='V'), VRESET_Unit, self['VRESET'].get_current(), 'uA')
-            print('IBP:', self['IBP'].get_voltage(unit='V'), 'V', self['IBP'].get_current(), 'uA')
-            print('IBN:', self['IBN'].get_voltage(unit='V'), 'V', self['IBN'].get_current(), 'uA')
+            print('IBP:', self['IBP'].get_voltage(unit='V'), 'V', self['IBP'].get_current(unit=IBP_Unit), 'uA')
+            print('IBN:', self['IBN'].get_voltage(unit='V'), 'V', self['IBN'].get_current(unit=IBN_Unit), 'uA')
             print('VDD:', self['VDD'].get_voltage(unit='V'), 'V', self['VDD'].get_current(), 'mA')
             print('DIODE_HV:', self['DIODE_HV'].get_voltage(unit='V'), 'V', self['DIODE_HV'].get_current(), 'mA')
             print('VMeas: ', self['VMeas'].get_voltage(unit='V'), 'V', self['VMeas'].get_current(), 'uA')
-
+            print('')
 
     def get_status(self, print_status=True):
             status = {}
@@ -266,6 +268,23 @@ class LF_SFF_MIO(Dut):
         seq_size  = len(trigger)
         self['SEQ'].set_repeat_start(0) 
         self['SEQ'].set_repeat(1)  # else records many events
+        self['SEQ'].set_size(len(adc_trigger))
+        self['SEQ']['RESET'][0:len(trigger)] =  reset
+        self['SEQ']['Trigger'][0:len(trigger)] =  trigger
+        self['SEQ']['ADC_Trigger'][0:len(trigger)] = adc_trigger
+        self['SEQ'].write()
+        self['SEQ'].start()
+
+    def repeat_signal_SEQ(self, overhead, delta_trigger):
+        self['SEQ'].reset()
+        self['SEQ'].set_clk_divide(1)
+        reset       = bitarray('0'+'0'*delta_trigger+'0'*overhead)
+        trigger     = bitarray('0'*delta_trigger+'1'+'0'*overhead)
+        adc_trigger = bitarray('1'+'0'*delta_trigger+'0'*overhead)
+
+        seq_size  = len(trigger)
+        self['SEQ'].set_repeat_start(0) 
+        self['SEQ'].set_repeat(0)  # else records many events
         self['SEQ'].set_size(len(adc_trigger))
         self['SEQ']['RESET'][0:len(trigger)] =  reset
         self['SEQ']['Trigger'][0:len(trigger)] =  trigger

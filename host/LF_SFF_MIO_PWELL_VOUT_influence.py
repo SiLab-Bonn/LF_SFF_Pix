@@ -12,8 +12,8 @@
 # -----------------------                  |
 # | MIO | GPIO | LF_SFF |       MIO------Computer
 # -----------------------            USB    |    
-#        Pixel  10 |                        | RJ45
-#        Matrix 1  |                        |     
+#        Pixel  X  |                        | RJ45
+#        Matrix Y  |                        |     
 #                  |______________________Oszi
 #
 # This script analyses the DC output voltage for different VOFFSETs and PWELL_BIAS 
@@ -132,9 +132,9 @@ def compare_for_different_VOFFSET(VOFFSET_SEL=[0.1,0.2,0.4,0.6,0.8,1.0,1.2,1.4,1
         VOUT_err_meas.append(VOUT_err)
         I_smu_meas.append(I_smu)
     if chip_version=='AC':
-        plt.beauty_plot(xlabel='PW_BIAS / V', ylabel='$V_{Out}$ / V', title='$V_{out}$ in dependency of PWELL_BIAS for different VRESET')
+        pltfit.beauty_plot(xlabel='PW_BIAS / V', ylabel='$V_{Out}$ / V', title='$V_{out}$ in dependency of PWELL_BIAS for different VRESET')
     else:
-        plt.beauty_plot(xlabel='PW_BIAS / V', ylabel='$V_{Out}$ / V', title='$V_{out}$ in dependency of PWELL_BIAS for different DIODE_HV')
+        pltfit.beauty_plot(xlabel='PW_BIAS / V', ylabel='$V_{Out}$ / V', title='$V_{out}$ in dependency of PWELL_BIAS for different DIODE_HV')
     for i in range(len(VOFFSET_SEL)):
         plt.errorbar(x=PWELL_SELECTION_meas[i], y=VOUT_meas[i], yerr=VOUT_err_meas[i], linestyle='None', marker='x', label='VOFFSET=%.2fV'%(VOFFSET_SEL[i]))
     plt.legend()

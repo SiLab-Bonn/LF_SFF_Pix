@@ -1,0 +1,14 @@
+transfer_layer:
+  - name     : Serial
+    type     : Serial
+    init     :
+        port     : /dev/ttyUSB5
+        read_termination : "\r"
+        baudrate : 19200
+
+hw_drivers:
+  - name      : sourcemeter
+    type      : scpi
+    interface : Serial
+    init      :
+        device : Keithley 2400

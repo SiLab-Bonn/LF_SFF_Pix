@@ -475,8 +475,7 @@ def AC_sweep(load_data=False, DC=False, PWELL_BIAS_SELECTION = [0], IBN = [100],
         plt.close()
         return IBN_Gain_meas, IBN_Gain_err_meas, IBN_f_hp_meas, IBN_f_hp_err_meas, IBN_R_off_meas, IBN_R_off_err_meas, IBN_C_in_meas, IBN_C_in_err_meas #IBP_f_tp, IBP_f_tp_err, IBP_f_hp, IBP_f_hp_err, IBP_C_in, IBP_C_in_err, IBP_R_off, IBP_R_off_err, IBN_Gain, IBN_Gain_err, IBN_f_tp, IBN_f_tp_err, IBN_f_hp, IBN_f_hp_err, IBN_C_in, IBN_C_in_err, IBN_R_off, IBN_R_off_err
 
-#AC_sweep()
-def AC_sweep_PWELL_range(PWELL_SELECTION=[-1, -1.5, -2, -2.5, -3, -4, -5]):
+def AC_sweep_PWELL_range(PWELL_SELECTION=[0, -1, -1.5, -2, -2.5, -3, -4, -5]):
     if not load_data:
         IBN_Gain, IBN_Gain_err,IBN_f_hp, IBN_f_hp_err, IBN_R_off, IBN_R_off_err, IBN_C_in, IBN_C_in_err = AC_sweep(PWELL_BIAS_SELECTION=PWELL_SELECTION)
         data_handler.save_data(data=[PWELL_SELECTION, IBN_Gain, IBN_Gain_err,IBN_f_hp, IBN_f_hp_err, IBN_R_off, IBN_R_off_err, IBN_C_in, IBN_C_in_err], header='PWELL_SELECTION, IBN_Gain, IBN_Gain_err, IBN_f_hp, IBN_f_hp_err,  IBN_R_off, IBN_R_off_err, IBN_C_in, IBN_C_in_err', output_path=data_path+'Gain_PWELL_range.csv')
@@ -513,4 +512,5 @@ def AC_sweep_PWELL_range(PWELL_SELECTION=[-1, -1.5, -2, -2.5, -3, -4, -5]):
     plt.savefig(image_path+'C_in_PWELL_comparison.pdf',bbox_inches='tight')
     plt.show()
 
+#AC_sweep()
 AC_sweep_PWELL_range()

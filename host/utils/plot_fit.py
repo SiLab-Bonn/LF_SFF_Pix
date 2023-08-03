@@ -92,6 +92,10 @@ def func_gauss_no_offset(p, x):
     a,b,c = p
     return a*np.exp(-(x-b)**2/2/c**2)
 
+def func_gauss_no_offset_normed(p, x):
+    b,c = p
+    return np.exp(-(x-b)**2/2/c**2)
+
 def func_exp(p,x):
     a,b,c,d = p
     return a*np.exp((b*x)+c)+d
@@ -157,3 +161,22 @@ def fit_landau_yerr(x, y, yerr, p, bounds = [1, 10000]):
                         p0=(mpv, eta, sigma, A),
                         bounds=(bounds[0], bounds[1]))
     return coeff, pcov
+
+#######
+# HISTOGRAM
+#######
+
+def rebin(x, y):
+    rebin_data = []
+    z=0
+    for i in range(len(x)):
+        for j in range(int(y[i])):
+            rebin_data.append(x[z])
+        z+=1
+    return np.array(rebin_data)
+
+def reshape_x(x):
+    new_x = []
+    for i in range(len(x)-1):
+        new_x.append((x[i]+x[i+1])/2)
+    return np.array(new_x)

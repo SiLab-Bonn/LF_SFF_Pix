@@ -59,8 +59,12 @@ def fit_first_order(data, threshold_x,threshold_y, control_plots = False):
     else:
         return None, None
 
-def smooth_data(y, box_pts=10):
-    return np.convolve(y, np.ones(box_pts)/box_pts, mode='same')[int(box_pts/2):-int(box_pts/2)]
+def smooth_data(y,x_lims=None, box_pts=10):
+    if not x_lims:
+        return np.convolve(y, np.ones(box_pts)/box_pts, mode='same')[int(box_pts/2):-int(box_pts/2)]
+    else:
+        y = np.convolve(y, np.ones(box_pts)/box_pts, mode='same')[int(box_pts/2):-int(box_pts/2)]
+        return np.linspace(x_lims[0], x_lims[1], len(y)),y
 
 def fit_exp(data, title, threshold_y, control_plots=False, image_path=None, smooth_data=False, calibrate_data=False):
     pltfit.beauty_plot(xlabel='ADC data points', ylabel='ADC units', title=title, fontsize=20)
@@ -107,3 +111,37 @@ def online_analyser(data, threshold_x, threshold_y):
     else:
         return None, None
     
+
+def fast_windowed_amplitude(x, y, channel, pixel, x_window=[], center=0, y_threshold=0.005, smooth=True):
+    smooth_amplitude = 0
+    if smooth:
+        x_smooth, y_smooth = smooth_data(y, x_lims=[np.min(x), np.max(x)], box_pts=30)
+        x_smooth_lower_lim = int((x_smooth[0]+x_window[0])//abs(x_smooth[1]-x_smooth[0]))
+        x_smooth_upper_lim = int((x_smooth[0]+x_window[1])//abs(x_smooth[1]-x_smooth[0]))
+        y_smooth_min = np.min(y_smooth[x_smooth_lower_lim:x_smooth_upper_lim])
+        smooth_baseleine = np.average(y_smooth[x_smooth_lower_lim:len(x_smooth)//2])
+        smooth_amplitude = smooth_baseleine - y_smooth_min
+    x_lower_lim = int((x[0]+x_window[0])//abs(x[1]-x[0]))
+    x_upper_lim = int((x[0]+x_window[1])//abs(x[1]-x[0]))
+    #y_min = np.min(y[x_lower_lim:x_upper_lim])
+    #y_min_pos = np.argmin(y[x_lower_lim:x_upper_lim])+x_lower_lim
+    y_min = np.min(y[len(y)//2-10:len(y)//2+50])
+    y_min_pos = np.argmin(y[len(y)//2-10:len(y)//2+50])+len(y)//2-10
+    baseline = np.average(y[x_lower_lim:len(x)//2])
+    amplitude = baseline - y_min
+
+    if (amplitude <= y_threshold or smooth_amplitude <= y_threshold):
+        return None, None, None, None
+    else:
+        return baseline, amplitude, y_min, y_min_pos
+    
+def fast_amplitude(x, y, channel, pixel, x_window=[], center=0, y_threshold=0.005, smooth=True):
+    minimum = np.min(y)
+    minimum_pos = np.argmin(y)
+    minimum = np.average(y[minimum_pos:])
+    baseline = np.average(y[0:np.argmax(y)])
+    amplitude = baseline-minimum
+    if amplitude >= y_threshold:
+        return baseline,amplitude, minimum, minimum_pos
+    else:
+        return None, None, None, None

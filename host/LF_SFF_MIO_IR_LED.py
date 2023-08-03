@@ -46,7 +46,7 @@
 #
 
 
-from lab_devices.LF_SFF_MIO import LF_SFF_MIO
+
 from lab_devices.oscilloscope import oscilloscope
 from lab_devices.function_generator import function_generator
 from lab_devices.conifg.config_handler import update_config
@@ -76,7 +76,9 @@ import numpy as np
 # Configure experiment
 #####
 load_data, chip_version, image_path, data_path = init_meas('IR_LED')
+pulse_width = 200*1e-9 
 if not load_data:
+    from lab_devices.LF_SFF_MIO import LF_SFF_MIO
     dut = LF_SFF_MIO(yaml.load(open("./lab_devices/LF_SFF_MIO.yaml", 'r'), Loader=yaml.Loader))
     dut.init()
     dut.boot_seq()
@@ -91,7 +93,6 @@ if not load_data:
 
     func_gen = function_generator(yaml.load(open("./lab_devices/agilent33250a_pyserial.yaml", 'r'), Loader=yaml.Loader))
     func_gen.init()
-    pulse_width = 200*1e-9 
     func_gen.load_IR_LED_ext_config(3.0, pulse_width, 10**6)
 
     sm = sourcemeter(yaml.load(open("./lab_devices/keithley_2410.yaml", 'r'), Loader=yaml.Loader))
@@ -177,16 +178,17 @@ def triggered_offline_analysis_PWELL_range(PWELL_range, n_events, fit=True, cont
             time.sleep(10)
     else:
         for PW_BIAS in PWELL_range:
-            data = np.genfromtxt(data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_pos', delimiter=',')
+            data = np.genfromtxt(data_path+'triggered_offlines_analysis_'+str(PW_BIAS)+'_'+str(DIODE_HV)+'_pos.csv', delimiter=',')
             base_pos.append(data[1][0])
             event_pos.append(data[1][1])
             event_time_const.append(data[1][2])
-    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$\\mu_{base}-\\mu_{event}$')
-    plt.scatter(PWELL_range, y = np.array(base_pos)-np.array(event_pos))
+
+    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$\Delta\\mu=\\mu_{base}-\\mu_{event}$', title=chip_version+' chip: DIODE_HV=%.2fV, pulse width=%.2fns'%(DIODE_HV, pulse_width*1e9))
+    plt.scatter(PWELL_range, y=np.array(base_pos)-np.array(event_pos), marker='x', color='black')
     plt.savefig(image_path+'compare_different_PWELL_BIAS.pdf')
     #plt.show()
-    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$\\tau$ / ADC units')
-    plt.scatter(PWELL_range, y = event_time_const)
+    pltfit.beauty_plot(figsize=[10,10],fontsize=20, xlabel='PWELL_BIAS / V', ylabel='$\\tau$ / ADC units', title=chip_version+' chip: DIODE_HV=%.2fV, pulse width=%.2fns'%(DIODE_HV, pulse_width*1e9))
+    plt.scatter(PWELL_range, y=event_time_const, marker='x', color='black')
     plt.savefig(image_path+'compare_different_PWELL_BIAS_event_time.pdf')
     plt.show()  
 
@@ -275,7 +277,7 @@ def untriggered_offline_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BI
     ####
     # Analyse data
     ####  
-    pltfit.beauty_plot(xlabel='ADC register entry', ylabel='# of hits', title=chip_version+ ': '+str(len(data))+' IR LED Pulses online detected without trigger (pulse width=200ns, PW_BIAS='+str(PW_BIAS)+'V)')
+    pltfit.beauty_plot(xlabel='ADC register entry', ylabel='# of hits', title=chip_version+' chip\n'+str(len(data))+' IR LED Pulses online detected without trigger (pulse width=200ns, PW_BIAS='+str(PW_BIAS)+'V)')
     binwidth = 1
     try:
         baseline_n, baseline_bins, baseline_patches = plt.hist(captured_base,edgecolor='black', label='baseline', bins=range(int(min(captured_base)), int(max(captured_base)) + binwidth, binwidth), alpha=0.8)        # data analysis
@@ -297,10 +299,10 @@ def untriggered_offline_analysis(n_events, adc_ch='fadc0_rx', fit = False, PW_BI
     plt.show()
 
 
-triggered_offlines_analysis(n_events=10,DIODE_HV=0.4, fit=True, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=100, area=[7000,7500])
+#triggered_offlines_analysis(n_events=10,DIODE_HV=0.4, fit=True, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=100, area=[7000,7500])
 #triggered_offlines_analysis(n_events=10,DIODE_HV=1.8, fit=False, control_pics=True, PW_BIAS=-3, adc = 'fadc0_rx', delta_trigger=500, threshold_y=150, calibrate_data=True)
 #untriggered_offline_analysis(n_events=10, adc_ch='fadc0_rx', fit = True, PW_BIAS=-3, control_plots=True, test_SEQ=True, threshold_y=100)
-#triggered_offline_analysis_PWELL_range(PWELL_range=[-1,-2,-3,-4],adc='fadc0_rx', control_pics=True,fit=False, n_events=3, DIODE_HV=0.1)
+triggered_offline_analysis_PWELL_range(PWELL_range=[-1,-2,-3,-4],adc='fadc0_rx', control_pics=True,fit=False, n_events=3, DIODE_HV=1.8)
 #triggered_offline_analysis_DIODE_HV_range(DIODE_HV_range=[0.5, 0.8, 1.0, 1.2, 1.4, 1.5,1.6, 1.7, 1.8], PW_BIAS=-3, n_events=1000, fit=True, control_pics=True, adc='fadc0_rx', area=[7000,7500])
 
 # Deactivate the output of the lab devices
